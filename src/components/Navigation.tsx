@@ -5,9 +5,9 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'Meetings', href: '#meetings' },
-    { name: 'Cancellation Policy', href: '#cancellation' },
+    { name: 'Home', href: '/' },
+    { name: 'Meetings', href: '/meetings' },
+    { name: 'Cancellation Policy', href: '/cancellation-policy' },
     { name: 'Privacy Policy', href: '#privacy' },
     { name: 'Terms and Conditions', href: '#terms' },
     { name: 'FAQ', href: '#faq' },

@@ -106,17 +106,6 @@ const Conferences = () => {
                   </div>
                 </div>
                 
-                {/* Conference Stats */}
-                <div className="flex justify-between mt-4 pt-4 border-t border-border">
-                  <div className="text-center">
-                    <div className="font-semibold text-foreground">{conference.attendees}+</div>
-                    <div className="text-xs text-muted-foreground">Attendees</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="font-semibold text-foreground">{conference.speakers}</div>
-                    <div className="text-xs text-muted-foreground">Speakers</div>
-                  </div>
-                </div>
               </CardContent>
               
               <CardFooter className="p-6 pt-0">
@@ -133,12 +122,14 @@ const Conferences = () => {
 
         {/* CTA Section */}
         <div className="text-center">
-          <Button 
-            size="lg" 
-            className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-8 py-4 text-lg"
-          >
-            Explore More Conferences
-          </Button>
+          <a href="/meetings">
+            <Button 
+              size="lg" 
+              className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-8 py-4 text-lg"
+            >
+              Explore More Conferences
+            </Button>
+          </a>
           
           <p className="text-muted-foreground mt-4">
             Join over 50,000 professionals transforming their careers through knowledge exchange
