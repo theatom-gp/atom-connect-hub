@@ -18,33 +18,6 @@ const Meetings = () => {
   const conferences = [
     {
       id: 1,
-      title: "AI Innovation Summit 2026",
-      date: "March 15-17, 2026",
-      venue: "Silicon Valley Convention Center",
-      location: "San Francisco, CA",
-      image: conferenceAI,
-      description: "Join leading AI researchers, tech executives, and innovators as they unveil the future of artificial intelligence."
-    },
-    {
-      id: 2,
-      title: "Global Healthcare Revolution",
-      date: "April 22-24, 2026",
-      venue: "Medical Innovation Hub",
-      location: "Boston, MA",
-      image: conferenceMedical,
-      description: "Discover breakthrough medical technologies and treatment innovations shaping the future of healthcare."
-    },
-    {
-      id: 3,
-      title: "Sustainable Future Conference",
-      date: "May 10-12, 2026",
-      venue: "Green Technology Center",
-      location: "Seattle, WA",
-      image: conferenceSustainability,
-      description: "Unite with environmental leaders and green tech pioneers driving sustainable development worldwide."
-    },
-    {
-      id: 4,
       title: "Tech Innovation Expo 2025",
       date: "November 5-7, 2025",
       venue: "Technology Convention Center",
@@ -53,7 +26,7 @@ const Meetings = () => {
       description: "Explore cutting-edge technologies and connect with industry leaders shaping tomorrow's digital landscape."
     },
     {
-      id: 5,
+      id: 2,
       title: "Global Finance Summit",
       date: "December 12-14, 2025",
       venue: "Financial District Convention Hall",
@@ -62,7 +35,7 @@ const Meetings = () => {
       description: "Navigate the future of finance with expert insights on blockchain, fintech, and digital banking innovations."
     },
     {
-      id: 6,
+      id: 3,
       title: "Education Transform Conference",
       date: "January 18-20, 2026",
       venue: "Academic Excellence Center",
@@ -71,9 +44,36 @@ const Meetings = () => {
       description: "Revolutionize learning with innovative teaching methods and educational technology breakthroughs."
     },
     {
+      id: 4,
+      title: "AI Innovation Summit 2026",
+      date: "Feb 15-17, 2026",
+      venue: "Silicon Valley Convention Center",
+      location: "San Francisco, CA",
+      image: conferenceAI,
+      description: "Join leading AI researchers, tech executives, and innovators as they unveil the future of artificial intelligence."
+    },
+    {
+      id: 5,
+      title: "Global Healthcare Revolution",
+      date: "Feb 22-24, 2026",
+      venue: "Medical Innovation Hub",
+      location: "Boston, MA",
+      image: conferenceMedical,
+      description: "Discover breakthrough medical technologies and treatment innovations shaping the future of healthcare."
+    },
+    {
+      id: 6,
+      title: "Sustainable Future Conference",
+      date: "March 10-12, 2026",
+      venue: "Green Technology Center",
+      location: "Seattle, WA",
+      image: conferenceSustainability,
+      description: "Unite with environmental leaders and green tech pioneers driving sustainable development worldwide."
+    },
+    {
       id: 7,
       title: "Digital Marketing Masters",
-      date: "February 8-10, 2026",
+      date: "March 22-24, 2026",
       venue: "Creative Innovation Hub",
       location: "Los Angeles, CA",
       image: conferenceMarketing,
@@ -82,7 +82,7 @@ const Meetings = () => {
     {
       id: 8,
       title: "Legal Innovation Forum",
-      date: "March 15-17, 2026",
+      date: "April 15-17, 2026",
       venue: "Justice Center Conference Hall",
       location: "Washington, DC",
       image: conferenceLegal,
@@ -91,7 +91,7 @@ const Meetings = () => {
     {
       id: 9,
       title: "Engineering Excellence Summit",
-      date: "April 5-7, 2026",
+      date: "April 25-27, 2026",
       venue: "Industrial Innovation Center",
       location: "Detroit, MI",
       image: conferenceEngineering,
@@ -125,9 +125,9 @@ const Meetings = () => {
       description: "Advance scientific knowledge through collaborative research and breakthrough discoveries across disciplines."
     },
     {
-      id: 12,
+      id: 13,
       title: "Global Congress on Forensic Science and Research",
-      date: "June 9-11, 2026",
+      date: "June 19-21, 2026",
       venue: "Research Innovation Campus",
       location: "San Diego, CA",
       image: conferenceScience,
