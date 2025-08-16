@@ -18,8 +18,8 @@ const Meetings = () => {
   const conferences = [
     {
       id: 1,
-      title: "AI Innovation Summit 2024",
-      date: "March 15-17, 2024",
+      title: "AI Innovation Summit 2026",
+      date: "March 15-17, 2026",
       venue: "Silicon Valley Convention Center",
       location: "San Francisco, CA",
       image: conferenceAI,
@@ -28,7 +28,7 @@ const Meetings = () => {
     {
       id: 2,
       title: "Global Healthcare Revolution",
-      date: "April 22-24, 2024",
+      date: "April 22-24, 2026",
       venue: "Medical Innovation Hub",
       location: "Boston, MA",
       image: conferenceMedical,
@@ -37,7 +37,7 @@ const Meetings = () => {
     {
       id: 3,
       title: "Sustainable Future Conference",
-      date: "May 10-12, 2024",
+      date: "May 10-12, 2026",
       venue: "Green Technology Center",
       location: "Seattle, WA",
       image: conferenceSustainability,
@@ -123,6 +123,15 @@ const Meetings = () => {
       location: "San Diego, CA",
       image: conferenceScience,
       description: "Advance scientific knowledge through collaborative research and breakthrough discoveries across disciplines."
+    },
+    {
+      id: 12,
+      title: "Global Congress on Forensic Science and Research",
+      date: "June 9-11, 2026",
+      venue: "Research Innovation Campus",
+      location: "San Diego, CA",
+      image: conferenceScience,
+      description: "Advance Forensic scientific knowledge through collaborative research and breakthrough discoveries across disciplines."
     }
   ];
 
