@@ -11,7 +11,7 @@ const Navigation = () => {
     { name: 'Privacy Policy', href: '/privacy-policy' },
     { name: 'Terms and Conditions', href: '/terms-and-conditions' },
     { name: 'FAQ', href: '/faq' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   return (
