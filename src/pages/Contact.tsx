@@ -112,28 +112,28 @@ const Contact = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-16">
+      {/* Hero Section - Mobile optimized */}
+      <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 sm:mb-6">
             Get in Touch with Our Team
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto mb-6 sm:mb-8">
             Have questions about our conferences? Need support with registration? Want to explore speaking or sponsorship opportunities? 
             We're here to help you every step of the way.
           </p>
           
-          {/* Trust Signals */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+          {/* Trust Signals - Mobile optimized */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mt-8 sm:mt-12">
             {trustSignals.map((signal, index) => {
               const IconComponent = signal.icon;
               return (
                 <div key={index} className="flex flex-col items-center">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                    <IconComponent className="w-8 h-8 text-primary" />
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                    <IconComponent className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                   </div>
-                  <div className="text-3xl font-bold text-foreground mb-2">{signal.metric}</div>
-                  <div className="text-muted-foreground">{signal.label}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">{signal.metric}</div>
+                  <div className="text-sm sm:text-base text-muted-foreground">{signal.label}</div>
                 </div>
               );
             })}
@@ -141,34 +141,34 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Main Content */}
-      <section className="py-16">
+      {/* Main Content - Mobile optimized */}
+      <section className="py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             
             {/* Contact Information */}
-            <div>
-              <h2 className="text-3xl font-bold text-foreground mb-8">Contact Information</h2>
-              <p className="text-muted-foreground mb-8">
+            <div className="order-2 lg:order-1">
+              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8 text-center lg:text-left">Contact Information</h2>
+              <p className="text-muted-foreground mb-6 sm:mb-8 text-center lg:text-left">
                 We're committed to providing exceptional service and support. Reach out to us through any of the following channels, 
                 and our dedicated team will respond promptly to assist you.
               </p>
               
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {contactInfo.map((info, index) => {
                   const IconComponent = info.icon;
                   return (
                     <Card key={index} className="border-l-4 border-l-primary">
-                      <CardContent className="p-6">
-                        <div className="flex items-start space-x-4">
-                          <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                            <IconComponent className="w-6 h-6 text-primary" />
+                      <CardContent className="p-4 sm:p-6">
+                        <div className="flex items-start space-x-3 sm:space-x-4">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                            <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                           </div>
-                          <div>
-                            <h3 className="font-semibold text-foreground mb-2">{info.title}</h3>
+                          <div className="min-w-0">
+                            <h3 className="font-semibold text-foreground mb-2 text-sm sm:text-base">{info.title}</h3>
                             <div className="space-y-1">
                               {info.details.map((detail, detailIndex) => (
-                                <p key={detailIndex} className="text-muted-foreground">{detail}</p>
+                                <p key={detailIndex} className="text-muted-foreground text-sm sm:text-base break-words">{detail}</p>
                               ))}
                             </div>
                           </div>
@@ -180,10 +180,10 @@ const Contact = () => {
               </div>
 
               {/* Quick Response Promise */}
-              <Card className="mt-8 bg-primary/5 border-primary/20">
-                <CardContent className="p-6">
-                  <h3 className="font-semibold text-foreground mb-2">Our Response Promise</h3>
-                  <p className="text-muted-foreground">
+              <Card className="mt-6 sm:mt-8 bg-primary/5 border-primary/20">
+                <CardContent className="p-4 sm:p-6">
+                  <h3 className="font-semibold text-foreground mb-2 text-sm sm:text-base">Our Response Promise</h3>
+                  <p className="text-muted-foreground text-sm sm:text-base">
                     We understand that timing is crucial for conference planning. Our team commits to responding to all inquiries within 
                     <span className="font-semibold text-primary"> 24 hours during business days</span>, often much sooner.
                   </p>
@@ -191,29 +191,29 @@ const Contact = () => {
               </Card>
             </div>
 
-            {/* Contact Form */}
-            <div>
+            {/* Contact Form - Mobile optimized */}
+            <div className="order-1 lg:order-2">
               <Card>
-                <CardHeader>
-                  <CardTitle className="text-2xl">Send Us a Message</CardTitle>
-                  <p className="text-muted-foreground">
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-xl sm:text-2xl text-center lg:text-left">Send Us a Message</CardTitle>
+                  <p className="text-muted-foreground text-sm sm:text-base text-center lg:text-left">
                     Fill out the form below and we'll get back to you as soon as possible. The more details you provide, 
                     the better we can assist you.
                   </p>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-4 sm:p-6">
                   <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                      {/* Name Fields */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+                      {/* Name Fields - Stack on mobile */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <FormField
                           control={form.control}
                           name="firstName"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>First Name *</FormLabel>
+                              <FormLabel className="text-sm sm:text-base">First Name *</FormLabel>
                               <FormControl>
-                                <Input placeholder="John" {...field} />
+                                <Input placeholder="John" className="h-12 touch-manipulation" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -225,9 +225,9 @@ const Contact = () => {
                           name="lastName"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Last Name *</FormLabel>
+                              <FormLabel className="text-sm sm:text-base">Last Name *</FormLabel>
                               <FormControl>
-                                <Input placeholder="Doe" {...field} />
+                                <Input placeholder="Doe" className="h-12 touch-manipulation" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -235,16 +235,16 @@ const Contact = () => {
                         />
                       </div>
 
-                      {/* Contact Fields */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Contact Fields - Stack on mobile */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <FormField
                           control={form.control}
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Email Address *</FormLabel>
+                              <FormLabel className="text-sm sm:text-base">Email Address *</FormLabel>
                               <FormControl>
-                                <Input placeholder="john.doe@example.com" type="email" {...field} />
+                                <Input placeholder="john.doe@example.com" type="email" className="h-12 touch-manipulation" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -256,9 +256,9 @@ const Contact = () => {
                           name="phone"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Phone Number *</FormLabel>
+                              <FormLabel className="text-sm sm:text-base">Phone Number *</FormLabel>
                               <FormControl>
-                                <Input placeholder="+1 (555) 123-4567" {...field} />
+                                <Input placeholder="+1 (555) 123-4567" className="h-12 touch-manipulation" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -272,26 +272,26 @@ const Contact = () => {
                         name="organization"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Organization</FormLabel>
+                            <FormLabel className="text-sm sm:text-base">Organization</FormLabel>
                             <FormControl>
-                              <Input placeholder="Your company or institution" {...field} />
+                              <Input placeholder="Your company or institution" className="h-12 touch-manipulation" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
 
-                      {/* Inquiry Type */}
+                      {/* Inquiry Type - Larger touch target */}
                       <FormField
                         control={form.control}
                         name="inquiryType"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Inquiry Type *</FormLabel>
+                            <FormLabel className="text-sm sm:text-base">Inquiry Type *</FormLabel>
                             <FormControl>
                               <select
                                 {...field}
-                                className="w-full h-10 px-3 py-2 text-sm border border-input bg-background rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                className="w-full h-12 px-3 py-2 text-sm sm:text-base border border-input bg-background rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 touch-manipulation"
                               >
                                 <option value="">Select inquiry type</option>
                                 {inquiryTypes.map((type) => (
@@ -310,26 +310,26 @@ const Contact = () => {
                         name="subject"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Subject *</FormLabel>
+                            <FormLabel className="text-sm sm:text-base">Subject *</FormLabel>
                             <FormControl>
-                              <Input placeholder="Brief description of your inquiry" {...field} />
+                              <Input placeholder="Brief description of your inquiry" className="h-12 touch-manipulation" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
 
-                      {/* Message */}
+                      {/* Message - Larger on mobile */}
                       <FormField
                         control={form.control}
                         name="message"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Message *</FormLabel>
+                            <FormLabel className="text-sm sm:text-base">Message *</FormLabel>
                             <FormControl>
                               <Textarea
                                 placeholder="Please provide detailed information about your inquiry. Include any specific dates, requirements, or questions you may have."
-                                className="min-h-[120px]"
+                                className="min-h-[100px] sm:min-h-[120px] text-sm sm:text-base touch-manipulation"
                                 {...field}
                               />
                             </FormControl>
@@ -338,10 +338,10 @@ const Contact = () => {
                         )}
                       />
 
-                      {/* Submit Button */}
+                      {/* Submit Button - Larger touch target */}
                       <Button 
                         type="submit" 
-                        className="w-full" 
+                        className="w-full h-12 sm:h-auto touch-manipulation" 
                         size="lg"
                         disabled={isSubmitting}
                       >
@@ -358,7 +358,7 @@ const Contact = () => {
                         )}
                       </Button>
 
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs sm:text-sm text-muted-foreground text-center">
                         By submitting this form, you agree to our Privacy Policy and consent to being contacted regarding your inquiry.
                       </p>
                     </form>
@@ -370,20 +370,20 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-primary/5 py-16">
+      {/* CTA Section - Mobile optimized */}
+      <section className="bg-primary/5 py-12 sm:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 sm:mb-4">
             Ready to Join Our Next Conference?
           </h2>
-          <p className="text-xl text-muted-foreground mb-8">
+          <p className="text-lg sm:text-xl text-muted-foreground mb-6 sm:mb-8">
             Don't miss out on our upcoming events. Browse our conference calendar and secure your spot today.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild>
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center">
+            <Button size="lg" className="h-12 touch-manipulation" asChild>
               <a href="/meetings">View Upcoming Conferences</a>
             </Button>
-            <Button variant="outline" size="lg" asChild>
+            <Button variant="outline" size="lg" className="h-12 touch-manipulation" asChild>
               <a href="/">Learn More About Us</a>
             </Button>
           </div>

@@ -42,29 +42,29 @@ const Footer = () => {
   return (
     <footer className="bg-slate-900 text-white">
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-8">
           
           {/* Company Info */}
-          <div className="lg:col-span-1">
+          <div className="sm:col-span-2 lg:col-span-1 text-center sm:text-left">
             <div className="mb-6">
-              <h3 className="text-2xl font-bold text-white mb-3">Atom Conferences</h3>
-              <p className="text-slate-300 leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">Atom Conferences</h3>
+              <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
                 Connecting minds, shaping futures. We create world-class conferences that bring together 
                 industry leaders, innovators, and change-makers to drive meaningful progress across all sectors.
               </p>
             </div>
             
-            {/* Trust Indicators */}
-            <div className="grid grid-cols-3 gap-3">
+            {/* Trust Indicators - Mobile optimized */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
               {achievements.map((achievement, index) => {
                 const IconComponent = achievement.icon;
                 return (
                   <div key={index} className="text-center">
-                    <div className="w-10 h-10 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                      <IconComponent className="w-5 h-5 text-blue-400" />
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
+                      <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
                     </div>
-                    <div className="text-sm font-semibold text-white">{achievement.number}</div>
+                    <div className="text-xs sm:text-sm font-semibold text-white">{achievement.number}</div>
                     <div className="text-xs text-slate-400">{achievement.label}</div>
                   </div>
                 );
@@ -73,17 +73,17 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h4 className="text-lg font-semibold text-white mb-6">Quick Links</h4>
-            <ul className="space-y-3">
+          <div className="text-center sm:text-left">
+            <h4 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6">Quick Links</h4>
+            <ul className="space-y-2 sm:space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
                   <a 
                     href={link.href}
-                    className="text-slate-300 hover:text-white transition-colors duration-200 flex items-center group"
+                    className="text-slate-300 hover:text-white transition-colors duration-200 flex items-center justify-center sm:justify-start group touch-manipulation py-1"
                   >
                     <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                    {link.name}
+                    <span className="text-sm sm:text-base">{link.name}</span>
                   </a>
                 </li>
               ))}
@@ -91,17 +91,17 @@ const Footer = () => {
           </div>
 
           {/* Conference Categories */}
-          <div>
-            <h4 className="text-lg font-semibold text-white mb-6">Conference Categories</h4>
-            <ul className="space-y-3">
+          <div className="text-center sm:text-left">
+            <h4 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6">Conference Categories</h4>
+            <ul className="space-y-2 sm:space-y-3">
               {conferenceCategories.map((category, index) => (
                 <li key={index}>
                   <a 
                     href={category.href}
-                    className="text-slate-300 hover:text-white transition-colors duration-200 flex items-center group"
+                    className="text-slate-300 hover:text-white transition-colors duration-200 flex items-center justify-center sm:justify-start group touch-manipulation py-1"
                   >
                     <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                    {category.name}
+                    <span className="text-sm sm:text-base">{category.name}</span>
                   </a>
                 </li>
               ))}
@@ -109,17 +109,17 @@ const Footer = () => {
           </div>
 
           {/* Contact & Legal */}
-          <div>
-            <h4 className="text-lg font-semibold text-white mb-6">Get In Touch</h4>
+          <div className="text-center sm:text-left">
+            <h4 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6">Get In Touch</h4>
             
             {/* Contact Info */}
             <div className="space-y-3 mb-6">
               {contactInfo.map((info, index) => {
                 const IconComponent = info.icon;
                 return (
-                  <div key={index} className="flex items-start space-x-3">
-                    <IconComponent className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-slate-300 text-sm">{info.text}</span>
+                  <div key={index} className="flex items-start space-x-3 justify-center sm:justify-start">
+                    <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-slate-300 text-xs sm:text-sm text-left">{info.text}</span>
                   </div>
                 );
               })}
@@ -133,7 +133,7 @@ const Footer = () => {
                   <li key={index}>
                     <a 
                       href={link.href}
-                      className="text-slate-400 hover:text-white transition-colors duration-200 text-sm"
+                      className="text-slate-400 hover:text-white transition-colors duration-200 text-xs sm:text-sm touch-manipulation py-1 inline-block"
                     >
                       {link.name}
                     </a>
@@ -147,23 +147,23 @@ const Footer = () => {
 
       <Separator className="bg-slate-700" />
 
-      {/* Bottom Footer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <div className="text-slate-400 text-sm">
+      {/* Bottom Footer - Mobile optimized */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 text-center sm:text-left">
+          <div className="text-slate-400 text-xs sm:text-sm">
             © {currentYear} Atom Conferences. All rights reserved. Empowering global knowledge exchange since 2020.
           </div>
           
-          <div className="flex items-center space-x-6 text-sm text-slate-400">
-            <span>Follow the conversation:</span>
-            <div className="flex space-x-4">
-              <a href="#" className="hover:text-white transition-colors duration-200" aria-label="LinkedIn">
+          <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 text-xs sm:text-sm text-slate-400">
+            <span className="hidden sm:inline">Follow the conversation:</span>
+            <div className="flex space-x-4 sm:space-x-4">
+              <a href="#" className="hover:text-white transition-colors duration-200 touch-manipulation py-2 px-2" aria-label="LinkedIn">
                 LinkedIn
               </a>
-              <a href="#" className="hover:text-white transition-colors duration-200" aria-label="Twitter">
+              <a href="#" className="hover:text-white transition-colors duration-200 touch-manipulation py-2 px-2" aria-label="Twitter">
                 Twitter
               </a>
-              <a href="#" className="hover:text-white transition-colors duration-200" aria-label="YouTube">
+              <a href="#" className="hover:text-white transition-colors duration-200 touch-manipulation py-2 px-2" aria-label="YouTube">
                 YouTube
               </a>
             </div>
