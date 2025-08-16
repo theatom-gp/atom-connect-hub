@@ -2,7 +2,12 @@ import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import venueImage from '@/assets/venue-tech-expo.jpg';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import heroBackground from '@/assets/hero-tech-background.jpg';
+import venueInterior from '@/assets/venue-interior-1.jpg';
+import venueConference from '@/assets/venue-conference-room.jpg';
+import venueNetworking from '@/assets/venue-networking.jpg';
+import venueExhibition from '@/assets/venue-exhibition.jpg';
 import chairpersonImage from '@/assets/chairperson-tech.jpg';
 import speaker1 from '@/assets/speaker-1.jpg';
 import speaker2 from '@/assets/speaker-2.jpg';
@@ -39,6 +44,29 @@ const ConferenceDetail = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  const venueImages = [
+    {
+      src: venueInterior,
+      alt: "Technology Convention Center - Main Hall",
+      title: "Main Convention Hall"
+    },
+    {
+      src: venueConference,
+      alt: "Professional Conference Room Setup",
+      title: "Conference Rooms"
+    },
+    {
+      src: venueNetworking,
+      alt: "Networking Area",
+      title: "Networking Spaces"
+    },
+    {
+      src: venueExhibition,
+      alt: "Technology Exhibition Hall",
+      title: "Exhibition Area"
+    }
+  ];
 
   const speakers = [
     {
@@ -94,8 +122,7 @@ const ConferenceDetail = () => {
         "Conference schedule handout",
         "Certificate of Attendance",
         "E-Abstract Book"
-      ],
-      featured: true
+      ]
     },
     {
       title: "Student",
@@ -168,19 +195,18 @@ const ConferenceDetail = () => {
   ];
 
   const publishingPartners = [
-    "IEEE Computer Society",
-    "ACM Digital Library", 
-    "SpringerLink",
-    "ScienceDirect",
-    "ResearchGate"
+    { name: "MDPI", description: "Academic Open Access Publishing" },
+    { name: "Cambridge Scholars Publishing", description: "Academic Publisher" },
+    { name: "Scopus", description: "Abstract and Citation Database" },
+    { name: "Bon View Publishing", description: "International Academic Publisher" }
   ];
 
   const mediaPartners = [
-    "TechCrunch",
-    "MIT Technology Review",
-    "IEEE Spectrum",
-    "Wired Magazine",
-    "VentureBeat"
+    { name: "TechCrunch", description: "Technology News Platform" },
+    { name: "MIT Technology Review", description: "Innovation Magazine" },
+    { name: "IEEE Spectrum", description: "Engineering Publication" },
+    { name: "Wired Magazine", description: "Technology & Culture" },
+    { name: "VentureBeat", description: "Tech Industry News" }
   ];
 
   return (
@@ -188,18 +214,23 @@ const ConferenceDetail = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-primary/10 via-background to-secondary/10">
+      <section 
+        className="relative py-20 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url(${heroBackground})`
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-semibold mb-6">
               Innovation • Technology • Future
             </div>
             
-            <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6">
+            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6">
               Tech Innovation <span className="text-primary">Expo 2025</span>
             </h1>
             
-            <div className="flex flex-col md:flex-row justify-center items-center gap-6 mb-8 text-lg text-muted-foreground">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-6 mb-8 text-lg text-white/90">
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"/>
@@ -218,9 +249,9 @@ const ConferenceDetail = () => {
             {/* Countdown Timer */}
             <div className="flex justify-center gap-4 mb-8">
               {Object.entries(timeLeft).map(([unit, value]) => (
-                <div key={unit} className="bg-primary/10 backdrop-blur-sm rounded-lg p-4 min-w-[80px]">
-                  <div className="text-2xl font-bold text-primary">{value}</div>
-                  <div className="text-sm text-muted-foreground capitalize">{unit}</div>
+                <div key={unit} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 min-w-[80px]">
+                  <div className="text-2xl font-bold text-white">{value}</div>
+                  <div className="text-sm text-white/80 capitalize">{unit}</div>
                 </div>
               ))}
             </div>
@@ -240,11 +271,26 @@ const ConferenceDetail = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
-              <img 
-                src={venueImage} 
-                alt="Technology Convention Center Austin"
-                className="w-full h-[400px] object-cover rounded-lg shadow-lg"
-              />
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {venueImages.map((image, index) => (
+                    <CarouselItem key={index}>
+                      <div className="relative">
+                        <img 
+                          src={image.src} 
+                          alt={image.alt}
+                          className="w-full h-[400px] object-cover rounded-lg shadow-lg"
+                        />
+                        <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1 rounded-lg">
+                          <span className="text-sm font-semibold">{image.title}</span>
+                        </div>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-4" />
+                <CarouselNext className="right-4" />
+              </Carousel>
             </div>
             
             <div className="order-1 lg:order-2">
@@ -399,9 +445,7 @@ const ConferenceDetail = () => {
             {pricingTiers.map((tier, index) => (
               <Card 
                 key={index} 
-                className={`relative overflow-hidden transition-all duration-300 hover:shadow-lg ${
-                  tier.featured ? 'ring-2 ring-primary scale-105' : ''
-                }`}
+                className="relative overflow-hidden transition-all duration-300 hover:shadow-lg"
               >
                 <CardHeader className="p-6 pb-4">
                   <h3 className="text-xl font-bold text-foreground mb-1">{tier.title}</h3>
@@ -430,11 +474,7 @@ const ConferenceDetail = () => {
                 
                 <CardFooter className="p-6 pt-0">
                   <Button 
-                    className={`w-full ${
-                      tier.featured 
-                        ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
-                        : 'bg-blue-500 hover:bg-blue-600 text-white'
-                    }`}
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                     size="lg"
                   >
                     Register Now
@@ -503,24 +543,41 @@ const ConferenceDetail = () => {
       <section className="py-20 bg-secondary/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
+            <div className="inline-block px-4 py-2 bg-orange-500/20 text-orange-600 rounded-full text-sm font-semibold mb-6">
+              Media
+            </div>
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
               Publishing <span className="text-primary">Partners</span>
             </h2>
-            <p className="text-xl text-muted-foreground">
-              Showcasing research through leading academic and industry publications
-            </p>
+            
+            <div className="flex justify-center mb-8">
+              <div className="flex gap-1">
+                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              </div>
+            </div>
           </div>
 
-          <div className="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 gap-8">
-            {publishingPartners.map((partner, index) => (
-              <div 
-                key={index}
-                className="bg-background p-6 rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 flex items-center justify-center h-24"
-              >
-                <span className="text-sm font-semibold text-foreground text-center">{partner}</span>
-              </div>
-            ))}
-          </div>
+          <Card className="p-8">
+            <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8">
+              {publishingPartners.map((partner, index) => (
+                <div 
+                  key={index}
+                  className="text-center p-6 hover:bg-secondary/10 rounded-lg transition-all duration-300"
+                >
+                  <div className="w-16 h-16 bg-primary/10 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <div className="w-8 h-8 bg-primary/20 rounded"></div>
+                  </div>
+                  <h3 className="font-bold text-foreground mb-2">{partner.name}</h3>
+                  <p className="text-sm text-muted-foreground">{partner.description}</p>
+                </div>
+              ))}
+            </div>
+          </Card>
         </div>
       </section>
 
@@ -528,24 +585,41 @@ const ConferenceDetail = () => {
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
+            <div className="inline-block px-4 py-2 bg-blue-500/20 text-blue-600 rounded-full text-sm font-semibold mb-6">
+              Media Coverage
+            </div>
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
               Media <span className="text-primary">Partners</span>
             </h2>
-            <p className="text-xl text-muted-foreground">
-              Amplifying innovation stories across global technology media platforms
-            </p>
+            
+            <div className="flex justify-center mb-8">
+              <div className="flex gap-1">
+                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              </div>
+            </div>
           </div>
 
-          <div className="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 gap-8">
-            {mediaPartners.map((partner, index) => (
-              <div 
-                key={index}
-                className="bg-secondary/10 p-6 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center h-24"
-              >
-                <span className="text-sm font-semibold text-foreground text-center">{partner}</span>
-              </div>
-            ))}
-          </div>
+          <Card className="p-8">
+            <div className="grid lg:grid-cols-5 md:grid-cols-3 gap-8">
+              {mediaPartners.map((partner, index) => (
+                <div 
+                  key={index}
+                  className="text-center p-4 hover:bg-secondary/10 rounded-lg transition-all duration-300"
+                >
+                  <div className="w-12 h-12 bg-secondary/20 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <div className="w-6 h-6 bg-secondary/40 rounded"></div>
+                  </div>
+                  <h4 className="font-semibold text-foreground mb-1 text-sm">{partner.name}</h4>
+                  <p className="text-xs text-muted-foreground">{partner.description}</p>
+                </div>
+              ))}
+            </div>
+          </Card>
         </div>
       </section>
 
