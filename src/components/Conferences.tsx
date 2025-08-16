@@ -8,8 +8,8 @@ const Conferences = () => {
   const conferences = [
     {
       id: 1,
-      title: "AI Innovation Summit 2024",
-      date: "March 15-17, 2024",
+      title: "AI Innovation Summit 2025",
+      date: "Nov 15-17, 2025",
       venue: "Silicon Valley Convention Center",
       location: "San Francisco, CA",
       image: conferenceAI,
@@ -20,7 +20,7 @@ const Conferences = () => {
     {
       id: 2,
       title: "Global Healthcare Revolution",
-      date: "April 22-24, 2024",
+      date: "Dec 22-24, 2025",
       venue: "Medical Innovation Hub",
       location: "Boston, MA",
       image: conferenceMedical,
@@ -31,7 +31,7 @@ const Conferences = () => {
     {
       id: 3,
       title: "Sustainable Future Conference",
-      date: "May 10-12, 2024",
+      date: "Jan 10-12, 2026",
       venue: "Green Technology Center",
       location: "Seattle, WA",
       image: conferenceSustainability,
