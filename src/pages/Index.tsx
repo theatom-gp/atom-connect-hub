@@ -4,6 +4,7 @@ import AboutUs from '@/components/AboutUs';
 import Mission from '@/components/Mission';
 import Vision from '@/components/Vision';
 import Conferences from '@/components/Conferences';
+import Footer from '@/components/Footer';
 
 const Index = () => {
   return (
@@ -14,6 +15,7 @@ const Index = () => {
       <Mission />
       <Vision />
       <Conferences />
+      <Footer />
     </div>
   );
 };
