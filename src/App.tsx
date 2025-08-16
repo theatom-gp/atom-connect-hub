@@ -8,6 +8,7 @@ import Meetings from "./pages/Meetings";
 import CancellationPolicy from "./pages/CancellationPolicy";
 import ConferenceDetail from "./pages/ConferenceDetail";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/conference/tech-innovation-expo-2025" element={<ConferenceDetail />} />
           <Route path="/cancellation-policy" element={<CancellationPolicy />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
