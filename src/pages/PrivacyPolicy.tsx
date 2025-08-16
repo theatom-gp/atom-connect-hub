@@ -1,3 +1,4 @@
+import Navigation from '@/components/Navigation';
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -100,7 +101,9 @@ const PrivacyPolicy = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10">
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      <div className="bg-gradient-to-br from-background via-background to-secondary/10">
       {/* Header */}
       <div className="bg-primary text-primary-foreground py-16">
         <div className="container mx-auto px-4">
@@ -199,6 +202,7 @@ const PrivacyPolicy = () => {
             </CardContent>
           </Card>
         </div>
+      </div>
       </div>
     </div>
   );

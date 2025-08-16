@@ -20,7 +20,9 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <h1 className="text-2xl font-bold text-primary">Atom Conferences</h1>
+            <a href="/" className="text-2xl font-bold text-primary hover:text-primary/80 transition-colors">
+              Atom Conferences
+            </a>
           </div>
 
           {/* Desktop Navigation */}
