@@ -27,21 +27,13 @@ const Hero = () => {
               to share knowledge, drive innovation, and shape the future across every industry.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <div className="flex justify-center lg:justify-start">
               <Button 
                 size="lg" 
                 className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-8 py-4 text-lg"
                 style={{ boxShadow: 'var(--shadow-hero)' }}
               >
                 Explore Conferences
-              </Button>
-              
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="border-white text-white hover:bg-white/10 font-semibold px-8 py-4 text-lg"
-              >
-                Host Your Event
               </Button>
             </div>
             

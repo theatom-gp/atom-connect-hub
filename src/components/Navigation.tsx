@@ -24,25 +24,18 @@ const Navigation = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:block">
-            <div className="ml-10 flex items-baseline space-x-8">
+          <div className="hidden lg:flex flex-1 justify-center">
+            <div className="flex items-center space-x-8">
               {navItems.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors duration-200"
+                  className="text-foreground hover:text-primary px-4 py-2 text-sm font-medium transition-colors duration-200 rounded-lg hover:bg-secondary/10"
                 >
                   {item.name}
                 </a>
               ))}
             </div>
-          </div>
-
-          {/* CTA Button */}
-          <div className="hidden lg:block">
-            <Button variant="default" className="bg-secondary hover:bg-secondary/90">
-              Register Now
-            </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -76,11 +69,6 @@ const Navigation = () => {
                   {item.name}
                 </a>
               ))}
-              <div className="pt-4">
-                <Button variant="default" className="w-full bg-secondary hover:bg-secondary/90">
-                  Register Now
-                </Button>
-              </div>
             </div>
           </div>
         )}
