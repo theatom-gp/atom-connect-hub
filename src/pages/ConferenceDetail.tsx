@@ -22,8 +22,13 @@ const ConferenceDetail = () => {
     seconds: 0
   });
 
+  const targetDate = new Date('2025-11-05T09:00:00');
+  const earlyBirdDate = new Date('2025-07-27T23:59:59'); // More than 100 days before event
+  const now = new Date();
+  const daysToEvent = Math.floor((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  const isEarlyBird = daysToEvent > 100;
+
   useEffect(() => {
-    const targetDate = new Date('2025-11-05T09:00:00');
     
     const updateCountdown = () => {
       const now = new Date().getTime();
@@ -195,18 +200,18 @@ const ConferenceDetail = () => {
   ];
 
   const publishingPartners = [
-    { name: "MDPI", description: "Academic Open Access Publishing" },
-    { name: "Cambridge Scholars Publishing", description: "Academic Publisher" },
-    { name: "Scopus", description: "Abstract and Citation Database" },
-    { name: "Bon View Publishing", description: "International Academic Publisher" }
+    { name: "MDPI", description: "Academic Open Access Publishing", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MDPI_logo.svg/200px-MDPI_logo.svg.png" },
+    { name: "Cambridge Scholars Publishing", description: "Academic Publisher", logo: "https://www.cambridgescholars.com/images/logo.png" },
+    { name: "Scopus", description: "Abstract and Citation Database", logo: "https://www.elsevier.com/__data/assets/image/0004/1098667/scopus-logo-orange.png" },
+    { name: "Bon View Publishing", description: "International Academic Publisher", logo: "https://bonviewglobal.com/images/logo.png" }
   ];
 
   const mediaPartners = [
-    { name: "TechCrunch", description: "Technology News Platform" },
-    { name: "MIT Technology Review", description: "Innovation Magazine" },
-    { name: "IEEE Spectrum", description: "Engineering Publication" },
-    { name: "Wired Magazine", description: "Technology & Culture" },
-    { name: "VentureBeat", description: "Tech Industry News" }
+    { name: "TechCrunch", description: "Technology News Platform", logo: "https://techcrunch.com/wp-content/uploads/2015/02/cropped-cropped-favicon-gradient.png" },
+    { name: "MIT Technology Review", description: "Innovation Magazine", logo: "https://wp.technologyreview.com/wp-content/uploads/2021/09/MIT-Technology-Review-logo-2021-square.png" },
+    { name: "IEEE Spectrum", description: "Engineering Publication", logo: "https://spectrum.ieee.org/static/images/ieee-spectrum-logo.png" },
+    { name: "Wired Magazine", description: "Technology & Culture", logo: "https://media.wired.com/photos/5a593a7d9eb5045d5cd437dd/master/w_1600%2Cc_limit/Wired_Logo.jpg" },
+    { name: "VentureBeat", description: "Tech Industry News", logo: "https://venturebeat.com/wp-content/themes/vb-news/assets/img/logos/VB_Logo_Horizontal.svg" }
   ];
 
   return (
@@ -217,7 +222,7 @@ const ConferenceDetail = () => {
       <section 
         className="relative py-20 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url(${heroBackground})`
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url(${heroBackground})`
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -260,7 +265,42 @@ const ConferenceDetail = () => {
               size="lg" 
               className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg font-semibold"
             >
-              Register Now - Early Bird Special
+              {isEarlyBird ? 'Register Now - Early Bird Special' : 'Register Now'}
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Early Bird / Abstract Submission Banner */}
+      <section className="py-4 bg-gradient-to-r from-primary/10 to-accent/10 border-y">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-center md:text-left">
+              {isEarlyBird ? (
+                <>
+                  <p className="text-primary font-semibold text-lg">
+                    🎯 Early Bird Registration Ends: July 27, 2025
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    Save up to 30% on registration fees - Limited time offer!
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-primary font-semibold text-lg">
+                    📝 Submit Your Abstracts Now
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    Share your research and innovations with the global tech community
+                  </p>
+                </>
+              )}
+            </div>
+            <Button 
+              variant="outline" 
+              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground whitespace-nowrap"
+            >
+              {isEarlyBird ? 'Claim Early Bird Discount' : 'Submit Abstract'}
             </Button>
           </div>
         </div>
@@ -453,9 +493,9 @@ const ConferenceDetail = () => {
                     <p className="text-muted-foreground text-sm">{tier.subtitle}</p>
                   )}
                   <div className="mt-4">
-                    <span className="text-sm text-accent">$</span>
-                    <span className="text-4xl font-bold text-accent">{tier.price}</span>
-                    <span className="text-sm text-muted-foreground ml-1">USD</span>
+                    <span className="text-sm text-primary">$</span>
+                    <span className="text-4xl font-bold text-primary">{tier.price}</span>
+                    <span className="text-sm text-foreground font-medium ml-1">USD</span>
                   </div>
                 </CardHeader>
                 
@@ -562,22 +602,32 @@ const ConferenceDetail = () => {
             </div>
           </div>
 
-          <Card className="p-8">
-            <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8">
-              {publishingPartners.map((partner, index) => (
-                <div 
-                  key={index}
-                  className="text-center p-6 hover:bg-secondary/10 rounded-lg transition-all duration-300"
-                >
-                  <div className="w-16 h-16 bg-primary/10 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <div className="w-8 h-8 bg-primary/20 rounded"></div>
+          <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8 mb-16">
+            {publishingPartners.map((partner, index) => (
+              <Card key={index} className="text-center p-6 hover:shadow-lg transition-all duration-300 group">
+                <CardContent className="p-4 space-y-4">
+                  <div className="h-16 flex items-center justify-center">
+                    <img 
+                      src={partner.logo} 
+                      alt={partner.name}
+                      className="max-h-12 max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        const img = e.currentTarget as HTMLImageElement;
+                        const fallback = img.nextElementSibling as HTMLElement;
+                        img.style.display = 'none';
+                        if (fallback) fallback.style.display = 'block';
+                      }}
+                    />
+                    <div className="hidden bg-primary/10 text-primary px-3 py-2 rounded-lg text-sm font-semibold">
+                      {partner.name}
+                    </div>
                   </div>
-                  <h3 className="font-bold text-foreground mb-2">{partner.name}</h3>
-                  <p className="text-sm text-muted-foreground">{partner.description}</p>
-                </div>
-              ))}
-            </div>
-          </Card>
+                  <h3 className="font-bold text-foreground">{partner.name}</h3>
+                  <p className="text-muted-foreground text-sm">{partner.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -604,22 +654,32 @@ const ConferenceDetail = () => {
             </div>
           </div>
 
-          <Card className="p-8">
-            <div className="grid lg:grid-cols-5 md:grid-cols-3 gap-8">
-              {mediaPartners.map((partner, index) => (
-                <div 
-                  key={index}
-                  className="text-center p-4 hover:bg-secondary/10 rounded-lg transition-all duration-300"
-                >
-                  <div className="w-12 h-12 bg-secondary/20 rounded-lg mx-auto mb-3 flex items-center justify-center">
-                    <div className="w-6 h-6 bg-secondary/40 rounded"></div>
+          <div className="grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 gap-6">
+            {mediaPartners.map((partner, index) => (
+              <Card key={index} className="text-center p-4 hover:shadow-lg transition-all duration-300 group">
+                <CardContent className="p-3 space-y-3">
+                  <div className="h-12 flex items-center justify-center">
+                    <img 
+                      src={partner.logo} 
+                      alt={partner.name}
+                      className="max-h-8 max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        const img = e.currentTarget as HTMLImageElement;
+                        const fallback = img.nextElementSibling as HTMLElement;
+                        img.style.display = 'none';
+                        if (fallback) fallback.style.display = 'block';
+                      }}
+                    />
+                    <div className="hidden bg-secondary/10 text-secondary px-2 py-1 rounded text-xs font-semibold">
+                      {partner.name}
+                    </div>
                   </div>
-                  <h4 className="font-semibold text-foreground mb-1 text-sm">{partner.name}</h4>
-                  <p className="text-xs text-muted-foreground">{partner.description}</p>
-                </div>
-              ))}
-            </div>
-          </Card>
+                  <h3 className="font-bold text-foreground text-sm">{partner.name}</h3>
+                  <p className="text-muted-foreground text-xs">{partner.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
