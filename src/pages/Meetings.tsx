@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
@@ -15,6 +16,24 @@ import conferenceArts from '@/assets/conference-arts.jpg';
 import conferenceScience from '@/assets/conference-science.jpg';
 
 const Meetings = () => {
+  const [selectedCategory, setSelectedCategory] = useState('All Events');
+
+  const categories = [
+    'All Events',
+    'Technology',
+    'Finance',
+    'Education', 
+    'AI & Innovation',
+    'Healthcare',
+    'Sustainability',
+    'Marketing',
+    'Legal',
+    'Engineering',
+    'Psychology',
+    'Arts & Design',
+    'Science'
+  ];
+
   const conferences = [
     {
       id: 1,
@@ -23,7 +42,8 @@ const Meetings = () => {
       venue: "Technology Convention Center",
       location: "Austin, TX",
       image: conferenceTech,
-      description: "Explore cutting-edge technologies and connect with industry leaders shaping tomorrow's digital landscape."
+      description: "Explore cutting-edge technologies and connect with industry leaders shaping tomorrow's digital landscape.",
+      category: "Technology"
     },
     {
       id: 2,
@@ -32,7 +52,8 @@ const Meetings = () => {
       venue: "Financial District Convention Hall",
       location: "New York, NY",
       image: conferenceFinance,
-      description: "Navigate the future of finance with expert insights on blockchain, fintech, and digital banking innovations."
+      description: "Navigate the future of finance with expert insights on blockchain, fintech, and digital banking innovations.",
+      category: "Finance"
     },
     {
       id: 3,
@@ -41,7 +62,8 @@ const Meetings = () => {
       venue: "Academic Excellence Center",
       location: "Chicago, IL",
       image: conferenceEducation,
-      description: "Revolutionize learning with innovative teaching methods and educational technology breakthroughs."
+      description: "Revolutionize learning with innovative teaching methods and educational technology breakthroughs.",
+      category: "Education"
     },
     {
       id: 4,
@@ -50,7 +72,8 @@ const Meetings = () => {
       venue: "Silicon Valley Convention Center",
       location: "San Francisco, CA",
       image: conferenceAI,
-      description: "Join leading AI researchers, tech executives, and innovators as they unveil the future of artificial intelligence."
+      description: "Join leading AI researchers, tech executives, and innovators as they unveil the future of artificial intelligence.",
+      category: "AI & Innovation"
     },
     {
       id: 5,
@@ -59,7 +82,8 @@ const Meetings = () => {
       venue: "Medical Innovation Hub",
       location: "Boston, MA",
       image: conferenceMedical,
-      description: "Discover breakthrough medical technologies and treatment innovations shaping the future of healthcare."
+      description: "Discover breakthrough medical technologies and treatment innovations shaping the future of healthcare.",
+      category: "Healthcare"
     },
     {
       id: 6,
@@ -68,7 +92,8 @@ const Meetings = () => {
       venue: "Green Technology Center",
       location: "Seattle, WA",
       image: conferenceSustainability,
-      description: "Unite with environmental leaders and green tech pioneers driving sustainable development worldwide."
+      description: "Unite with environmental leaders and green tech pioneers driving sustainable development worldwide.",
+      category: "Sustainability"
     },
     {
       id: 7,
@@ -77,7 +102,8 @@ const Meetings = () => {
       venue: "Creative Innovation Hub",
       location: "Los Angeles, CA",
       image: conferenceMarketing,
-      description: "Master the latest digital marketing strategies and tools driving successful brand transformations."
+      description: "Master the latest digital marketing strategies and tools driving successful brand transformations.",
+      category: "Marketing"
     },
     {
       id: 8,
@@ -86,7 +112,8 @@ const Meetings = () => {
       venue: "Justice Center Conference Hall",
       location: "Washington, DC",
       image: conferenceLegal,
-      description: "Explore how technology is reshaping legal practice and discover new approaches to justice delivery."
+      description: "Explore how technology is reshaping legal practice and discover new approaches to justice delivery.",
+      category: "Legal"
     },
     {
       id: 9,
@@ -95,7 +122,8 @@ const Meetings = () => {
       venue: "Industrial Innovation Center",
       location: "Detroit, MI",
       image: conferenceEngineering,
-      description: "Advance engineering practices with breakthrough technologies and sustainable design methodologies."
+      description: "Advance engineering practices with breakthrough technologies and sustainable design methodologies.",
+      category: "Engineering"
     },
     {
       id: 10,
@@ -104,7 +132,8 @@ const Meetings = () => {
       venue: "Wellness Convention Center",
       location: "Denver, CO",
       image: conferencePsychology,
-      description: "Transform mental healthcare with innovative therapeutic approaches and psychological research findings."
+      description: "Transform mental healthcare with innovative therapeutic approaches and psychological research findings.",
+      category: "Psychology"
     },
     {
       id: 11,
@@ -113,7 +142,8 @@ const Meetings = () => {
       venue: "Arts & Culture Center",
       location: "Miami, FL",
       image: conferenceArts,
-      description: "Celebrate creativity and innovation in arts, design, and digital media with industry visionaries."
+      description: "Celebrate creativity and innovation in arts, design, and digital media with industry visionaries.",
+      category: "Arts & Design"
     },
     {
       id: 12,
@@ -122,7 +152,8 @@ const Meetings = () => {
       venue: "Research Innovation Campus",
       location: "San Diego, CA",
       image: conferenceScience,
-      description: "Advance scientific knowledge through collaborative research and breakthrough discoveries across disciplines."
+      description: "Advance scientific knowledge through collaborative research and breakthrough discoveries across disciplines.",
+      category: "Science"
     },
     {
       id: 13,
@@ -131,9 +162,14 @@ const Meetings = () => {
       venue: "Research Innovation Campus",
       location: "San Diego, CA",
       image: conferenceScience,
-      description: "Advance Forensic scientific knowledge through collaborative research and breakthrough discoveries across disciplines."
+      description: "Advance Forensic scientific knowledge through collaborative research and breakthrough discoveries across disciplines.",
+      category: "Science"
     }
   ];
+
+  const filteredConferences = selectedCategory === 'All Events' 
+    ? conferences 
+    : conferences.filter(conference => conference.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-background">
@@ -144,11 +180,11 @@ const Meetings = () => {
           {/* Header */}
           <div className="text-center mb-16">
             <div className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-6">
-              All Events
+              {selectedCategory}
             </div>
             
             <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
-              All <span className="text-primary">Conferences & Meetings</span>
+              {selectedCategory === 'All Events' ? 'All' : selectedCategory} <span className="text-primary">Conferences & Meetings</span>
             </h1>
             
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -156,9 +192,32 @@ const Meetings = () => {
             </p>
           </div>
 
+          {/* Category Filter */}
+          <div className="mb-12">
+            <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+              {categories.map((category) => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category)}
+                  className={`
+                    px-4 py-2 text-sm font-medium transition-all duration-200
+                    ${selectedCategory === category 
+                      ? 'bg-primary text-primary-foreground hover:bg-primary/90' 
+                      : 'bg-background text-foreground hover:bg-accent hover:text-accent-foreground border-input'
+                    }
+                  `}
+                >
+                  {category}
+                </Button>
+              ))}
+            </div>
+          </div>
+
           {/* Conference Grid */}
           <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
-            {conferences.map((conference) => (
+            {filteredConferences.map((conference) => (
               <Card 
                 key={conference.id} 
                 className="overflow-hidden hover:shadow-lg transition-all duration-300 group"
