@@ -2,7 +2,13 @@ import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import heroBackground from '@/assets/hero-tech-background.jpg';
 import venueImage from '@/assets/venue-tech-expo.jpg';
+import venueInterior from '@/assets/venue-interior-1.jpg';
+import venueConferenceRoom from '@/assets/venue-conference-room.jpg';
+import venueNetworking from '@/assets/venue-networking.jpg';
+import venueExhibition from '@/assets/venue-exhibition.jpg';
 import chairpersonImage from '@/assets/chairperson-tech.jpg';
 import speaker1 from '@/assets/speaker-1.jpg';
 import speaker2 from '@/assets/speaker-2.jpg';
@@ -16,6 +22,24 @@ const ConferenceDetail = () => {
     minutes: 0,
     seconds: 0
   });
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  const venueImages = [
+    { src: venueImage, alt: "Technology Convention Center Exterior", title: "Main Convention Center" },
+    { src: venueInterior, alt: "Convention Center Interior", title: "Main Exhibition Hall" },
+    { src: venueConferenceRoom, alt: "Conference Room", title: "Conference Room" },
+    { src: venueNetworking, alt: "Networking Area", title: "Networking Lounge" },
+    { src: venueExhibition, alt: "Exhibition Hall", title: "Technology Exhibition" }
+  ];
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % venueImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + venueImages.length) % venueImages.length);
+  };
 
   useEffect(() => {
     const targetDate = new Date('2025-11-05T09:00:00');
@@ -94,8 +118,7 @@ const ConferenceDetail = () => {
         "Conference schedule handout",
         "Certificate of Attendance",
         "E-Abstract Book"
-      ],
-      featured: true
+      ]
     },
     {
       title: "Student",
@@ -168,19 +191,18 @@ const ConferenceDetail = () => {
   ];
 
   const publishingPartners = [
-    "IEEE Computer Society",
-    "ACM Digital Library", 
-    "SpringerLink",
-    "ScienceDirect",
-    "ResearchGate"
+    { name: "MDPI", logo: "Academic Open Access Publishing since 1996" },
+    { name: "Cambridge Scholars Publishing", logo: "Cambridge University Press" },
+    { name: "Scopus", logo: "Elsevier's Abstract and Citation Database" },
+    { name: "Bon View Publishing", logo: "Academic Research Publishing" }
   ];
 
   const mediaPartners = [
-    "TechCrunch",
-    "MIT Technology Review",
-    "IEEE Spectrum",
-    "Wired Magazine",
-    "VentureBeat"
+    { name: "TechCrunch", logo: "Leading Technology Media" },
+    { name: "MIT Technology Review", logo: "Innovation & Research Coverage" },
+    { name: "IEEE Spectrum", logo: "Engineering & Technology News" },
+    { name: "Wired Magazine", logo: "Technology & Digital Culture" },
+    { name: "VentureBeat", logo: "Tech Industry News & Analysis" }
   ];
 
   return (
@@ -188,27 +210,35 @@ const ConferenceDetail = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-primary/10 via-background to-secondary/10">
+      <section 
+        className="relative py-20 bg-gradient-to-br from-primary/10 via-background to-secondary/10"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${heroBackground})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-semibold mb-6">
               Innovation • Technology • Future
             </div>
             
-            <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6">
-              Tech Innovation <span className="text-primary">Expo 2025</span>
+            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6">
+              Tech Innovation <span className="text-blue-400">Expo 2025</span>
             </h1>
             
-            <div className="flex flex-col md:flex-row justify-center items-center gap-6 mb-8 text-lg text-muted-foreground">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-6 mb-8 text-lg text-white/90">
               <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"/>
                 </svg>
                 <span>November 5-7, 2025</span>
               </div>
               
               <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
                 </svg>
                 <span>Technology Convention Center, Austin, TX</span>
@@ -218,16 +248,16 @@ const ConferenceDetail = () => {
             {/* Countdown Timer */}
             <div className="flex justify-center gap-4 mb-8">
               {Object.entries(timeLeft).map(([unit, value]) => (
-                <div key={unit} className="bg-primary/10 backdrop-blur-sm rounded-lg p-4 min-w-[80px]">
-                  <div className="text-2xl font-bold text-primary">{value}</div>
-                  <div className="text-sm text-muted-foreground capitalize">{unit}</div>
+                <div key={unit} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 min-w-[80px]">
+                  <div className="text-2xl font-bold text-blue-400">{value}</div>
+                  <div className="text-sm text-white/80 capitalize">{unit}</div>
                 </div>
               ))}
             </div>
 
             <Button 
               size="lg" 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg font-semibold"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg font-semibold"
             >
               Register Now - Early Bird Special
             </Button>
@@ -240,11 +270,50 @@ const ConferenceDetail = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
-              <img 
-                src={venueImage} 
-                alt="Technology Convention Center Austin"
-                className="w-full h-[400px] object-cover rounded-lg shadow-lg"
-              />
+              <div className="relative">
+                <img 
+                  src={venueImages[currentImageIndex].src} 
+                  alt={venueImages[currentImageIndex].alt}
+                  className="w-full h-[400px] object-cover rounded-lg shadow-lg"
+                />
+                
+                {/* Image Navigation */}
+                <div className="absolute inset-y-0 left-0 flex items-center">
+                  <button
+                    onClick={prevImage}
+                    className="ml-4 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                </div>
+                
+                <div className="absolute inset-y-0 right-0 flex items-center">
+                  <button
+                    onClick={nextImage}
+                    className="mr-4 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+                
+                {/* Image Title */}
+                <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1 rounded-lg">
+                  <p className="text-sm font-semibold">{venueImages[currentImageIndex].title}</p>
+                </div>
+                
+                {/* Image Indicators */}
+                <div className="absolute bottom-4 right-4 flex gap-2">
+                  {venueImages.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        index === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
             
             <div className="order-1 lg:order-2">
@@ -399,9 +468,7 @@ const ConferenceDetail = () => {
             {pricingTiers.map((tier, index) => (
               <Card 
                 key={index} 
-                className={`relative overflow-hidden transition-all duration-300 hover:shadow-lg ${
-                  tier.featured ? 'ring-2 ring-primary scale-105' : ''
-                }`}
+                className="relative overflow-hidden transition-all duration-300 hover:shadow-lg"
               >
                 <CardHeader className="p-6 pb-4">
                   <h3 className="text-xl font-bold text-foreground mb-1">{tier.title}</h3>
@@ -430,11 +497,7 @@ const ConferenceDetail = () => {
                 
                 <CardFooter className="p-6 pt-0">
                   <Button 
-                    className={`w-full ${
-                      tier.featured 
-                        ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
-                        : 'bg-blue-500 hover:bg-blue-600 text-white'
-                    }`}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                     size="lg"
                   >
                     Register Now
@@ -503,23 +566,40 @@ const ConferenceDetail = () => {
       <section className="py-20 bg-secondary/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
+            <div className="text-orange-500 text-sm font-semibold mb-4">Media</div>
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
               Publishing <span className="text-primary">Partners</span>
             </h2>
-            <p className="text-xl text-muted-foreground">
-              Showcasing research through leading academic and industry publications
-            </p>
+            
+            <div className="flex justify-center mb-8">
+              <div className="flex gap-1">
+                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              </div>
+            </div>
           </div>
 
-          <div className="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 gap-8">
-            {publishingPartners.map((partner, index) => (
-              <div 
-                key={index}
-                className="bg-background p-6 rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 flex items-center justify-center h-24"
-              >
-                <span className="text-sm font-semibold text-foreground text-center">{partner}</span>
-              </div>
-            ))}
+          <div className="bg-white rounded-lg border border-gray-200 p-8">
+            <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8">
+              {publishingPartners.map((partner, index) => (
+                <div 
+                  key={index}
+                  className="flex flex-col items-center justify-center text-center space-y-2"
+                >
+                  <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center mb-2">
+                    <span className="text-2xl font-bold text-gray-600">
+                      {partner.name.charAt(0)}
+                    </span>
+                  </div>
+                  <h3 className="font-semibold text-foreground">{partner.name}</h3>
+                  <p className="text-xs text-muted-foreground">{partner.logo}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -531,20 +611,36 @@ const ConferenceDetail = () => {
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
               Media <span className="text-primary">Partners</span>
             </h2>
-            <p className="text-xl text-muted-foreground">
-              Amplifying innovation stories across global technology media platforms
-            </p>
+            
+            <div className="flex justify-center mb-8">
+              <div className="flex gap-1">
+                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              </div>
+            </div>
           </div>
 
-          <div className="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 gap-8">
-            {mediaPartners.map((partner, index) => (
-              <div 
-                key={index}
-                className="bg-secondary/10 p-6 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center h-24"
-              >
-                <span className="text-sm font-semibold text-foreground text-center">{partner}</span>
-              </div>
-            ))}
+          <div className="bg-gray-50 rounded-lg border border-gray-200 p-8">
+            <div className="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 gap-8">
+              {mediaPartners.map((partner, index) => (
+                <div 
+                  key={index}
+                  className="flex flex-col items-center justify-center text-center space-y-2"
+                >
+                  <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm">
+                    <span className="text-lg font-bold text-gray-600">
+                      {partner.name.charAt(0)}
+                    </span>
+                  </div>
+                  <h3 className="font-semibold text-foreground text-sm">{partner.name}</h3>
+                  <p className="text-xs text-muted-foreground">{partner.logo}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
