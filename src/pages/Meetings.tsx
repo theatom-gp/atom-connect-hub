@@ -207,6 +207,11 @@ const Meetings = () => {
                   <Button 
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
                     size="lg"
+                    onClick={() => {
+                      if (conference.id === 1) {
+                        window.location.href = '/conference/tech-innovation-expo-2025';
+                      }
+                    }}
                   >
                     View Details & Register
                   </Button>
