@@ -83,10 +83,6 @@ const PrivacyPolicy = () => {
                 <FileText className="h-5 w-5 mr-2" />
                 Download PDF Version
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white/30 text-white hover:bg-white/10">
-                <Mail className="h-5 w-5 mr-2" />
-                Contact Privacy Team
-              </Button>
             </div>
             <p className="text-sm text-primary-foreground/70 mt-6">
               Last Updated: January 2025 • Effective: January 1, 2025
