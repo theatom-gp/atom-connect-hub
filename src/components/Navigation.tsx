@@ -10,7 +10,7 @@ const Navigation = () => {
     { name: 'Cancellation Policy', href: '/cancellation-policy' },
     { name: 'Privacy Policy', href: '/privacy-policy' },
     { name: 'Terms and Conditions', href: '/terms-and-conditions' },
-    { name: 'FAQ', href: '#faq' },
+    { name: 'FAQ', href: '/faq' },
     { name: 'Contact', href: '#contact' },
   ];
 
