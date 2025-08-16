@@ -8,7 +8,7 @@ const Navigation = () => {
     { name: 'Home', href: '/' },
     { name: 'Meetings', href: '/meetings' },
     { name: 'Cancellation Policy', href: '/cancellation-policy' },
-    { name: 'Privacy Policy', href: '#privacy' },
+    { name: 'Privacy Policy', href: '/privacy-policy' },
     { name: 'Terms and Conditions', href: '#terms' },
     { name: 'FAQ', href: '#faq' },
     { name: 'Contact', href: '#contact' },
