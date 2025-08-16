@@ -200,18 +200,63 @@ const ConferenceDetail = () => {
   ];
 
   const publishingPartners = [
-    { name: "MDPI", description: "Academic Open Access Publishing", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MDPI_logo.svg/200px-MDPI_logo.svg.png" },
-    { name: "Cambridge Scholars Publishing", description: "Academic Publisher", logo: "https://www.cambridgescholars.com/images/logo.png" },
-    { name: "Scopus", description: "Abstract and Citation Database", logo: "https://www.elsevier.com/__data/assets/image/0004/1098667/scopus-logo-orange.png" },
-    { name: "Bon View Publishing", description: "International Academic Publisher", logo: "https://bonviewglobal.com/images/logo.png" }
+    { 
+      name: "MDPI", 
+      description: "Academic Open Access Publishing", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MDPI_logo.svg/320px-MDPI_logo.svg.png",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY0ZjQiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzMzMzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TURQSTwvdGV4dD48L3N2Zz4="
+    },
+    { 
+      name: "Cambridge Scholars Publishing", 
+      description: "Academic Publisher", 
+      logo: "https://www.cambridgescholars.com/assets/img/logo.png",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY0ZjQiLz48dGV4dCB4PSI1MCIgeT0iMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI4IiBmaWxsPSIjMzMzMzMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5DYW1icmlkZ2U8L3RleHQ+PHRleHQgeD0iNTAiIHk9IjMwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOCIgZmlsbD0iIzMzMzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U2Nob2xhcnM8L3RleHQ+PC9zdmc+"
+    },
+    { 
+      name: "Scopus", 
+      description: "Abstract and Citation Database", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Scopus_logo.svg/320px-Scopus_logo.svg.png",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGRjZGMDAiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlNjb3B1czwvdGV4dD48L3N2Zz4="
+    },
+    { 
+      name: "Bon View Publishing", 
+      description: "International Academic Publisher", 
+      logo: "https://www.bonviewglobal.com/assets/images/logo.png",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY0ZjQiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzMzMzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Qm9uVmlldzwvdGV4dD48L3N2Zz4="
+    }
   ];
 
   const mediaPartners = [
-    { name: "TechCrunch", description: "Technology News Platform", logo: "https://techcrunch.com/wp-content/uploads/2015/02/cropped-cropped-favicon-gradient.png" },
-    { name: "MIT Technology Review", description: "Innovation Magazine", logo: "https://wp.technologyreview.com/wp-content/uploads/2021/09/MIT-Technology-Review-logo-2021-square.png" },
-    { name: "IEEE Spectrum", description: "Engineering Publication", logo: "https://spectrum.ieee.org/static/images/ieee-spectrum-logo.png" },
-    { name: "Wired Magazine", description: "Technology & Culture", logo: "https://media.wired.com/photos/5a593a7d9eb5045d5cd437dd/master/w_1600%2Cc_limit/Wired_Logo.jpg" },
-    { name: "VentureBeat", description: "Tech Industry News", logo: "https://venturebeat.com/wp-content/themes/vb-news/assets/img/logos/VB_Logo_Horizontal.svg" }
+    { 
+      name: "TechCrunch", 
+      description: "Technology News Platform", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/b/b9/TechCrunch_logo.svg",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiMwMENGNjQiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlRlY2hDcnVuY2g8L3RleHQ+PC9zdmc+"
+    },
+    { 
+      name: "MIT Technology Review", 
+      description: "Innovation Magazine", 
+      logo: "https://www.technologyreview.com/wp-content/uploads/2020/02/mit-logo-2020-web.png",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNBMzE2MjEiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk1JVCBUZWNoPC90ZXh0Pjwvc3ZnPg=="
+    },
+    { 
+      name: "IEEE Spectrum", 
+      description: "Engineering Publication", 
+      logo: "https://spectrum.ieee.org/media/logo/IEEE-spectrum-logo.svg",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiMwMDU1RkYiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPklFRUUgU3BlY3RydW08L3RleHQ+PC9zdmc+"
+    },
+    { 
+      name: "Wired Magazine", 
+      description: "Technology & Culture", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/5/50/Wired_logo.svg",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNTAiIHk9IjI1IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiMwMDAwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldJUkVEPC90ZXh0Pjwvc3ZnPg=="
+    },
+    { 
+      name: "VentureBeat", 
+      description: "Tech Industry News", 
+      logo: "https://venturebeat.com/wp-content/uploads/2020/06/VB_logo_2020.png",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGRjI0MDAiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlZlbnR1cmVCZWF0PC90ZXh0Pjwvc3ZnPg=="
+    }
   ];
 
   return (
@@ -261,50 +306,31 @@ const ConferenceDetail = () => {
               ))}
             </div>
 
-            <Button 
-              size="lg" 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg font-semibold"
-            >
-              {isEarlyBird ? 'Register Now - Early Bird Special' : 'Register Now'}
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg" 
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg font-semibold"
+              >
+                Register Now
+              </Button>
+              
+              <Button 
+                size="lg" 
+                variant={isEarlyBird ? "default" : "secondary"}
+                className={`px-8 py-3 text-lg font-semibold ${
+                  isEarlyBird 
+                    ? "bg-accent hover:bg-accent/90 text-accent-foreground border-accent" 
+                    : "opacity-50 cursor-not-allowed bg-muted text-muted-foreground"
+                }`}
+                disabled={!isEarlyBird}
+              >
+                {isEarlyBird ? "Early Bird Special" : "Early Bird Expired"}
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Early Bird / Abstract Submission Banner */}
-      <section className="py-4 bg-gradient-to-r from-primary/10 to-accent/10 border-y">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-center md:text-left">
-              {isEarlyBird ? (
-                <>
-                  <p className="text-primary font-semibold text-lg">
-                    🎯 Early Bird Registration Ends: July 27, 2025
-                  </p>
-                  <p className="text-muted-foreground text-sm">
-                    Save up to 30% on registration fees - Limited time offer!
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p className="text-primary font-semibold text-lg">
-                    📝 Submit Your Abstracts Now
-                  </p>
-                  <p className="text-muted-foreground text-sm">
-                    Share your research and innovations with the global tech community
-                  </p>
-                </>
-              )}
-            </div>
-            <Button 
-              variant="outline" 
-              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground whitespace-nowrap"
-            >
-              {isEarlyBird ? 'Claim Early Bird Discount' : 'Submit Abstract'}
-            </Button>
-          </div>
-        </div>
-      </section>
 
       {/* Conference Summary */}
       <section className="py-20 bg-background">
@@ -492,10 +518,10 @@ const ConferenceDetail = () => {
                   {tier.subtitle && (
                     <p className="text-muted-foreground text-sm">{tier.subtitle}</p>
                   )}
-                  <div className="mt-4">
-                    <span className="text-sm text-primary">$</span>
-                    <span className="text-4xl font-bold text-primary">{tier.price}</span>
-                    <span className="text-sm text-foreground font-medium ml-1">USD</span>
+                  <div className="mt-4 bg-white/95 backdrop-blur-sm p-3 rounded-lg border-2 border-primary/20">
+                    <span className="text-lg text-primary font-bold">$</span>
+                    <span className="text-5xl font-bold text-primary">{tier.price}</span>
+                    <span className="text-lg text-primary font-bold ml-1">USD</span>
                   </div>
                 </CardHeader>
                 
