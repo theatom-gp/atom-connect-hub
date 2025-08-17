@@ -8,7 +8,6 @@ const Footer = () => {
     { name: 'Home', href: '/' },
     { name: 'Upcoming Conferences', href: '/meetings' },
     { name: 'About Us', href: '/#about' },
-    { name: 'Our Mission', href: '/#mission' },
     { name: 'Contact Us', href: '/contact' },
   ];
 

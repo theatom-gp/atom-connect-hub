@@ -4,16 +4,16 @@ import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import heroBackground from '@/assets/hero-tech-background.jpg';
-import venueInterior from '@/assets/venue-interior-1.jpg';
-import venueConference from '@/assets/venue-conference-room.jpg';
-import venueNetworking from '@/assets/venue-networking.jpg';
-import venueExhibition from '@/assets/venue-exhibition.jpg';
-import chairpersonImage from '@/assets/chairperson-tech.jpg';
-import speaker1 from '@/assets/speaker-1.jpg';
-import speaker2 from '@/assets/speaker-2.jpg';
-import speaker3 from '@/assets/speaker-3.jpg';
-import speaker4 from '@/assets/speaker-4.jpg';
+import heroBackground from '@/assets/global-healthcare/bg.jpg';
+import venueInterior from '@/assets/global-healthcare/venue-interior-1.jpg';
+import venueConference from '@/assets/global-healthcare/venue-conference-room.jpg';
+import venueNetworking from '@/assets/global-healthcare/venue-networking.jpg';
+import venueExhibition from '@/assets/global-healthcare/venue-exhibition.jpg';
+import chairpersonImage from '@/assets/global-healthcare/chairperson-tech.jpg';
+import speaker1 from '@/assets/global-healthcare/speaker-1.jpg';
+import speaker2 from '@/assets/global-healthcare/speaker-2.jpg';
+import speaker3 from '@/assets/global-healthcare/speaker-3.jpg';
+import speaker4 from '@/assets/global-healthcare/speaker-4.jpg';
 
 const GlobalHealthcareRevolution = () => {
   const navigate = useNavigate();

@@ -4,16 +4,16 @@ import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import heroBackground from '@/assets/hero-tech-background.jpg';
-import venueInterior from '@/assets/venue-interior-1.jpg';
-import venueConference from '@/assets/venue-conference-room.jpg';
-import venueNetworking from '@/assets/venue-networking.jpg';
-import venueExhibition from '@/assets/venue-exhibition.jpg';
-import chairpersonImage from '@/assets/chairperson-tech.jpg';
-import speaker1 from '@/assets/speaker-1.jpg';
-import speaker2 from '@/assets/speaker-2.jpg';
-import speaker3 from '@/assets/speaker-3.jpg';
-import speaker4 from '@/assets/speaker-4.jpg';
+import heroBackground from '@/assets/aisummit/bg.avif';
+import venueInterior from '@/assets/aisummit/aisummit-venue.jpg';
+import venueConference from '@/assets/aisummit/conference.png';
+import venueNetworking from '@/assets/aisummit/lobby.jpg';
+import venueExhibition from '@/assets/aisummit/city.jpg';
+import chairpersonImage from '@/assets/aisummit/chairperson-tech.jpg';
+import speaker1 from '@/assets/aisummit/speaker-1.jpg';
+import speaker2 from '@/assets/aisummit/speaker-2.jpg';
+import speaker3 from '@/assets/aisummit/speaker-3.jpg';
+import speaker4 from '@/assets/aisummit/speaker-4.jpg';
 
 const AISummit = () => {
   const navigate = useNavigate();
@@ -24,8 +24,9 @@ const AISummit = () => {
     seconds: 0
   });
 
-  const targetDate = new Date('2025-11-05T09:00:00');
-  const earlyBirdDate = new Date('2025-07-27T23:59:59'); // More than 100 days before event
+  const targetDate = new Date('2026-02-15T09:00:00');
+  // const earlyBirdDate = new Date('2025-07-27T23:59:59'); // More than 100 days before event
+  const earlyBirdDate = new Date(targetDate.getTime() - 100 * 24 * 60 * 60 * 1000); // More than 100 days before event
   const now = new Date();
   const daysToEvent = Math.floor((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
   const isEarlyBird = daysToEvent > 100;
@@ -55,8 +56,8 @@ const AISummit = () => {
   const venueImages = [
     {
       src: venueInterior,
-      alt: "Technology Convention Center - Main Hall",
-      title: "Main Convention Hall"
+      alt: "Technology Convention Center",
+      title: "Convention Hall"
     },
     {
       src: venueConference,
@@ -66,12 +67,12 @@ const AISummit = () => {
     {
       src: venueNetworking,
       alt: "Networking Area",
-      title: "Networking Spaces"
+      title: "Lobby"
     },
     {
       src: venueExhibition,
       alt: "Technology Exhibition Hall",
-      title: "Exhibition Area"
+      title: "City"
     }
   ];
 
@@ -276,11 +277,11 @@ const AISummit = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-semibold mb-6">
-              Innovation • Technology • Future
+              AI • Technology • Future
             </div>
             
             <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6">
-              Tech Innovation <span className="text-primary">Expo 2025</span>
+              AI Innovation <span className="text-primary">Summit 2026</span>
             </h1>
             
             <div className="flex flex-col md:flex-row justify-center items-center gap-6 mb-8 text-lg text-white/90">
@@ -288,14 +289,14 @@ const AISummit = () => {
                 <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"/>
                 </svg>
-                <span>November 5-7, 2025</span>
+                <span>Feb 15-17, 2026</span>
               </div>
               
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
                 </svg>
-                <span>Technology Convention Center, Austin, TX</span>
+                <span>Silicon Valley Convention Center, San Francisco, CA</span>
               </div>
             </div>
 

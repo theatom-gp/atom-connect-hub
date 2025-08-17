@@ -4,16 +4,16 @@ import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import heroBackground from '@/assets/hero-tech-background.jpg';
-import venueInterior from '@/assets/venue-interior-1.jpg';
-import venueConference from '@/assets/venue-conference-room.jpg';
-import venueNetworking from '@/assets/venue-networking.jpg';
-import venueExhibition from '@/assets/venue-exhibition.jpg';
-import chairpersonImage from '@/assets/chairperson-tech.jpg';
-import speaker1 from '@/assets/speaker-1.jpg';
-import speaker2 from '@/assets/speaker-2.jpg';
-import speaker3 from '@/assets/speaker-3.jpg';
-import speaker4 from '@/assets/speaker-4.jpg';
+import heroBackground from '@/assets/tech-innovation/bg.jpg';
+import venueInterior from '@/assets/tech-innovation/venue-interior-1.jpg';
+import venueConference from '@/assets/tech-innovation/venue-conference-room.jpg';
+import venueNetworking from '@/assets/tech-innovation/venue-networking.jpg';
+import venueExhibition from '@/assets/tech-innovation/venue-exhibition.jpg';
+import chairpersonImage from '@/assets/tech-innovation/chairperson-tech.jpg';
+import speaker1 from '@/assets/tech-innovation/speaker-1.jpg';
+import speaker2 from '@/assets/tech-innovation/speaker-2.jpg';
+import speaker3 from '@/assets/tech-innovation/speaker-3.jpg';
+import speaker4 from '@/assets/tech-innovation/speaker-4.jpg';
 
 const ConferenceDetail = () => {
   const navigate = useNavigate();
