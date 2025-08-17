@@ -440,6 +440,7 @@ const ConferenceDetail = () => {
                     variant="outline" 
                     size="lg"
                     className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                    onClick={() => window.location.href = '/submit-abstract'}
                   >
                     Submit Your Abstract
                   </Button>

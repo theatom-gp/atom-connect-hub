@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Meetings from "./pages/Meetings";
 import CancellationPolicy from "./pages/CancellationPolicy";
 import ConferenceDetail from "./pages/ConferenceDetail";
+import AbstractSubmission from "./pages/AbstractSubmission";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import FAQ from "./pages/FAQ";
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/meetings" element={<Meetings />} />
           <Route path="/conference/tech-innovation-expo-2025" element={<ConferenceDetail />} />
+          <Route path="/submit-abstract" element={<AbstractSubmission />} />
           <Route path="/cancellation-policy" element={<CancellationPolicy />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
