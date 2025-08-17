@@ -28,6 +28,7 @@ const Hero = () => {
             </p>
             
             <div className="flex justify-center lg:justify-start mb-8 sm:mb-12">
+              <a href="/meetings">
               <Button 
                 size="lg" 
                 className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg touch-manipulation"
@@ -35,6 +36,7 @@ const Hero = () => {
               >
                 Explore Conferences
               </Button>
+              </a>
             </div>
             
             {/* Stats - Mobile optimized */}

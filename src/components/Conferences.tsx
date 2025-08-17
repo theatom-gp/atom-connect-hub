@@ -127,7 +127,7 @@ const Conferences = () => {
               size="lg" 
               className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-8 py-4 text-lg"
             >
-              Explore Conferences
+              More Conferences
             </Button>
           </a>
           
