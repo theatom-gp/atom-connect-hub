@@ -5,18 +5,25 @@ const CancellationPolicy = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <section className="py-20 bg-background">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-20 px-4 text-center overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIyIi8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
+        <div className="relative container mx-auto max-w-4xl">
           <div className="text-center mb-16">
-            <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
-              Cancellation <span className="text-primary">Policy</span>
+            <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
+              Cancellation <span className="text-yellow-300">Policy</span>
             </h1>
             
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 leading-relaxed">
               Please review our comprehensive cancellation and refund policies before registering for any conference.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <section className="py-16 bg-background">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Policy Content */}
           <div className="space-y-12">

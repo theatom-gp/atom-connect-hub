@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
@@ -15,6 +16,7 @@ import speaker3 from '@/assets/speaker-3.jpg';
 import speaker4 from '@/assets/speaker-4.jpg';
 
 const ConferenceDetail = () => {
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -311,6 +313,7 @@ const ConferenceDetail = () => {
               <Button 
                 size="lg" 
                 className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg font-semibold"
+                onClick={() => navigate('/registration')}
               >
                 Register Now
               </Button>
@@ -569,6 +572,7 @@ const ConferenceDetail = () => {
                   <Button 
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                     size="lg"
+                    onClick={() => navigate('/registration')}
                   >
                     Register Now
                   </Button>
@@ -749,6 +753,7 @@ const ConferenceDetail = () => {
             <Button 
               size="lg" 
               className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg font-semibold"
+              onClick={() => navigate('/registration')}
             >
               Register Now
             </Button>

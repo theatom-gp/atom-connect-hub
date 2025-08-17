@@ -10,32 +10,33 @@ const TermsAndConditions = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative py-20 px-4 text-center">
-        <div className="container mx-auto max-w-4xl">
+      <section className="relative bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-20 px-4 text-center overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIyIi8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
+        <div className="relative container mx-auto max-w-4xl">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <Shield className="h-8 w-8 text-primary" />
-            <Badge variant="secondary" className="text-sm font-medium">
+            <Shield className="h-8 w-8 text-primary-foreground" />
+            <Badge variant="secondary" className="text-lg px-6 py-3 bg-white/20 backdrop-blur-sm">
               Legal Framework
             </Badge>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            Terms & Conditions
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            Terms & <span className="text-yellow-300">Conditions</span>
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 leading-relaxed">
             Clear, fair terms that protect both you and Atom Conferences. 
             Last updated: January 2025
           </p>
-          <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center gap-4 text-sm text-primary-foreground/80">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-500" />
+              <CheckCircle className="h-4 w-4 text-yellow-300" />
               <span>Transparent</span>
             </div>
             <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-blue-500" />
+              <Users className="h-4 w-4 text-yellow-300" />
               <span>Fair to All</span>
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-orange-500" />
+              <Clock className="h-4 w-4 text-yellow-300" />
               <span>Regularly Updated</span>
             </div>
           </div>

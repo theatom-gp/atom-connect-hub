@@ -70,22 +70,23 @@ const FAQ = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative py-20 px-4 text-center">
-        <div className="container mx-auto max-w-4xl">
+      <section className="relative bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-20 px-4 text-center overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIyIi8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
+        <div className="relative container mx-auto max-w-4xl">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <HelpCircle className="h-8 w-8 text-primary" />
-            <Badge variant="secondary" className="text-sm font-medium">
+            <HelpCircle className="h-8 w-8 text-primary-foreground" />
+            <Badge variant="secondary" className="text-lg px-6 py-3 bg-white/20 backdrop-blur-sm">
               Get Answers
             </Badge>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            Frequently Asked Questions
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            Frequently Asked <span className="text-yellow-300">Questions</span>
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto leading-relaxed">
             Everything you need to know about Atom Conferences. Can't find your answer? 
             Our support team is here to help.
           </p>
-          <Button size="lg" className="mb-8">
+          <Button size="lg" variant="secondary" className="mb-8 text-lg px-8 py-4">
             <MessageCircle className="h-5 w-5 mr-2" />
             Ask a Question
           </Button>
@@ -93,7 +94,7 @@ const FAQ = () => {
       </section>
 
       {/* FAQ Content */}
-      <section className="py-16 px-4">
+      <section className="py-16 bg-background px-4">
         <div className="container mx-auto max-w-4xl">
           <div className="space-y-8">
             {faqCategories.map((category, categoryIndex) => (
