@@ -425,14 +425,39 @@ const ConferenceDetail = () => {
                 <p className="font-semibold text-foreground">Dr. Sarah Mitchell</p>
                 <p className="text-muted-foreground">Conference Chair & Director of Innovation, Global Tech Institute</p>
               </div>
-              
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-              >
-                Submit Your Abstract
-              </Button>
+
+              {/* Abstract Submission Section */}
+              <div className="bg-secondary/10 rounded-lg p-6 mb-8">
+                <h3 className="text-xl font-semibold text-foreground mb-3">Call for Abstracts</h3>
+                <p className="text-muted-foreground mb-4">
+                  Share your innovative research and join the conversation! We welcome abstracts on topics including AI, machine learning, sustainable technology, quantum computing, and digital transformation.
+                </p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  <strong>Submission Deadline:</strong> September 15, 2025 | <strong>Format:</strong> 300-500 words | <strong>Requirements:</strong> Original research only
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button 
+                    variant="outline" 
+                    size="lg"
+                    className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                  >
+                    Submit Your Abstract
+                  </Button>
+                  <Button 
+                    variant="secondary"
+                    size="lg"
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = '/sample-abstract.pdf';
+                      link.download = 'sample-abstract.pdf';
+                      link.click();
+                    }}
+                    className="bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+                  >
+                    📄 Download Sample Abstract
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
