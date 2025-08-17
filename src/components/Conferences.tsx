@@ -1,10 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { useNavigate } from 'react-router-dom';
 import conferenceAI from '@/assets/conference-ai.jpg';
 import conferenceMedical from '@/assets/conference-medical.jpg';
 import conferenceSustainability from '@/assets/conference-sustainability.jpg';
 
 const Conferences = () => {
+  const navigate = useNavigate();
+  
   const conferences = [
     {
       id: 1,
@@ -15,7 +18,8 @@ const Conferences = () => {
       image: conferenceAI,
       description: "Join leading AI researchers, tech executives, and innovators as they unveil the future of artificial intelligence.",
       attendees: 500,
-      speakers: 25
+      speakers: 25,
+      route: "/conference/aisummit"
     },
     {
       id: 2,
@@ -26,7 +30,8 @@ const Conferences = () => {
       image: conferenceMedical,
       description: "Discover breakthrough medical technologies and treatment innovations shaping the future of healthcare.",
       attendees: 350,
-      speakers: 18
+      speakers: 18,
+      route: "/conference/healthcarerevolution"
     },
     {
       id: 3,
@@ -37,7 +42,8 @@ const Conferences = () => {
       image: conferenceSustainability,
       description: "Unite with environmental leaders and green tech pioneers driving sustainable development worldwide.",
       attendees: 400,
-      speakers: 22
+      speakers: 22,
+      route: "/conference/sustainablefuture"
     }
   ];
 
@@ -112,6 +118,7 @@ const Conferences = () => {
                 <Button 
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
                   size="lg"
+                  onClick={() => navigate(conference.route)}
                 >
                   View Details & Register
                 </Button>

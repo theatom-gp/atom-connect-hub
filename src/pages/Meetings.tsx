@@ -269,6 +269,30 @@ const Meetings = () => {
                     onClick={() => {
                       if (conference.id === 1) {
                         window.location.href = '/conference/tech-innovation-expo-2025';
+                      } else if (conference.id === 2) {
+                        window.location.href = '/conference/globalfinancesummit';
+                      } else if (conference.id === 3) {
+                        window.location.href = '/conference/educationtransformconference';
+                      } else if (conference.id === 4) {
+                        window.location.href = '/conference/aisummit';
+                      } else if (conference.id === 5) {
+                        window.location.href = '/conference/globalhealthcarerevolution';
+                      } else if (conference.id === 6) {
+                        window.location.href = '/conference/sustainablefutureconference';
+                      } else if (conference.id === 7) {
+                        window.location.href = '/conference/digitalmarketingmasters';
+                      } else if (conference.id === 8) {
+                        window.location.href = '/conference/legalinnovationforum';
+                      } else if (conference.id === 9) {
+                        window.location.href = '/conference/engineeringexcellencesummit';
+                      } else if (conference.id === 10) {
+                        window.location.href = '/conference/mentalhealthpsychologycongress';
+                      } else if (conference.id === 11) {
+                        window.location.href = '/conference/creativeartsdesignfestival';
+                      } else if (conference.id === 12) {
+                        window.location.href = '/conference/scientificresearchsymposium';
+                      } else if (conference.id === 13) {
+                        window.location.href = '/conference/globalforensicscienceresearch';
                       }
                     }}
                   >

@@ -7,6 +7,18 @@ import Index from "./pages/Index";
 import Meetings from "./pages/Meetings";
 import CancellationPolicy from "./pages/CancellationPolicy";
 import ConferenceDetail from "./pages/ConferenceDetail";
+import AISummit from "./pages/AISummit";
+import GlobalHealthcareRevolution from "./pages/GlobalHealthcareRevolution";
+// import SustainableFutureConference from "./pages/SustainableFutureConference";
+// import GlobalFinancesummit from "./pages/GlobalFinancesummit";
+// import EducationTransformConference from "./pages/EducationTransformConference";
+// import DigitalMarketingMasters from "./pages/DigitalMarketingMasters";
+// import LegalInnovationForum from "./pages/LegalInnovationForum";
+// import EngineeringExcellenceSummit from "./pages/EngineeringExcellenceSummit";
+// import MentalHealthPsychologyCongress from "./pages/MentalHealthPsychologyCongress";
+// import CreativeArtsDesignFestival from "./pages/CreativeArtsDesignFestival";
+// import ScientificResearchSymposium from "./pages/ScientificResearchSymposium";
+// import GlobalForensicScienceResearch from "./pages/GlobalForensicScienceResearch";
 import AbstractSubmission from "./pages/AbstractSubmission";
 import Registration from "./pages/Registration";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -26,7 +38,6 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/meetings" element={<Meetings />} />
-          <Route path="/conference/tech-innovation-expo-2025" element={<ConferenceDetail />} />
           <Route path="/submit-abstract" element={<AbstractSubmission />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/cancellation-policy" element={<CancellationPolicy />} />
@@ -34,6 +45,19 @@ const App = () => (
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/conference/tech-innovation-expo-2025" element={<ConferenceDetail />} />
+          <Route path="/conference/aisummit" element={<AISummit />} />
+          <Route path="/conference/globalhealthcarerevolution" element={<GlobalHealthcareRevolution />} />
+          {/* <Route path="/conference/sustainablefutureconference" element={<SustainableFutureConference />} />
+          <Route path="/conference/globalfinancesummit" element={<GlobalFinancesummit />} />
+          <Route path="/conference/educationtransformconference" element={<EducationTransformConference />} />
+          <Route path="/conference/digitalmarketingmasters" element={<DigitalMarketingMasters />} /> 
+          <Route path="/conference/legalinnovationforum" element={<LegalInnovationForum />} /> 
+          <Route path="/conference/engineeringexcellencesummit" element={<EngineeringExcellenceSummit />} />
+          <Route path="/conference/mentalhealthpsychologycongress" element={<MentalHealthPsychologyCongress />} />
+          <Route path="/conference/creativeartsdesignfestival" element={<CreativeArtsDesignFestival />} />
+          <Route path="/conference/scientificresearchsymposium" element={<ScientificResearchSymposium />} />
+          <Route path="/conference/globalforensicscienceresearch" element={<GlobalForensicScienceResearch />} /> */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

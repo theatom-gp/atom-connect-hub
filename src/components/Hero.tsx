@@ -23,8 +23,7 @@ const Hero = () => {
             </h1>
             
             <p className="text-lg sm:text-xl text-white/90 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0">
-              Join the world's premier platform where professionals, lecturers, and students unite 
-              to share knowledge, drive innovation, and shape the future across every industry.
+            Connect with the world's brightest minds across disciplines to solve challenges and accelerate progress.
             </p>
             
             <div className="flex justify-center lg:justify-start mb-8 sm:mb-12">
@@ -70,16 +69,28 @@ const Hero = () => {
             </div>
             
             {/* Floating Card - Hidden on small mobile, adjusted for larger screens */}
-            <div className="hidden sm:block absolute -bottom-4 sm:-bottom-6 -left-3 sm:-left-6 bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 max-w-[280px] sm:max-w-xs">
+            <div className="hidden sm:block absolute -bottom-4 sm:-bottom-6 -left-3 sm:-left-6 bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 max-w-[280px] sm:max-w-xs shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
               <div className="flex items-center gap-3 sm:gap-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-secondary rounded-full flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-secondary rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-primary transition-all duration-300 ease-in-out transform group-hover:scale-110">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white transition-transform duration-300 ease-in-out group-hover:rotate-12" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
                   </svg>
                 </div>
-                <div className="min-w-0">
-                  <div className="font-semibold text-foreground text-sm sm:text-base truncate">Next Conference</div>
-                  <div className="text-xs sm:text-sm text-muted-foreground truncate">AI Innovation Summit</div>
+                <div className="min-w-0 flex-1">
+                  <Button 
+                    variant="ghost" 
+                    className="h-auto p-0 text-left hover:bg-transparent w-full transition-all duration-300 ease-in-out group"
+                    onClick={() => window.location.href = '/conference/aisummit'}
+                  >
+                    <div className="space-y-1">
+                      <div className="font-semibold text-foreground text-sm sm:text-base leading-tight group-hover:text-primary transition-colors duration-200">
+                        Next Conference
+                      </div>
+                      <div className="text-xs sm:text-sm text-muted-foreground leading-tight group-hover:text-primary/80 transition-colors duration-200">
+                        AI Innovation Summit
+                      </div>
+                    </div>
+                  </Button>
                 </div>
               </div>
             </div>

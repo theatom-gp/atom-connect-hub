@@ -40,15 +40,14 @@ const Mission = () => {
             <div className="space-y-4 sm:space-y-6 text-base sm:text-lg text-muted-foreground text-center lg:text-left">
               <p className="text-lg sm:text-xl leading-relaxed">
                 To democratize access to world-class knowledge by creating an inclusive platform 
-                where professionals, educators, and students can connect, collaborate, and catalyze 
+                where businesses and communities can connect, collaborate, and catalyze 
                 breakthrough innovations that benefit humanity.
               </p>
               
               <p>
                 We're committed to breaking down silos between industries and academic disciplines, 
                 fostering an environment where diverse perspectives converge to solve the world's 
-                most pressing challenges. Every conference we host is a step toward a more connected, 
-                knowledgeable, and innovative global community.
+                most pressing challenges.
               </p>
             </div>
             

@@ -29,11 +29,6 @@ const Vision = () => {
                 technologies, educational innovations, and solutions we haven't yet imagined.
               </p>
               
-              <p>
-                Our platform will have evolved into a living ecosystem where knowledge flows freely, 
-                mentorship transcends geographical boundaries, and every participant becomes both 
-                teacher and student in humanity's greatest classroom.
-              </p>
             </div>
             
             {/* Vision Metrics */}
