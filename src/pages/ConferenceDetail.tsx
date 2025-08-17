@@ -144,7 +144,8 @@ const ConferenceDetail = () => {
     {
       title: "Virtual",
       subtitle: "(Speaker/Delegate)",
-      price: 349,
+      // price: 349,
+      price: 399,
       features: [
         "conference recorded video access",
         "Conference schedule handout",
