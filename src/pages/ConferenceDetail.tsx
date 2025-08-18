@@ -266,71 +266,147 @@ const ConferenceDetail = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      {/* Hero Section */}
-      <section 
-        className="relative py-20 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url(${heroBackground})`
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Modern Hero Section with Micro Animations */}
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        {/* Animated Background */}
+        <div 
+          className="absolute inset-0 bg-gradient-to-br from-background via-muted/50 to-background"
+          style={{
+            backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), url(${heroBackground})`
+          }}
+        />
+        
+        {/* Floating Geometric Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-primary/10 rounded-full blur-xl animate-[float_6s_ease-in-out_infinite]" />
+          <div className="absolute bottom-32 right-16 w-24 h-24 bg-secondary/10 rounded-full blur-lg animate-[float_8s_ease-in-out_infinite_reverse]" />
+          <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-accent/10 rounded-full blur-sm animate-[float_4s_ease-in-out_infinite]" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center">
-            <div className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-semibold mb-6">
-              Innovation • Technology • Future
+            {/* Animated Badge */}
+            <div className="inline-block animate-fade-in">
+              <div className="group px-6 py-3 bg-gradient-to-r from-primary/20 to-secondary/20 backdrop-blur-sm border border-primary/30 text-primary rounded-full text-sm font-semibold mb-8 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/25">
+                <span className="inline-flex items-center gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                  Innovation • Technology • Future
+                  <div className="w-2 h-2 bg-secondary rounded-full animate-pulse animation-delay-200" />
+                </span>
+              </div>
             </div>
             
-            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6">
-              Tech Innovation <span className="text-primary">Expo 2025</span>
-            </h1>
+            {/* Animated Title */}
+            <div className="overflow-hidden mb-8">
+              <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight animate-slide-up">
+                <span className="inline-block animate-fade-in">Tech Innovation</span>
+                <br />
+                <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent animate-fade-in animation-delay-300">
+                  Expo 2025
+                </span>
+              </h1>
+            </div>
             
-            <div className="flex flex-col md:flex-row justify-center items-center gap-6 mb-8 text-lg text-white/90">
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"/>
-                </svg>
-                <span>November 5-7, 2025</span>
+            {/* Animated Info Cards */}
+            <div className="flex flex-col md:flex-row justify-center items-center gap-6 mb-12">
+              <div className="group flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-xl animate-fade-in animation-delay-500">
+                <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center transition-transform duration-300 group-hover:rotate-12">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"/>
+                  </svg>
+                </div>
+                <span className="text-lg font-medium text-white">November 5-7, 2025</span>
               </div>
               
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
-                </svg>
-                <span>Technology Convention Center, Austin, TX</span>
+              <div className="group flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-xl animate-fade-in animation-delay-700">
+                <div className="w-10 h-10 bg-gradient-to-br from-secondary to-accent rounded-full flex items-center justify-center transition-transform duration-300 group-hover:rotate-12">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
+                  </svg>
+                </div>
+                <span className="text-lg font-medium text-white">Austin, Texas</span>
               </div>
             </div>
 
-            {/* Countdown Timer */}
-            <div className="flex justify-center gap-4 mb-8">
-              {Object.entries(timeLeft).map(([unit, value]) => (
-                <div key={unit} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 min-w-[80px]">
-                  <div className="text-2xl font-bold text-white">{value}</div>
-                  <div className="text-sm text-white/80 capitalize">{unit}</div>
+            {/* Modern Countdown Timer */}
+            <div className="flex justify-center gap-3 mb-12 animate-fade-in animation-delay-1000">
+              {Object.entries(timeLeft).map(([unit, value], index) => (
+                <div key={unit} className="group">
+                  <div className="relative bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-6 min-w-[90px] border border-white/30 transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-primary/20">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="relative">
+                      <div className="text-3xl font-bold text-white mb-1 transition-all duration-300 group-hover:scale-110">{value}</div>
+                      <div className="text-sm text-white/80 capitalize font-medium">{unit}</div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {/* Animated Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in animation-delay-1200">
               <Button 
                 size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg font-semibold"
+                className="group relative overflow-hidden bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-10 py-4 text-lg font-semibold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/25"
                 onClick={() => navigate('/registration')}
               >
-                Register Now
+                <span className="relative z-10 flex items-center gap-2">
+                  Register Now
+                  <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               </Button>
               
               <Button 
                 size="lg" 
-                variant={isEarlyBird ? "default" : "secondary"}
-                className={`px-8 py-3 text-lg font-semibold ${
+                variant="outline"
+                className={`group relative overflow-hidden px-10 py-4 text-lg font-semibold rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${
                   isEarlyBird 
-                    ? "bg-accent hover:bg-accent/90 text-accent-foreground border-accent" 
-                    : "opacity-50 cursor-not-allowed bg-muted text-muted-foreground"
+                    ? "border-accent text-accent hover:bg-accent hover:text-white hover:shadow-2xl hover:shadow-accent/25" 
+                    : "opacity-50 cursor-not-allowed border-muted text-muted-foreground"
                 }`}
                 disabled={!isEarlyBird}
               >
-                {isEarlyBird ? "Early Bird Special" : "Early Bird Expired"}
+                <span className="relative z-10 flex items-center gap-2">
+                  {isEarlyBird ? (
+                    <>
+                      <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+                      Early Bird Special
+                    </>
+                  ) : (
+                    "Early Bird Expired"
+                  )}
+                </span>
+                {isEarlyBird && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                )}
               </Button>
             </div>
+
+            {/* Floating Stats */}
+            <div className="mt-16 flex justify-center">
+              <div className="flex gap-8 px-8 py-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 animate-fade-in animation-delay-1500">
+                {[
+                  { number: "500+", label: "Speakers" },
+                  { number: "5K+", label: "Attendees" },
+                  { number: "50+", label: "Countries" }
+                ].map((stat, index) => (
+                  <div key={index} className="text-center group cursor-default">
+                    <div className="text-2xl font-bold text-white group-hover:text-primary transition-colors duration-300">{stat.number}</div>
+                    <div className="text-sm text-white/70 group-hover:text-white transition-colors duration-300">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />
           </div>
         </div>
       </section>
