@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import conferenceAI from '@/assets/conference-ai.jpg';
 import conferenceMedical from '@/assets/conference-medical.jpg';
 import conferenceSustainability from '@/assets/conference-sustainability.jpg';
@@ -129,18 +130,99 @@ const Conferences = () => {
 
         {/* CTA Section */}
         <div className="text-center">
-          <a href="/meetings">
-            <Button 
-              size="lg" 
-              className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-8 py-4 text-lg"
-            >
-              More Conferences
-            </Button>
-          </a>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <a href="/meetings">
+              <Button 
+                size="lg" 
+                className="group relative overflow-hidden bg-gradient-to-r from-secondary to-secondary/90 hover:from-secondary/90 hover:to-secondary text-white font-semibold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <motion.span
+                  className="relative z-10 flex items-center gap-2"
+                  initial={{ opacity: 1 }}
+                  whileHover={{ opacity: 1 }}
+                >
+                  <motion.div
+                    className="w-2 h-2 bg-white rounded-full"
+                    animate={{ 
+                      scale: [1, 1.2, 1],
+                      opacity: [0.7, 1, 0.7]
+                    }}
+                    transition={{ 
+                      duration: 2, 
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                  More Conferences
+                  <motion.svg 
+                    className="w-5 h-5" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                    initial={{ x: 0 }}
+                    whileHover={{ x: 5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </motion.svg>
+                  <motion.div
+                    className="w-2 h-2 bg-white rounded-full"
+                    animate={{ 
+                      scale: [1, 1.2, 1],
+                      opacity: [0.7, 1, 0.7]
+                    }}
+                    transition={{ 
+                      duration: 2, 
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 0.5
+                    }}
+                  />
+                </motion.span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: "100%" }}
+                />
+                <motion.div
+                  className="absolute -inset-1 bg-gradient-to-r from-secondary/50 to-secondary/30 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-500"
+                  animate={{
+                    boxShadow: [
+                      "0 0 0 0 rgba(139, 92, 246, 0.7)",
+                      "0 0 0 10px rgba(139, 92, 246, 0)",
+                      "0 0 0 0 rgba(139, 92, 246, 0)"
+                    ]
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatType: "loop"
+                  }}
+                />
+              </Button>
+            </a>
+          </motion.div>
           
-          <p className="text-muted-foreground mt-4">
-            Join over 50,000 professionals transforming their careers through knowledge exchange
-          </p>
+          <motion.p 
+            className="text-muted-foreground mt-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Join over{" "}
+            <motion.span 
+              className="font-bold text-primary"
+              animate={{ scale: [1, 1.1, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              50,000+
+            </motion.span>{" "}
+            professionals transforming their careers through knowledge exchange
+          </motion.p>
         </div>
       </div>
     </section>

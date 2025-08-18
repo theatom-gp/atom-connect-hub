@@ -6,11 +6,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Meetings from "./pages/Meetings";
 import CancellationPolicy from "./pages/CancellationPolicy";
-import ConferenceDetail from "./pages/ConferenceDetail";
-import AISummit from "./pages/AISummit";
-import GlobalHealthcareRevolution from "./pages/GlobalHealthcareRevolution";
+import TechInnovationExpo from "./pages/conference/TechInnovationExpo";
+import AISummit from "./pages/conference/AISummit";
+import GlobalHealthcareRevolution from "./pages/conference/GlobalHealthcareRevolution";
 // import SustainableFutureConference from "./pages/SustainableFutureConference";
-// import GlobalFinancesummit from "./pages/GlobalFinancesummit";
+import GlobalFinanceSummit from "./pages/conference/GlobalFinanceSummit";
+import ForensicScience from "./pages/conference/ForensicScience";
 // import EducationTransformConference from "./pages/EducationTransformConference";
 // import DigitalMarketingMasters from "./pages/DigitalMarketingMasters";
 // import LegalInnovationForum from "./pages/LegalInnovationForum";
@@ -45,9 +46,11 @@ const App = () => (
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/conference/tech-innovation-expo-2025" element={<ConferenceDetail />} />
+          <Route path="/conference/tech-innovation-expo-2025" element={<TechInnovationExpo />} />
           <Route path="/conference/aisummit" element={<AISummit />} />
           <Route path="/conference/globalhealthcarerevolution" element={<GlobalHealthcareRevolution />} />
+          <Route path="/conference/globalfinancesummit" element={<GlobalFinanceSummit />} />
+          <Route path="/conference/forensicscience" element={<ForensicScience />} />
           {/* <Route path="/conference/sustainablefutureconference" element={<SustainableFutureConference />} />
           <Route path="/conference/globalfinancesummit" element={<GlobalFinancesummit />} />
           <Route path="/conference/educationtransformconference" element={<EducationTransformConference />} />

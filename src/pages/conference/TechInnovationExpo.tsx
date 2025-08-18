@@ -15,7 +15,7 @@ import speaker2 from '@/assets/tech-innovation/speaker-2.jpg';
 import speaker3 from '@/assets/tech-innovation/speaker-3.jpg';
 import speaker4 from '@/assets/tech-innovation/speaker-4.jpg';
 
-const ConferenceDetail = () => {
+const TechInnovationExpo = () => {
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -25,7 +25,7 @@ const ConferenceDetail = () => {
   });
 
   const targetDate = new Date('2025-11-05T09:00:00');
-  const earlyBirdDate = new Date('2025-07-27T23:59:59'); // More than 100 days before event
+  const earlyBirdDate = new Date(targetDate.getTime() - 100 * 24 * 60 * 60 * 1000); // More than 100 days before event
   const now = new Date();
   const daysToEvent = Math.floor((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
   const isEarlyBird = daysToEvent > 100;
@@ -466,10 +466,25 @@ const ConferenceDetail = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                 )}
               </Button>
+
+                            <Button 
+                size="lg" 
+                className="group relative overflow-hidden bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-10 py-4 text-lg font-semibold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/25"
+                onClick={() => navigate('/submit-abstract')}
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  Submit Abstract
+                  <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+              </Button>
+              
             </div>
 
             {/* Floating Stats */}
-            <div className="mt-16 flex justify-center">
+            {/* <div className="mt-16 flex justify-center">
               <div className="flex gap-8 px-8 py-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 animate-fade-in animation-delay-1500">
                 {[
                   { number: "500+", label: "Speakers" },
@@ -482,7 +497,7 @@ const ConferenceDetail = () => {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -930,4 +945,4 @@ const ConferenceDetail = () => {
   );
 };
 
-export default ConferenceDetail;
+export default TechInnovationExpo;

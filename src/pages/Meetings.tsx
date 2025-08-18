@@ -47,23 +47,23 @@ const Meetings = () => {
     },
     {
       id: 2,
+      title: "Global Congress on Forensic Science and Research",
+      date: "Dec 18-20, 2025",
+      venue: "Academic Excellence Center",
+      location: "Lisbon, Portugal",
+      image: conferenceEducation,
+      description: "Revolutionize learning with innovative teaching methods and educational technology breakthroughs.",
+      category: "Education"
+    },
+    {
+      id: 3,
       title: "Global Finance Summit",
-      date: "December 12-14, 2025",
+      date: "Jan 12-14, 2026",
       venue: "Financial District Convention Hall",
       location: "New York, NY",
       image: conferenceFinance,
       description: "Navigate the future of finance with expert insights on blockchain, fintech, and digital banking innovations.",
       category: "Finance"
-    },
-    {
-      id: 3,
-      title: "Education Transform Conference",
-      date: "January 18-20, 2026",
-      venue: "Academic Excellence Center",
-      location: "Chicago, IL",
-      image: conferenceEducation,
-      description: "Revolutionize learning with innovative teaching methods and educational technology breakthroughs.",
-      category: "Education"
     },
     {
       id: 4,
@@ -270,9 +270,9 @@ const Meetings = () => {
                       if (conference.id === 1) {
                         window.location.href = '/conference/tech-innovation-expo-2025';
                       } else if (conference.id === 2) {
-                        window.location.href = '/conference/globalfinancesummit';
+                        window.location.href = '/conference/forensicscience';
                       } else if (conference.id === 3) {
-                        window.location.href = '/conference/educationtransformconference';
+                        window.location.href = '/conference/globalfinancesummit';
                       } else if (conference.id === 4) {
                         window.location.href = '/conference/aisummit';
                       } else if (conference.id === 5) {
