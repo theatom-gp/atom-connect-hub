@@ -266,77 +266,160 @@ const ConferenceDetail = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      {/* Modern Hero Section with Micro Animations */}
+      {/* Professional Hero Section with Sophisticated Animations */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
-        {/* Animated Background */}
-        <div 
-          className="absolute inset-0 bg-gradient-to-br from-background via-muted/50 to-background"
-          style={{
-            backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), url(${heroBackground})`
-          }}
-        />
+        {/* Multi-layered Background with Parallax Effect */}
+        <div className="absolute inset-0">
+          {/* Base Image Layer */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 transition-transform duration-[20s] ease-out"
+            style={{
+              backgroundImage: `url(${heroBackground})`,
+              transform: 'scale(1.05)',
+              filter: 'brightness(0.4) contrast(1.1) saturate(1.2)'
+            }}
+          />
+          
+          {/* Gradient Overlay with Professional Look */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-slate-800/80 to-slate-900/95" />
+          
+          {/* Subtle Pattern Overlay */}
+          <div className="absolute inset-0 opacity-[0.02]" style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+            backgroundSize: '20px 20px'
+          }} />
+        </div>
         
-        {/* Floating Geometric Elements */}
+        {/* Advanced Floating Elements with Professional Animation */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-primary/10 rounded-full blur-xl animate-[float_6s_ease-in-out_infinite]" />
-          <div className="absolute bottom-32 right-16 w-24 h-24 bg-secondary/10 rounded-full blur-lg animate-[float_8s_ease-in-out_infinite_reverse]" />
-          <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-accent/10 rounded-full blur-sm animate-[float_4s_ease-in-out_infinite]" />
+          {/* Large Ambient Orb */}
+          <div className="absolute top-1/4 -left-32 w-96 h-96 bg-gradient-radial from-primary/20 via-primary/5 to-transparent rounded-full animate-[orbital_25s_linear_infinite]" />
+          
+          {/* Medium Tech Particles */}
+          <div className="absolute top-1/3 right-1/4 w-2 h-2 bg-primary/60 rounded-full animate-[techFloat_8s_ease-in-out_infinite]" />
+          <div className="absolute bottom-1/3 left-1/3 w-1 h-1 bg-secondary/80 rounded-full animate-[techFloat_6s_ease-in-out_infinite_1s]" />
+          <div className="absolute top-2/3 right-1/3 w-1.5 h-1.5 bg-accent/70 rounded-full animate-[techFloat_10s_ease-in-out_infinite_2s]" />
+          
+          {/* Geometric Grid Lines */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary to-transparent animate-[slideRight_12s_ease-in-out_infinite]" />
+            <div className="absolute bottom-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-secondary to-transparent animate-[slideLeft_15s_ease-in-out_infinite]" />
+          </div>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center">
-            {/* Animated Badge */}
-            <div className="inline-block animate-fade-in">
-              <div className="group px-6 py-3 bg-gradient-to-r from-primary/20 to-secondary/20 backdrop-blur-sm border border-primary/30 text-primary rounded-full text-sm font-semibold mb-8 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/25">
-                <span className="inline-flex items-center gap-2">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                  Innovation • Technology • Future
-                  <div className="w-2 h-2 bg-secondary rounded-full animate-pulse animation-delay-200" />
+            {/* Professional Animated Badge */}
+            <div className="inline-block animate-[staggerUp_0.8s_ease-out_0.2s_both]">
+              <div className="group relative px-8 py-4 bg-white/5 backdrop-blur-xl border border-white/10 text-white rounded-full text-sm font-medium mb-12 transition-all duration-500 hover:bg-white/10 hover:border-white/20 hover:scale-105">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <span className="relative inline-flex items-center gap-3">
+                  <div className="flex items-center gap-1">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-[techPulse_2s_ease-in-out_infinite]" />
+                    <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.3s]" />
+                    <div className="w-1.5 h-1.5 bg-accent rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.6s]" />
+                  </div>
+                  <span className="tracking-wider uppercase">Innovation • Technology • Future</span>
+                  <div className="flex items-center gap-1">
+                    <div className="w-1.5 h-1.5 bg-accent rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.9s]" />
+                    <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-[techPulse_2s_ease-in-out_infinite_1.2s]" />
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-[techPulse_2s_ease-in-out_infinite_1.5s]" />
+                  </div>
                 </span>
               </div>
             </div>
             
-            {/* Animated Title */}
-            <div className="overflow-hidden mb-8">
-              <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight animate-slide-up">
-                <span className="inline-block animate-fade-in">Tech Innovation</span>
-                <br />
-                <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent animate-fade-in animation-delay-300">
-                  Expo 2025
-                </span>
+            {/* Professional Animated Title */}
+            <div className="overflow-hidden mb-16">
+              <h1 className="text-6xl lg:text-8xl xl:text-9xl font-extralight text-white leading-[0.9] tracking-tight">
+                <div className="animate-[staggerUp_1s_ease-out_0.4s_both]">
+                  <span className="inline-block font-light">Tech Innovation</span>
+                </div>
+                <div className="animate-[staggerUp_1s_ease-out_0.6s_both] mt-4">
+                  <span className="inline-block font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-primary to-secondary bg-size-200 animate-[gradientShift_4s_ease-in-out_infinite]">
+                    Expo 2025
+                  </span>
+                </div>
               </h1>
+              
+              {/* Professional Subtitle */}
+              <div className="animate-[staggerUp_1s_ease-out_0.8s_both] mt-8">
+                <p className="text-xl lg:text-2xl text-white/80 font-light max-w-3xl mx-auto leading-relaxed">
+                  Shaping Tomorrow's Technology Landscape Through Innovation, 
+                  <span className="text-white font-medium"> Collaboration, and Visionary Leadership</span>
+                </p>
+              </div>
             </div>
             
-            {/* Animated Info Cards */}
-            <div className="flex flex-col md:flex-row justify-center items-center gap-6 mb-12">
-              <div className="group flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-xl animate-fade-in animation-delay-500">
-                <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center transition-transform duration-300 group-hover:rotate-12">
-                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"/>
-                  </svg>
+            {/* Professional Info Cards with Advanced Animations */}
+            <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-16">
+              <div className="group animate-[staggerUp_1s_ease-out_1s_both]">
+                <div className="relative overflow-hidden bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 transition-all duration-700 hover:bg-white/8 hover:border-white/20 hover:scale-105 hover:shadow-2xl hover:shadow-primary/10 p-6">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="relative flex items-center gap-4">
+                    <div className="relative">
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:rotate-6 group-hover:scale-110">
+                        <svg className="w-6 h-6 text-white transition-transform duration-500 group-hover:scale-110" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"/>
+                        </svg>
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-[techPulse_2s_ease-in-out_infinite]" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm text-white/60 font-medium uppercase tracking-wider mb-1">Event Dates</div>
+                      <div className="text-xl font-semibold text-white">November 5-7, 2025</div>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-lg font-medium text-white">November 5-7, 2025</span>
               </div>
               
-              <div className="group flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-xl animate-fade-in animation-delay-700">
-                <div className="w-10 h-10 bg-gradient-to-br from-secondary to-accent rounded-full flex items-center justify-center transition-transform duration-300 group-hover:rotate-12">
-                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
-                  </svg>
+              <div className="group animate-[staggerUp_1s_ease-out_1.2s_both]">
+                <div className="relative overflow-hidden bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 transition-all duration-700 hover:bg-white/8 hover:border-white/20 hover:scale-105 hover:shadow-2xl hover:shadow-secondary/10 p-6">
+                  <div className="absolute inset-0 bg-gradient-to-r from-secondary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="relative flex items-center gap-4">
+                    <div className="relative">
+                      <div className="w-12 h-12 bg-gradient-to-br from-secondary/20 to-accent/20 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:rotate-6 group-hover:scale-110">
+                        <svg className="w-6 h-6 text-white transition-transform duration-500 group-hover:scale-110" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
+                        </svg>
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-secondary rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.5s]" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm text-white/60 font-medium uppercase tracking-wider mb-1">Location</div>
+                      <div className="text-xl font-semibold text-white">Austin, Texas</div>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-lg font-medium text-white">Austin, Texas</span>
               </div>
             </div>
 
-            {/* Modern Countdown Timer */}
-            <div className="flex justify-center gap-3 mb-12 animate-fade-in animation-delay-1000">
+            {/* Ultra-Professional Countdown Timer */}
+            <div className="flex justify-center gap-4 mb-16 animate-[staggerUp_1s_ease-out_1.4s_both]">
               {Object.entries(timeLeft).map(([unit, value], index) => (
                 <div key={unit} className="group">
-                  <div className="relative bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-6 min-w-[90px] border border-white/30 transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-primary/20">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <div className="relative">
-                      <div className="text-3xl font-bold text-white mb-1 transition-all duration-300 group-hover:scale-110">{value}</div>
-                      <div className="text-sm text-white/80 capitalize font-medium">{unit}</div>
+                  <div className="relative">
+                    {/* Glow Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-70 transition-all duration-700 scale-110" />
+                    
+                    {/* Main Card */}
+                    <div className="relative bg-white/5 backdrop-blur-2xl rounded-3xl p-8 min-w-[110px] border border-white/10 transition-all duration-700 hover:bg-white/8 hover:border-white/20 hover:scale-105 hover:shadow-2xl">
+                      {/* Animated Border */}
+                      <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/30 via-secondary/30 to-accent/30 p-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                        <div className="w-full h-full bg-white/5 rounded-3xl" />
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="relative text-center">
+                        <div className="text-4xl lg:text-5xl font-bold text-white mb-2 transition-all duration-500 group-hover:scale-110 tabular-nums">
+                          {value.toString().padStart(2, '0')}
+                        </div>
+                        <div className="text-xs uppercase tracking-widest text-white/60 font-medium">{unit}</div>
+                        
+                        {/* Micro Animation Dot */}
+                        <div className="absolute -top-2 -right-2 w-2 h-2 bg-primary rounded-full animate-[techPulse_2s_ease-in-out_infinite] opacity-60" 
+                             style={{ animationDelay: `${index * 0.2}s` }} />
+                      </div>
                     </div>
                   </div>
                 </div>

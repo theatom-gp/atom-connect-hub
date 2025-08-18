@@ -113,6 +113,77 @@ export default {
 					'50%': {
 						transform: 'translateY(-20px) rotate(180deg)'
 					}
+				},
+				
+				// Professional Hero Animations
+				'staggerUp': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(30px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'gradientShift': {
+					'0%, 100%': {
+						backgroundPosition: '0% 50%'
+					},
+					'50%': {
+						backgroundPosition: '100% 50%'
+					}
+				},
+				'techPulse': {
+					'0%, 100%': {
+						opacity: '0.4',
+						transform: 'scale(1)'
+					},
+					'50%': {
+						opacity: '1',
+						transform: 'scale(1.2)'
+					}
+				},
+				'techFloat': {
+					'0%, 100%': {
+						transform: 'translateY(0) translateX(0) rotate(0deg)'
+					},
+					'33%': {
+						transform: 'translateY(-10px) translateX(5px) rotate(120deg)'
+					},
+					'66%': {
+						transform: 'translateY(5px) translateX(-5px) rotate(240deg)'
+					}
+				},
+				'orbital': {
+					'0%': {
+						transform: 'rotate(0deg) translateX(100px) rotate(0deg)'
+					},
+					'100%': {
+						transform: 'rotate(360deg) translateX(100px) rotate(-360deg)'
+					}
+				},
+				'slideRight': {
+					'0%': {
+						transform: 'translateX(-100%)'
+					},
+					'50%': {
+						transform: 'translateX(0%)'
+					},
+					'100%': {
+						transform: 'translateX(100%)'
+					}
+				},
+				'slideLeft': {
+					'0%': {
+						transform: 'translateX(100%)'
+					},
+					'50%': {
+						transform: 'translateX(0%)'
+					},
+					'100%': {
+						transform: 'translateX(-100%)'
+					}
 				}
 			},
 			animation: {
@@ -121,6 +192,12 @@ export default {
 				'fade-in': 'fade-in 0.6s ease-out',
 				'slide-up': 'slide-up 0.8s ease-out',
 				'float': 'float 6s ease-in-out infinite'
+			},
+			backgroundSize: {
+				'200': '200% 200%',
+			},
+			backgroundImage: {
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 			},
 			animationDelay: {
 				'200': '200ms',
