@@ -10,16 +10,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Check as CheckIcon, Mail, Bell, Calendar, Globe, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 // import heroBackground from '@/assets/tech-innovation/bg.jpg';
-import heroBackground from '@/assets/forensicscience/bg.jpeg';
-import venueInterior from '@/assets/tech-innovation/venue-interior-1.jpg';
-import venueConference from '@/assets/tech-innovation/venue-conference-room.jpg';
-import venueNetworking from '@/assets/tech-innovation/venue-networking.jpg';
-import venueExhibition from '@/assets/tech-innovation/venue-exhibition.jpg';
-import chairpersonImage from '@/assets/tech-innovation/chairperson-tech.jpg';
-import speaker1 from '@/assets/tech-innovation/speaker-1.jpg';
-import speaker2 from '@/assets/tech-innovation/speaker-2.jpg';
-import speaker3 from '@/assets/tech-innovation/speaker-3.jpg';
-import speaker4 from '@/assets/tech-innovation/speaker-4.jpg';
+import heroBackground from '@/assets/quantumcomputing/bg.jpg';
+import venueInterior from '@/assets/quantumcomputing/venue-interior-1.jpg';
+import venueConference from '@/assets/quantumcomputing/venue-conference-room.jpg';
+import venueNetworking from '@/assets/quantumcomputing/venue-networking.jpg';
+import venueExhibition from '@/assets/quantumcomputing/venue-exhibition.jpg';
+import chairpersonImage from '@/assets/quantumcomputing/chairperson-tech.jpg';
+import speaker1 from '@/assets/quantumcomputing/speaker-1.jpg';
+import speaker2 from '@/assets/quantumcomputing/speaker-2.jpg';
+import speaker3 from '@/assets/quantumcomputing/speaker-3.jpg';
+import speaker4 from '@/assets/quantumcomputing/speaker-4.jpg';
 
 const ForensicScience = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const ForensicScience = () => {
     'Day 3': false
   });
 
-  const targetDate = new Date('2025-11-22T09:00:00');
+  const targetDate = new Date('2026-01-15T09:00:00');
   const earlyBirdDate = new Date(targetDate.getTime() - (100 * 24 * 60 * 60 * 1000));
   const now = new Date();
   const daysToEvent = Math.floor((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
@@ -69,7 +69,7 @@ const ForensicScience = () => {
   const venueImages = [
     {
       src: venueInterior,
-      alt: "Forensic Science Convention Center - Main Hall",
+      alt: "Main Hall",
       title: "Main Convention Hall"
     },
     {
@@ -84,7 +84,7 @@ const ForensicScience = () => {
     },
     {
       src: venueExhibition,
-      alt: "Forensic Science Exhibition Hall",
+      alt: "Exhibition Hall",
       title: "Exhibition Area"
     }
   ];
@@ -92,31 +92,31 @@ const ForensicScience = () => {
   const speakers = [
     {
       name: "Dr. Maria Santos",
-      title: "Chief Forensic Scientist, Lisbon Crime Lab",
-      country: "Portugal",
+      title: "Chief Quantum Computing Engineer, San Francisco Quantum Computing Lab",
+      country: "Spain",
       image: speaker1,
-      expertise: "DNA Analysis"
+      expertise: "Quantum Computing Algorithms and Applications"
     },
     {
       name: "Prof. James Wilson",
-      title: "Director of Forensic Research, London Metropolitan University",
+      title: "Director of Quantum Computing Research, University of California, San Francisco",
       country: "United Kingdom",
       image: speaker2,
-      expertise: "Digital Forensics"
+      expertise: "Quantum Computing Algorithms and Applications"
     },
     {
       name: "Dr. Elena Rodriguez",
-      title: "Senior Forensic Pathologist, Madrid Institute",
+      title: "Senior Quantum Computing Engineer, San Francisco Quantum Computing Lab",
       country: "Spain",
       image: speaker3,
-      expertise: "Forensic Pathology"
+      expertise: "Quantum Computing Algorithms and Applications"
     },
     {
       name: "Prof. Hans Mueller",
-      title: "Head of Forensic Chemistry, Berlin University",
+      title: "Head of Quantum Computing Policy and Regulation, University of California, San Francisco",
       country: "Germany",
       image: speaker4,
-      expertise: "Toxicology"
+      expertise: "Quantum Computing Algorithms and Applications"
     }
   ];
 
@@ -182,7 +182,7 @@ const ForensicScience = () => {
         { time: "13:15-14:00", activity: "Group Photo & Network Lunch" },
         { time: "14:00-16:00", activity: "Keynote Session" },
         { time: "16:00-16:15", activity: "Networking Break" },
-        { time: "16:15-18:00", activity: "Forensic Sessions" }
+        { time: "16:15-18:00", activity: "Quantum Computing Sessions" }
       ]
     },
     {
@@ -191,11 +191,11 @@ const ForensicScience = () => {
       sessions: [
         { time: "09:00-11:30", activity: "Plenary Session" },
         { time: "11:30-11:45", activity: "Networking Break" },
-        { time: "11:45-13:45", activity: "Forensic Sessions" },
+        { time: "11:45-13:45", activity: "Quantum Computing Sessions" },
         { time: "13:45-14:30", activity: "Networking Lunch Break" },
-        { time: "14:30-16:30", activity: "Forensic Sessions" },
+        { time: "14:30-16:30", activity: "Quantum Computing Sessions" },
         { time: "16:30-16:45", activity: "Networking Break" },
-        { time: "16:45-18:30", activity: "Forensic Sessions" },
+        { time: "16:45-18:30", activity: "Quantum Computing Sessions" },
         { time: "18:45-19:00", activity: "Certification" }
       ]
     },
@@ -203,13 +203,13 @@ const ForensicScience = () => {
       day: "Day 3",
       date: "November 15, 2025", 
       sessions: [
-        { time: "09:00-11:30", activity: "Forensic Sessions" },
+        { time: "09:00-11:30", activity: "Quantum Computing Sessions" },
         { time: "11:30-11:45", activity: "Networking Break" },
-        { time: "11:45-13:45", activity: "Forensic Sessions" },
+        { time: "11:45-13:45", activity: "Quantum Computing Sessions" },
         { time: "13:45-14:30", activity: "Networking Lunch Break" },
-        { time: "14:30-16:30", activity: "Forensic Sessions" },
+        { time: "14:30-16:30", activity: "Quantum Computing Sessions" },
         { time: "16:30-16:45", activity: "Networking Break" },
-        { time: "16:45-18:30", activity: "Forensic Sessions" },
+        { time: "16:45-18:30", activity: "Quantum Computing Sessions" },
         { time: "18:30-19:00", activity: "Closing Ceremony" }
       ]
     }
@@ -217,26 +217,26 @@ const ForensicScience = () => {
 
   const publishingPartners = [
     { 
-      name: "Forensic Science International", 
-      description: "Leading Forensic Journal", 
+      name: "Quantum Computing International", 
+      description: "Leading Quantum Computing Journal", 
       logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MDPI_logo.svg/320px-MDPI_logo.svg.png",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY0ZjQiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzMzMzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Rm9yZW5zaWMgU2NpZW5jZTwvdGV4dD48L3N2Zz4="
     },
     { 
-      name: "Journal of Forensic Sciences", 
-      description: "Academic Forensic Research", 
+      name: "Journal of Quantum Computing", 
+      description: "Academic Quantum Computing Research", 
       logo: "https://www.cambridgescholars.com/assets/img/logo.png",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY0ZjQiLz48dGV4dCB4PSI1MCIgeT0iMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI4IiBmaWxsPSIjMzMzMzMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Kb3VybmFsPC90ZXh0Pjx0ZXh0IHg9IjUwIiB5PSIzMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjgiIGZpbGw9IiMzMzMzMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljczwvdGV4dD48L3N2Zz4="
     },
     { 
-      name: "Forensic Science Review", 
-      description: "Forensic Research Database", 
+      name: "Quantum Computing Review", 
+      description: "Quantum Computing Research Database", 
       logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Scopus_logo.svg/320px-Scopus_logo.svg.png",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGRjZGMDAiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljIFJldmlldzwvdGV4dD48L3N2Zz4="
     },
     { 
-      name: "International Journal of Legal Medicine", 
-      description: "Legal Medicine Research", 
+      name: "International Journal of Quantum Computing", 
+      description: "Power and Energy Research", 
       logo: "https://www.bonviewglobal.com/assets/images/logo.png",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY0ZjQiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzMzMzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TGVnYWwgTWVkaWNpbmU8L3RleHQ+PC9zdmc+"
     }
@@ -244,32 +244,32 @@ const ForensicScience = () => {
 
   const mediaPartners = [
     { 
-      name: "Forensic Magazine", 
-      description: "Forensic Science News", 
+      name: "Quantum Computing Today", 
+      description: "Quantum Computing Research Publication", 
       logo: "https://upload.wikimedia.org/wikipedia/commons/b/b9/TechCrunch_logo.svg",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiMwMENGNjQiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljIE1hZzwvdGV4dD48L3N2Zz4="
     },
     { 
-      name: "Crime Scene Investigation", 
-      description: "CSI Magazine", 
+      name: "Quantum Computing Today", 
+      description: "Quantum Computing Research Publication", 
       logo: "https://www.technologyreview.com/wp-content/uploads/2020/02/mit-logo-2020-web.png",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNBMzE2MjEiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNTSTwvdGV4dD48L3N2Zz4="
     },
     { 
-      name: "Forensic Science Today", 
-      description: "Forensic Research Publication", 
+      name: "Quantum Computing Today", 
+      description: "Quantum Computing Research Publication", 
       logo: "https://spectrum.ieee.org/media/logo/IEEE-spectrum-logo.svg",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiMwMDU1RkYiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljIFRvZGF5PC90ZXh0Pjwvc3ZnPg=="
     },
     { 
-      name: "Legal Medicine Today", 
-      description: "Legal Medicine News", 
+      name: "Quantum Computing Today", 
+      description: "Quantum Computing Research Publication", 
       logo: "https://upload.wikimedia.org/wikipedia/commons/5/50/Wired_logo.svg",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNTAiIHk9IjI1IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiMwMDAwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkxlZ2FsIE1lZGljaW5lPC90ZXh0Pjwvc3ZnPg=="
     },
     { 
-      name: "Forensic Research Network", 
-      description: "Forensic Research News", 
+      name: "Quantum Computing Research Network", 
+      description: "Quantum Computing Research News", 
       logo: "https://venturebeat.com/wp-content/uploads/2020/06/VB_logo_2020.png",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGRjI0MDAiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljIFJlc2VhcmNoPC90ZXh0Pjwvc3ZnPg=="
     }
@@ -473,7 +473,7 @@ const ForensicScience = () => {
                     <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.3s]" />
                     <div className="w-1.5 h-1.5 bg-accent rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.6s]" />
                   </div>
-                  <span className="tracking-wider uppercase">Forensic Science • Research • Justice</span>
+                  <span className="tracking-wider uppercase">Quantum Computing • Research • Quantum Applications</span>
                   <div className="flex items-center gap-1">
                     <div className="w-1.5 h-1.5 bg-accent rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.9s]" />
                     <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-[techPulse_2s_ease-in-out_infinite_1.2s]" />
@@ -491,12 +491,12 @@ const ForensicScience = () => {
                 </div>
                 <div className="animate-[staggerUp_1s_ease-out_0.6s_both] mt-4">
                   <span className="inline-block font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-primary to-secondary bg-size-200 animate-[gradientShift_4s_ease-in-out_infinite]">
-                    Forensic Science
+                    Quantum Computing
                   </span>
                 </div>
                 <div className="animate-[staggerUp_1s_ease-out_0.8s_both] mt-4">
                   <span className="inline-block font-light text-transparent bg-clip-text bg-gradient-to-r from-white via-secondary to-accent bg-size-200 animate-[gradientShift_4s_ease-in-out_infinite]">
-                    and Research
+                    and Applications
                   </span>
                 </div>
               </h1>
@@ -504,7 +504,7 @@ const ForensicScience = () => {
               {/* Professional Subtitle */}
               <div className="animate-[staggerUp_1s_ease-out_1s_both] mt-8">
                 <p className="text-xl lg:text-2xl text-white/80 font-light max-w-3xl mx-auto leading-relaxed">
-                  Advancing Forensic Science Through Innovation, 
+                  Advancing Quantum Computing and Applications Through Innovation and Engineering, 
                   <span className="text-white font-medium"> Research, and International Collaboration</span>
                 </p>
               </div>
@@ -526,7 +526,7 @@ const ForensicScience = () => {
                     </div>
                     <div className="text-left">
                       <div className="text-sm text-white/60 font-medium uppercase tracking-wider mb-1">Event Dates</div>
-                      <div className="text-xl font-semibold text-white">November 22-24, 2025</div>
+                      <div className="text-xl font-semibold text-white">January 15-17, 2026</div>
                     </div>
                   </div>
                 </div>
@@ -546,7 +546,7 @@ const ForensicScience = () => {
                     </div>
                     <div className="text-left">
                       <div className="text-sm text-white/60 font-medium uppercase tracking-wider mb-1">Location</div>
-                      <div className="text-xl font-semibold text-white">Lisbon, Portugal</div>
+                      <div className="text-xl font-semibold text-white">San Francisco, CA</div>
                     </div>
                   </div>
                 </div>
@@ -729,24 +729,24 @@ const ForensicScience = () => {
               </div>
               
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
-                Advancing <span className="text-primary">Forensic Science</span> Through Innovation
+                Advancing <span className="text-primary">Quantum Computing</span> Through Innovation and Applications
               </h2>
               
               <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                Join the most influential forensic science conference of 2025, where cutting-edge research meets practical applications. Connect with forensic experts, explore breakthrough technologies, and discover solutions that will define the future of criminal investigation and justice.
+                Join the most influential quantum computing conference of 2025, where cutting-edge research meets practical applications. Connect with quantum computing experts, explore breakthrough technologies, and discover solutions that will define the future of quantum computing.
               </p>
               
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                From DNA analysis and digital forensics to forensic pathology and toxicology, this three-day immersive experience brings together leading forensic scientists, researchers, and law enforcement professionals from across the globe to share insights, forge partnerships, and accelerate forensic innovation.
+                From quantum computing algorithms to quantum applications, this three-day immersive experience brings together leading quantum computing experts, researchers, and engineers from across the globe to share insights, forge partnerships, and accelerate quantum computing innovation.
               </p>
               
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-primary">150+</div>
+                  <div className="text-3xl font-bold text-primary">75+</div>
                   <div className="text-muted-foreground">Expert Speakers</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-primary">40+</div>
+                  <div className="text-3xl font-bold text-primary">10+</div>
                   <div className="text-muted-foreground">Sessions</div>
                 </div>
               </div>
@@ -777,16 +777,16 @@ const ForensicScience = () => {
               </h2>
               
               <blockquote className="text-muted-foreground text-lg leading-relaxed mb-6 italic">
-                "Forensic science is the bridge between evidence and justice. The Global Congress on Forensic Science and Research 2025 represents a unique opportunity to witness the convergence of brilliant minds and revolutionary techniques in forensic investigation."
+                "Quantum computing is the backbone of modern society. The Global Congress on Quantum Computing and Applications 2025 represents a unique opportunity to witness the convergence of brilliant minds and revolutionary techniques in quantum computing."
               </blockquote>
               
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                As we stand at the forefront of forensic innovation, this conference serves as a catalyst for meaningful collaboration and groundbreaking discoveries. Join us in Lisbon as we explore the technologies and methodologies that will shape the future of forensic science and create lasting impact across the justice system worldwide.
+                As we stand at the forefront of quantum computing innovation, this conference serves as a catalyst for meaningful collaboration and groundbreaking discoveries. Join us in San Francisco as we explore the technologies and methodologies that will shape the future of quantum computing and create lasting impact across the quantum computing system worldwide.
               </p>
               
               <div className="mb-8">
                 <p className="font-semibold text-foreground">Dr. Carlos Mendes</p>
-                <p className="text-muted-foreground">Conference Chair & Director of Forensic Sciences, Portuguese National Institute of Legal Medicine</p>
+                <p className="text-muted-foreground">Conference Chair & Director of Quantum Computing, University of California, San Francisco</p>
               </div>
             </div>
           </div>
@@ -803,7 +803,7 @@ const ForensicScience = () => {
               </div>
               <h2 className="text-3xl font-bold text-foreground mb-4">Submit Your Abstract</h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                Share your research and insights with the global forensic science community. We welcome abstracts on all aspects of forensic science and criminal investigation.
+                Share your research and insights with the global quantum computing community. We welcome abstracts on all aspects of quantum computing and quantum applications.
               </p>
             </div>
             
@@ -813,23 +813,23 @@ const ForensicScience = () => {
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    DNA Analysis & Genetic Forensics
+                    Quantum Computing Algorithms and Applications
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    Digital Forensics & Cybercrime
+                    Quantum Computing Applications
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    Forensic Pathology & Toxicology
+                    Quantum Computing Hardware and Software
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    Crime Scene Investigation
+                    Quantum Computing Security and Privacy
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    Forensic Chemistry & Trace Evidence
+                    Quantum Computing Policy and Regulation
                   </li>
                 </ul>
               </div>
@@ -839,7 +839,7 @@ const ForensicScience = () => {
                 <ul className="space-y-3 text-muted-foreground">
                   <li className="flex items-start gap-2">
                     <span className="font-semibold min-w-[120px]">Deadline:</span>
-                    <span>September 30, 2025</span>
+                    <span>December 30, 2025</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="font-semibold min-w-[120px]">Format:</span>
@@ -851,7 +851,7 @@ const ForensicScience = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="font-semibold min-w-[120px]">Notification:</span>
-                    <span>October 31, 2025</span>
+                    <span>January 15, 2026</span>
                   </li>
                 </ul>
               </div>
@@ -899,7 +899,7 @@ const ForensicScience = () => {
             </h2>
             
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Learn from forensic science pioneers and thought leaders representing forensic institutions across the globe.
+              Learn from quantum computing pioneers and thought leaders representing quantum computing institutions across the globe.
             </p>
           </div>
 
@@ -1109,7 +1109,7 @@ const ForensicScience = () => {
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 bg-primary rounded-full"></div>
-                        <span className="text-sm font-medium text-muted-foreground">Western European Time (WET)</span>
+                        <span className="text-sm font-medium text-muted-foreground">Pacific Standard Time (PST)</span>
                       </div>
                     </div>
                     <Button
@@ -1274,7 +1274,7 @@ const ForensicScience = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              We're proud to collaborate with leading forensic science publications and media organizations.
+              We're proud to collaborate with leading quantum computing publications and media organizations.
             </motion.p>
           </div>
           
@@ -1375,7 +1375,7 @@ const ForensicScience = () => {
             </h2>
             
             <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-              Subscribe to our newsletter and be the first to know about upcoming forensic science conferences, 
+              Subscribe to our newsletter and be the first to know about upcoming conferences, 
               early bird specials, and exclusive research opportunities.
             </p>
           </motion.div>

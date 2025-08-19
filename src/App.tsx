@@ -12,6 +12,8 @@ import GlobalHealthcareRevolution from "./pages/conference/GlobalHealthcareRevol
 // import SustainableFutureConference from "./pages/SustainableFutureConference";
 import GlobalFinanceSummit from "./pages/conference/GlobalFinanceSummit";
 import ForensicScience from "./pages/conference/ForensicScience";
+import PowerandEnergy from "./pages/conference/PowerandEnergy";
+import QuantumComputing from "./pages/conference/QuantumComputing";
 // import EducationTransformConference from "./pages/EducationTransformConference";
 // import DigitalMarketingMasters from "./pages/DigitalMarketingMasters";
 // import LegalInnovationForum from "./pages/LegalInnovationForum";
@@ -55,6 +57,8 @@ const App = () => (
           <Route path="/conference/globalhealthcarerevolution" element={<GlobalHealthcareRevolution />} />
           <Route path="/conference/globalfinancesummit" element={<GlobalFinanceSummit />} />
           <Route path="/conference/forensicscience" element={<ForensicScience />} />
+          <Route path="/conference/powerandenergy" element={<PowerandEnergy />} />
+          <Route path="/conference/quantumcomputing" element={<QuantumComputing />} />
           {/* <Route path="/conference/sustainablefutureconference" element={<SustainableFutureConference />} />
           <Route path="/conference/globalfinancesummit" element={<GlobalFinancesummit />} />
           <Route path="/conference/educationtransformconference" element={<EducationTransformConference />} />
