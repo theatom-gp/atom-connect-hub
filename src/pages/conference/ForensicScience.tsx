@@ -9,7 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Check as CheckIcon, Mail, Bell, Calendar, Globe, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import heroBackground from '@/assets/tech-innovation/bg.jpg';
+// import heroBackground from '@/assets/tech-innovation/bg.jpg';
+import heroBackground from '@/assets/forensicscience/bg.jpeg';
 import venueInterior from '@/assets/tech-innovation/venue-interior-1.jpg';
 import venueConference from '@/assets/tech-innovation/venue-conference-room.jpg';
 import venueNetworking from '@/assets/tech-innovation/venue-networking.jpg';
@@ -38,7 +39,7 @@ const ForensicScience = () => {
     'Day 3': false
   });
 
-  const targetDate = new Date('2025-11-13T09:00:00');
+  const targetDate = new Date('2025-11-22T09:00:00');
   const earlyBirdDate = new Date(targetDate.getTime() - (100 * 24 * 60 * 60 * 1000));
   const now = new Date();
   const daysToEvent = Math.floor((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
@@ -525,7 +526,7 @@ const ForensicScience = () => {
                     </div>
                     <div className="text-left">
                       <div className="text-sm text-white/60 font-medium uppercase tracking-wider mb-1">Event Dates</div>
-                      <div className="text-xl font-semibold text-white">November 13-15, 2025</div>
+                      <div className="text-xl font-semibold text-white">November 22-24, 2025</div>
                     </div>
                   </div>
                 </div>
@@ -870,8 +871,10 @@ const ForensicScience = () => {
                 size="lg"
                 onClick={() => {
                   const link = document.createElement('a');
-                  link.href = '/sample-abstract.pdf';
-                  link.download = 'sample-abstract.pdf';
+                  // link.href = '/sample-abstract.pdf';
+                  // link.download = 'sample-abstract.pdf';
+                  link.href = '/abstract-sample-template.pdf';
+                  link.download = 'abstract-sample-template.pdf';
                   link.click();
                 }}
                 className="bg-secondary hover:bg-secondary/90 text-secondary-foreground"
@@ -929,287 +932,83 @@ const ForensicScience = () => {
       </section>
 
       {/* Pricing Section */}
-      <motion.section 
-        className="py-20 bg-muted/20"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
+      <section className="py-20 bg-muted/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <motion.div 
-              className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
+            <div className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">
               Registration Options
-            </motion.div>
+            </div>
             
-            <motion.h2 
-              className="text-3xl lg:text-4xl font-bold text-foreground mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
               Choose Your <span className="text-primary">Pricing Plan</span>
-            </motion.h2>
+            </h2>
             
-            <motion.p 
-              className="text-muted-foreground text-lg max-w-3xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
+            <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
               Select the registration option that best suits your needs and budget.
-            </motion.p>
+            </p>
             
-            {isEarlyBird && (
-              <motion.div 
-                className="mt-6 max-w-2xl mx-auto"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
+            {/* {isEarlyBird && (
+              <div className="mt-6 max-w-2xl mx-auto">
                 <div className="bg-gradient-to-r from-orange-100 via-red-100 to-pink-100 border-2 border-orange-300 rounded-xl p-4 shadow-lg">
                   <div className="flex items-center justify-center gap-3">
-                    <motion.div
-                      className="text-2xl"
-                      animate={{ 
-                        rotate: [0, 10, -10, 0],
-                        scale: [1, 1.1, 1]
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    >
-                      ⏰
-                    </motion.div>
+                    <div className="text-2xl">⏰</div>
                     <div className="text-center">
                       <p className="font-bold text-orange-800 text-lg">🔥 EARLY BIRD SPECIAL ACTIVE!</p>
                       <p className="text-orange-700 text-sm">Save up to 30% - Ends {earlyBirdDate.toLocaleDateString()}</p>
                     </div>
-                    <motion.div
-                      className="text-2xl"
-                      animate={{ 
-                        rotate: [0, -10, 10, 0],
-                        scale: [1, 1.1, 1]
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: 0.5
-                      }}
-                    >
-                      🔥
-                    </motion.div>
+                    <div className="text-2xl">🔥</div>
                   </div>
                 </div>
-              </motion.div>
-            )}
+              </div>
+            )} */}
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             {pricingTiers.map((tier, index) => (
-              <motion.div 
+              <div 
                 key={index}
-                className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 border relative group ${
+                className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 border relative ${
                   tier.title === "Speaker" 
                     ? "border-blue-300 shadow-blue-100/50 ring-2 ring-blue-200/50" 
                     : "border-gray-100"
                 }`}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ 
-                  duration: 0.6, 
-                  delay: 0.1 * index,
-                  type: "spring",
-                  stiffness: 100
-                }}
-                whileHover={{ 
-                  y: -8,
-                  scale: 1.02,
-                  boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
-                }}
               >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
-                />
                 {tier.title === "Speaker" && (
-                  <motion.div
-                    className="absolute top-4 right-4 z-20"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                  >
-                    <motion.div 
-                      className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg"
-                      animate={{ 
-                        boxShadow: [
-                          "0 0 0 0 rgba(59, 130, 246, 0.7)",
-                          "0 0 0 10px rgba(59, 130, 246, 0)",
-                          "0 0 0 0 rgba(59, 130, 246, 0)"
-                        ]
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        repeatType: "loop"
-                      }}
-                    >
+                  <div className="absolute top-4 right-4 z-20">
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
                       ⭐ Most Popular
-                    </motion.div>
-                  </motion.div>
+                    </div>
+                  </div>
                 )}
-                <div className="p-6 border-b border-border relative z-10">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                  >
-                    <h3 className="text-xl font-bold text-foreground group-hover:text-blue-600 transition-colors duration-300">{tier.title}</h3>
-                    {tier.subtitle && <p className="text-muted-foreground text-sm mt-1">{tier.subtitle}</p>}
-                  </motion.div>
-                  <motion.div 
-                    className="mt-4 flex items-baseline"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                  >
+                
+                <div className="p-6 border-b border-border">
+                  <h3 className="text-xl font-bold text-foreground">{tier.title}</h3>
+                  {tier.subtitle && <p className="text-muted-foreground text-sm mt-1">{tier.subtitle}</p>}
+                  <div className="mt-4 flex items-baseline">
                     <span className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">${tier.price}</span>
                     <span className="ml-1 text-muted-foreground">/person</span>
-                  </motion.div>
+                  </div>
                 </div>
                 
-                <div className="p-6 flex flex-col h-full relative z-10 min-h-[300px]">
-                  <ul className="space-y-3 flex-grow mb-6">
+                <div className="p-6 flex flex-col h-full">
+                  <ul className="space-y-2 mb-6">
                     {tier.features.map((feature, featureIndex) => (
-                      <motion.li 
-                        key={featureIndex} 
-                        className="flex items-center group/feature"
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.4, delay: 0.1 * featureIndex }}
-                        whileHover={{ x: 5 }}
-                      >
-                        <motion.div
-                          whileHover={{ scale: 1.2, rotate: 5 }}
-                          transition={{ type: "spring", stiffness: 400 }}
-                        >
-                          <CheckIcon className="h-5 w-5 text-green-500 mr-2 group-hover/feature:text-green-600 transition-colors duration-200" />
-                        </motion.div>
-                        <span className="text-muted-foreground group-hover/feature:text-gray-700 transition-colors duration-200">{feature}</span>
-                      </motion.li>
+                      <li key={featureIndex} className="flex items-start">
+                        <CheckIcon className="h-4 w-4 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-muted-foreground leading-relaxed">{feature}</span>
+                      </li>
                     ))}
                   </ul>
                   
-                  <motion.div 
-                    className="mt-6 relative z-20"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
+                  <Button 
+                    className="w-full py-3 text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200" 
+                    variant="default"
+                    onClick={() => navigate('/registration')}
                   >
-                    <motion.div
-                      whileHover={{ 
-                        scale: 1.02,
-                        boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
-                      }}
-                      whileTap={{ scale: 0.98 }}
-                      animate={{
-                        y: [0, -3, 0],
-                        boxShadow: [
-                          "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-                          "0 15px 20px -3px rgba(0, 0, 0, 0.15)",
-                          "0 10px 15px -3px rgba(0, 0, 0, 0.1)"
-                        ]
-                      }}
-                      transition={{ 
-                        type: "spring", 
-                        stiffness: 400, 
-                        damping: 17,
-                        y: {
-                          duration: 3,
-                          repeat: Infinity,
-                          repeatType: "reverse",
-                          ease: "easeInOut"
-                        },
-                        boxShadow: {
-                          duration: 3,
-                          repeat: Infinity,
-                          repeatType: "reverse",
-                          ease: "easeInOut"
-                        }
-                      }}
-                    >
-                      <Button 
-                        className="w-full py-6 text-base font-bold shadow-xl hover:shadow-2xl transition-all duration-300 bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 hover:from-blue-700 hover:via-purple-600 hover:to-blue-800 text-white border-0 relative overflow-hidden group animate-pulse" 
-                        variant="default"
-                        onClick={() => navigate('/registration')}
-                      >
-                        <motion.span
-                          className="relative font-extrabold tracking-wide"
-                          initial={{ opacity: 1 }}
-                          whileHover={{ 
-                            opacity: 1,
-                            scale: 1.05,
-                            textShadow: "0 0 10px rgba(255,255,255,0.8)"
-                          }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          🚀 Register Now
-                        </motion.span>
-                        <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                          initial={{ x: "-100%" }}
-                          whileHover={{ x: "0%" }}
-                          transition={{ duration: 0.3 }}
-                        />
-                        <motion.div
-                          className="absolute -inset-2 bg-gradient-to-r from-blue-400 via-purple-600 to-pink-500 rounded-lg blur opacity-30 group-hover:opacity-100 transition duration-500 group-hover:duration-200"
-                          initial={{ opacity: 0 }}
-                          whileHover={{ opacity: 1 }}
-                          animate={{
-                            boxShadow: [
-                              "0 0 0 0 rgba(59, 130, 246, 0.7)",
-                              "0 0 0 10px rgba(59, 130, 246, 0)",
-                              "0 0 0 0 rgba(59, 130, 246, 0)"
-                            ]
-                          }}
-                          transition={{
-                            boxShadow: {
-                              duration: 2,
-                              repeat: Infinity,
-                              repeatType: "loop"
-                            }
-                          }}
-                        />
-                        <motion.div
-                          className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100"
-                          initial={{ x: "-100%" }}
-                          whileHover={{ x: "100%" }}
-                          transition={{ duration: 0.6 }}
-                        />
-                      </Button>
-                    </motion.div>
-                  </motion.div>
+                    Register Now
+                  </Button>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
           
@@ -1220,7 +1019,7 @@ const ForensicScience = () => {
             <Button variant="outline" onClick={() => navigate('/contact')}>Contact for Group Rates</Button>
           </div>
         </div>
-      </motion.section>
+      </section>
 
             {/* Conference Schedule */}
       <section className="py-20 bg-background">
@@ -1537,7 +1336,7 @@ const ForensicScience = () => {
           </div>
           
           <div className="mt-12 text-center">
-            <Button variant="outline" onClick={() => navigate('/partners')}>Become a Partner</Button>
+            <Button variant="outline" onClick={() => navigate('/contact')}>Become a Partner</Button>
           </div>
         </div>
       </section>

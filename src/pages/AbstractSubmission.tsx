@@ -358,7 +358,7 @@ const AbstractSubmission = () => {
                       <ul className="text-blue-800 dark:text-blue-200 space-y-1">
                         <li>• Abstracts are reviewed by our expert panel within 2-3 weeks</li>
                         <li>• You'll receive notification by email about acceptance status</li>
-                        <li>• Early bird registration discount available until April 1, 2025</li>
+                        <li>• Early bird registration discount available until 100 days before the event</li>
                         <li>• Final papers due 30 days after acceptance notification</li>
                       </ul>
                     </div>

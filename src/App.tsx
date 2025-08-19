@@ -27,6 +27,8 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import PresentationGuidelines from "./pages/PresentationGuidelines";
+import VisaInvitation from "./pages/VisaInvitation";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +48,8 @@ const App = () => (
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/presentation-guidelines" element={<PresentationGuidelines />} />
+          <Route path="/visa-invitation" element={<VisaInvitation />} />
           <Route path="/conference/tech-innovation-expo-2025" element={<TechInnovationExpo />} />
           <Route path="/conference/aisummit" element={<AISummit />} />
           <Route path="/conference/globalhealthcarerevolution" element={<GlobalHealthcareRevolution />} />

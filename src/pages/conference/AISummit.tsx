@@ -24,7 +24,7 @@ const AISummit = () => {
     seconds: 0
   });
 
-  const targetDate = new Date('2026-02-15T09:00:00');
+  const targetDate = new Date('2025-11-15T09:00:00');
   // const earlyBirdDate = new Date('2025-07-27T23:59:59'); // More than 100 days before event
   const earlyBirdDate = new Date(targetDate.getTime() - 100 * 24 * 60 * 60 * 1000); // More than 100 days before event
   const now = new Date();
@@ -289,7 +289,7 @@ const AISummit = () => {
                 <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"/>
                 </svg>
-                <span>Feb 15-17, 2026</span>
+                <span>Nov 15-17, 2025</span>
               </div>
               
               <div className="flex items-center gap-2">

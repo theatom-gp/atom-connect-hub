@@ -2,9 +2,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import conferenceAI from '@/assets/conference-ai.jpg';
-import conferenceMedical from '@/assets/conference-medical.jpg';
-import conferenceSustainability from '@/assets/conference-sustainability.jpg';
+import aisummit from '@/assets/aisummit/bg.avif';
+import forensicscience from '@/assets/forensicscience/bg.jpeg';
+import powerandenergy from '@/assets/powerandenergy/bg.jpeg';
 
 const Conferences = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const Conferences = () => {
       date: "Nov 15-17, 2025",
       venue: "Silicon Valley Convention Center",
       location: "San Francisco, CA",
-      image: conferenceAI,
+      image: aisummit,
       description: "Join leading AI researchers, tech executives, and innovators as they unveil the future of artificial intelligence.",
       attendees: 500,
       speakers: 25,
@@ -24,27 +24,27 @@ const Conferences = () => {
     },
     {
       id: 2,
-      title: "Global Healthcare Revolution",
-      date: "Dec 22-24, 2025",
-      venue: "Medical Innovation Hub",
-      location: "Boston, MA",
-      image: conferenceMedical,
-      description: "Discover breakthrough medical technologies and treatment innovations shaping the future of healthcare.",
+      title: "Global Congress on Forensic Science and Research",
+      date: "Nov 22-24, 2025",
+      venue: "Academic Excellence Center",
+      location: "Lisbon, Portugal",
+      image: forensicscience,
+      description: "Discover breakthrough Forensic Science technologies and innovations.",
       attendees: 350,
       speakers: 18,
-      route: "/conference/healthcarerevolution"
+      route: "/conference/forensicscience"
     },
     {
       id: 3,
-      title: "Sustainable Future Conference",
-      date: "Jan 10-12, 2026",
+      title: "Global Congress on Power and Energy Engineering",
+      date: "Dec 10-12, 2025",
       venue: "Green Technology Center",
       location: "Seattle, WA",
-      image: conferenceSustainability,
-      description: "Unite with environmental leaders and green tech pioneers driving sustainable development worldwide.",
+      image: powerandenergy,
+      description: "Unite with environmental leaders and Power tech pioneers driving development worldwide.",
       attendees: 400,
       speakers: 22,
-      route: "/conference/sustainablefuture"
+      route: "/conference/powerandenergy"
     }
   ];
 

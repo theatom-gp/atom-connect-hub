@@ -24,7 +24,7 @@ const TechInnovationExpo = () => {
     seconds: 0
   });
 
-  const targetDate = new Date('2025-11-05T09:00:00');
+  const targetDate = new Date('2026-03-15T09:00:00');
   const earlyBirdDate = new Date(targetDate.getTime() - 100 * 24 * 60 * 60 * 1000); // More than 100 days before event
   const now = new Date();
   const daysToEvent = Math.floor((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
@@ -367,7 +367,7 @@ const TechInnovationExpo = () => {
                     </div>
                     <div className="text-left">
                       <div className="text-sm text-white/60 font-medium uppercase tracking-wider mb-1">Event Dates</div>
-                      <div className="text-xl font-semibold text-white">November 5-7, 2025</div>
+                      <div className="text-xl font-semibold text-white">March 15-17, 2026</div>
                     </div>
                   </div>
                 </div>
