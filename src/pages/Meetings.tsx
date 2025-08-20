@@ -15,7 +15,7 @@ import quantumcomputing from '@/assets/quantumcomputing/bg.jpg';
 import globalhealthcarerevolution from '@/assets/globalhealthcarerevolution/bg.jpg';
 import biomaterials from '@/assets/biomaterials/bg.jpeg';
 import techinnovationexpo from '@/assets/techinnovationexpo/bg.jpeg';
-import surgeryandanesthesia from '@/assets/surgery/bg.jpeg';
+import surgeryandanesthesia from '@/assets/surgeryandanesthesia/bg.jpeg';
 import neurology from '@/assets/neurology/bg.jpeg';  
 import conferenceFinance from '@/assets/conference-finance.jpg';
 import conferenceEducation from '@/assets/conference-education.jpg';
@@ -506,7 +506,7 @@ const Meetings = () => {
                       } else if (conference.id === 6) {
                         window.location.href = '/conference/biomaterials';
                       } else if (conference.id === 7) {
-                        window.location.href = '/conference/tech-innovation-expo-2025';
+                        window.location.href = '/conference/techinnovationexpo';
                       } else if (conference.id === 8) {
                         window.location.href = '/conference/surgeryandanesthesia';
                       } else if (conference.id === 9) {

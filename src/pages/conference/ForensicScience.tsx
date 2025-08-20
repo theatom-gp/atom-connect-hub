@@ -11,15 +11,15 @@ import { Check as CheckIcon, Mail, Bell, Calendar, Globe, ChevronDown, ChevronUp
 import { Input } from '@/components/ui/input';
 // import heroBackground from '@/assets/tech-innovation/bg.jpg';
 import heroBackground from '@/assets/forensicscience/bg.jpeg';
-import venueInterior from '@/assets/tech-innovation/venue-interior-1.jpg';
-import venueConference from '@/assets/tech-innovation/venue-conference-room.jpg';
-import venueNetworking from '@/assets/tech-innovation/venue-networking.jpg';
-import venueExhibition from '@/assets/tech-innovation/venue-exhibition.jpg';
-import chairpersonImage from '@/assets/tech-innovation/chairperson-tech.jpg';
-import speaker1 from '@/assets/tech-innovation/speaker-1.jpg';
-import speaker2 from '@/assets/tech-innovation/speaker-2.jpg';
-import speaker3 from '@/assets/tech-innovation/speaker-3.jpg';
-import speaker4 from '@/assets/tech-innovation/speaker-4.jpg';
+import venueInterior from '@/assets/forensicscience/venue-interior-1.jpg';
+import venueConference from '@/assets/forensicscience/venue-conference-room.jpg';
+import venueNetworking from '@/assets/forensicscience/venue-networking.jpg';
+import venueExhibition from '@/assets/forensicscience/venue-exhibition.jpg';
+import chairpersonImage from '@/assets/forensicscience/chairperson-tech.jpg';
+import speaker1 from '@/assets/forensicscience/speaker-1.jpg';
+import speaker2 from '@/assets/forensicscience/speaker-2.jpg';
+import speaker3 from '@/assets/forensicscience/speaker-3.jpg';
+import speaker4 from '@/assets/forensicscience/speaker-4.jpg';
 
 const ForensicScience = () => {
   const navigate = useNavigate();

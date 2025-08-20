@@ -81,7 +81,7 @@ const PrivacyPolicy = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
                 <FileText className="h-5 w-5 mr-2" />
-                Download PDF Version
+                <a href="/privacy-policy.pdf" download>Download PDF Version</a>
               </Button>
             </div>
             <p className="text-sm text-primary-foreground/70 mt-6">

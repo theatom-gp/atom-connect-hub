@@ -9,19 +9,18 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Check as CheckIcon, Mail, Bell, Calendar, Globe, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-// import heroBackground from '@/assets/tech-innovation/bg.jpg';
-import heroBackground from '@/assets/powerandenergy/bg.jpeg';
-import venueInterior from '@/assets/powerandenergy/venue-interior-1.jpg';
-import venueConference from '@/assets/powerandenergy/venue-conference-room.jpg';
-import venueNetworking from '@/assets/powerandenergy/venue-networking.jpg';
-import venueExhibition from '@/assets/powerandenergy/venue-exhibition.jpg';
-import chairpersonImage from '@/assets/powerandenergy/chairperson-tech.jpg';
-import speaker1 from '@/assets/powerandenergy/speaker-1.jpg';
-import speaker2 from '@/assets/powerandenergy/speaker-2.jpg';
-import speaker3 from '@/assets/powerandenergy/speaker-3.jpg';
-import speaker4 from '@/assets/powerandenergy/speaker-4.jpg';
+import heroBackground from '@/assets/neurology/bg.jpeg';
+import venueInterior from '@/assets/neurology/venue-interior-1.jpg';
+import venueConference from '@/assets/neurology/venue-conference-room.jpg';
+import venueNetworking from '@/assets/neurology/venue-networking.jpg';
+import venueExhibition from '@/assets/neurology/venue-exhibition.jpg';
+import chairpersonImage from '@/assets/neurology/chairperson-tech.jpg';
+import speaker1 from '@/assets/neurology/speaker-1.jpg';
+import speaker2 from '@/assets/neurology/speaker-2.jpg';
+import speaker3 from '@/assets/neurology/speaker-3.jpg';
+import speaker4 from '@/assets/neurology/speaker-4.jpg';
 
-const PowerandEnergy = () => {
+const neurology = () => {
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -39,7 +38,7 @@ const PowerandEnergy = () => {
     'Day 3': false
   });
 
-  const targetDate = new Date('2025-12-10T09:00:00');
+  const targetDate = new Date('2026-03-25T09:00:00');
   const earlyBirdDate = new Date(targetDate.getTime() - (100 * 24 * 60 * 60 * 1000));
   const now = new Date();
   const daysToEvent = Math.floor((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
@@ -92,31 +91,31 @@ const PowerandEnergy = () => {
   const speakers = [
     {
       name: "Dr. Maria Santos",
-      title: "Chief Power and Energy Engineer, Seattle Power and Energy Lab",
-      country: "United States",
+      title: "Chief Neurology Scientist, Lisbon Crime Lab",
+      country: "Portugal",
       image: speaker1,
-      expertise: "Power and Energy Generation and Distribution"
+      expertise: "Neurology Analysis"
     },
     {
       name: "Prof. James Wilson",
-      title: "Director of Power and Energy Research, University of Washington",
-      country: "United States",
+      title: "Director of Neurology Research, London Metropolitan University",
+      country: "United Kingdom",
       image: speaker2,
-      expertise: "Power and Energy Storage and Management"
+      expertise: "Digital Neurology"
     },
     {
       name: "Dr. Elena Rodriguez",
-      title: "Senior Power and Energy Engineer, Seattle Power and Energy Lab",
-      country: "United States",
+      title: "Senior Neurology Pathologist, Madrid Institute",
+      country: "Spain",
       image: speaker3,
-      expertise: "Power and Energy Transmission and Distribution"
+      expertise: "Neurology Pathology"
     },
     {
       name: "Prof. Hans Mueller",
-      title: "Head of Power and Energy Policy and Regulation, University of Washington",
+      title: "Head of Neurology Chemistry, Berlin University",
       country: "Germany",
       image: speaker4,
-      expertise: "Power and Energy Policy and Regulation"
+      expertise: "Neurology Toxicology"
     }
   ];
 
@@ -182,7 +181,7 @@ const PowerandEnergy = () => {
         { time: "13:15-14:00", activity: "Group Photo & Network Lunch" },
         { time: "14:00-16:00", activity: "Keynote Session" },
         { time: "16:00-16:15", activity: "Networking Break" },
-        { time: "16:15-18:00", activity: "Power and Energy Sessions" }
+        { time: "16:15-18:00", activity: "Neurology Sessions" }
       ]
     },
     {
@@ -191,11 +190,11 @@ const PowerandEnergy = () => {
       sessions: [
         { time: "09:00-11:30", activity: "Plenary Session" },
         { time: "11:30-11:45", activity: "Networking Break" },
-        { time: "11:45-13:45", activity: "Power and Energy Sessions" },
+        { time: "11:45-13:45", activity: "Neurology Sessions" },
         { time: "13:45-14:30", activity: "Networking Lunch Break" },
-        { time: "14:30-16:30", activity: "Power and Energy Sessions" },
+        { time: "14:30-16:30", activity: "Neurology Sessions" },
         { time: "16:30-16:45", activity: "Networking Break" },
-        { time: "16:45-18:30", activity: "Power and Energy Sessions" },
+        { time: "16:45-18:30", activity: "Neurology Sessions" },
         { time: "18:45-19:00", activity: "Certification" }
       ]
     },
@@ -203,13 +202,13 @@ const PowerandEnergy = () => {
       day: "Day 3",
       date: "November 15, 2025", 
       sessions: [
-        { time: "09:00-11:30", activity: "Power and Energy Sessions" },
+        { time: "09:00-11:30", activity: "Neurology Sessions" },
         { time: "11:30-11:45", activity: "Networking Break" },
-        { time: "11:45-13:45", activity: "Power and Energy Sessions" },
+        { time: "11:45-13:45", activity: "Neurology Sessions" },
         { time: "13:45-14:30", activity: "Networking Lunch Break" },
-        { time: "14:30-16:30", activity: "Power and Energy Sessions" },
+        { time: "14:30-16:30", activity: "Neurology Sessions" },
         { time: "16:30-16:45", activity: "Networking Break" },
-        { time: "16:45-18:30", activity: "Power and Energy Sessions" },
+        { time: "16:45-18:30", activity: "Neurology Sessions" },
         { time: "18:30-19:00", activity: "Closing Ceremony" }
       ]
     }
@@ -217,26 +216,26 @@ const PowerandEnergy = () => {
 
   const publishingPartners = [
     { 
-      name: "Power and Energy International", 
-      description: "Leading Power and Energy Journal", 
+      name: "Neurology International", 
+      description: "Leading Neurology Journal", 
       logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MDPI_logo.svg/320px-MDPI_logo.svg.png",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY0ZjQiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzMzMzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Rm9yZW5zaWMgU2NpZW5jZTwvdGV4dD48L3N2Zz4="
     },
     { 
-      name: "Journal of Power and Energy", 
-      description: "Academic Power and Energy Research", 
+      name: "Journal of Neurology Sciences", 
+      description: "Academic Neurology Research", 
       logo: "https://www.cambridgescholars.com/assets/img/logo.png",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY0ZjQiLz48dGV4dCB4PSI1MCIgeT0iMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI4IiBmaWxsPSIjMzMzMzMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Kb3VybmFsPC90ZXh0Pjx0ZXh0IHg9IjUwIiB5PSIzMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjgiIGZpbGw9IiMzMzMzMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljczwvdGV4dD48L3N2Zz4="
     },
     { 
-      name: "Power and Energy Review", 
-      description: "Power and Energy Research Database", 
+      name: "Neurology Review", 
+      description: "Neurology Research Database", 
       logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Scopus_logo.svg/320px-Scopus_logo.svg.png",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGRjZGMDAiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljIFJldmlldzwvdGV4dD48L3N2Zz4="
     },
     { 
-      name: "International Journal of Power and Energy", 
-      description: "Power and Energy Research", 
+      name: "International Journal of Neurology", 
+      description: "Neurology Research", 
       logo: "https://www.bonviewglobal.com/assets/images/logo.png",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY0ZjQiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzMzMzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TGVnYWwgTWVkaWNpbmU8L3RleHQ+PC9zdmc+"
     }
@@ -244,32 +243,32 @@ const PowerandEnergy = () => {
 
   const mediaPartners = [
     { 
-      name: "Power and Energy Today", 
-      description: "Power and Energy Research Publication", 
+      name: "Neurology Magazine", 
+      description: "Neurology News", 
       logo: "https://upload.wikimedia.org/wikipedia/commons/b/b9/TechCrunch_logo.svg",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiMwMENGNjQiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljIE1hZzwvdGV4dD48L3N2Zz4="
     },
     { 
-      name: "Power and Energy Today", 
-      description: "Power and Energy Research Publication", 
+      name: "Neurology Investigation", 
+      description: "Neurology Magazine", 
       logo: "https://www.technologyreview.com/wp-content/uploads/2020/02/mit-logo-2020-web.png",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNBMzE2MjEiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNTSTwvdGV4dD48L3N2Zz4="
     },
     { 
-      name: "Power and Energy Today", 
-      description: "Power and Energy Research Publication", 
+      name: "Neurology Today", 
+      description: "Neurology Research Publication", 
       logo: "https://spectrum.ieee.org/media/logo/IEEE-spectrum-logo.svg",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiMwMDU1RkYiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljIFRvZGF5PC90ZXh0Pjwvc3ZnPg=="
     },
     { 
-      name: "Power and Energy Today", 
-      description: "Power and Energy Research Publication", 
+      name: "Neurology Today", 
+      description: "Neurology News", 
       logo: "https://upload.wikimedia.org/wikipedia/commons/5/50/Wired_logo.svg",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNTAiIHk9IjI1IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiMwMDAwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkxlZ2FsIE1lZGljaW5lPC90ZXh0Pjwvc3ZnPg=="
     },
     { 
-      name: "Power and Energy Research Network", 
-      description: "Power and Energy Research News", 
+      name: "Neurology Research Network", 
+      description: "Neurology Research News", 
       logo: "https://venturebeat.com/wp-content/uploads/2020/06/VB_logo_2020.png",
       fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGRjI0MDAiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljIFJlc2VhcmNoPC90ZXh0Pjwvc3ZnPg=="
     }
@@ -473,7 +472,7 @@ const PowerandEnergy = () => {
                     <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.3s]" />
                     <div className="w-1.5 h-1.5 bg-accent rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.6s]" />
                   </div>
-                  <span className="tracking-wider uppercase">Power and Energy • Research • Innovation</span>
+                  <span className="tracking-wider uppercase">Neurology • Research • Disorders</span>
                   <div className="flex items-center gap-1">
                     <div className="w-1.5 h-1.5 bg-accent rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.9s]" />
                     <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-[techPulse_2s_ease-in-out_infinite_1.2s]" />
@@ -487,16 +486,16 @@ const PowerandEnergy = () => {
             <div className="overflow-hidden mb-16">
               <h1 className="text-6xl lg:text-8xl xl:text-9xl font-extralight text-white leading-[0.9] tracking-tight">
                 <div className="animate-[staggerUp_1s_ease-out_0.4s_both]">
-                  <span className="inline-block font-light">Global Congress on</span>
+                  <span className="inline-block font-light">International Experts Summit on</span>
                 </div>
                 <div className="animate-[staggerUp_1s_ease-out_0.6s_both] mt-4">
                   <span className="inline-block font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-primary to-secondary bg-size-200 animate-[gradientShift_4s_ease-in-out_infinite]">
-                    Power and Energy
+                    Neurology and Neurological Disorders
                   </span>
                 </div>
                 <div className="animate-[staggerUp_1s_ease-out_0.8s_both] mt-4">
                   <span className="inline-block font-light text-transparent bg-clip-text bg-gradient-to-r from-white via-secondary to-accent bg-size-200 animate-[gradientShift_4s_ease-in-out_infinite]">
-                    and Engineering
+                    and Research
                   </span>
                 </div>
               </h1>
@@ -504,8 +503,8 @@ const PowerandEnergy = () => {
               {/* Professional Subtitle */}
               <div className="animate-[staggerUp_1s_ease-out_1s_both] mt-8">
                 <p className="text-xl lg:text-2xl text-white/80 font-light max-w-3xl mx-auto leading-relaxed">
-                  Advancing Power and Energy Through Innovation and Engineering, 
-                  <span className="text-white font-medium"> Research, and International Collaboration</span>
+                  Advancing Neurology and Neurological Disorders Through 
+                  <span className="text-white font-medium"> Research and International Collaboration</span>
                 </p>
               </div>
             </div>
@@ -526,7 +525,7 @@ const PowerandEnergy = () => {
                     </div>
                     <div className="text-left">
                       <div className="text-sm text-white/60 font-medium uppercase tracking-wider mb-1">Event Dates</div>
-                      <div className="text-xl font-semibold text-white">December 10-12, 2025</div>
+                      <div className="text-xl font-semibold text-white">March 25-27, 2026</div>
                     </div>
                   </div>
                 </div>
@@ -546,7 +545,7 @@ const PowerandEnergy = () => {
                     </div>
                     <div className="text-left">
                       <div className="text-sm text-white/60 font-medium uppercase tracking-wider mb-1">Location</div>
-                      <div className="text-xl font-semibold text-white">Seattle, WA</div>
+                      <div className="text-xl font-semibold text-white">San Francisco, CA</div>
                     </div>
                   </div>
                 </div>
@@ -729,24 +728,24 @@ const PowerandEnergy = () => {
               </div>
               
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
-                Advancing <span className="text-primary">Power and Energy</span> Through Innovation and Engineering
+                Advancing <span className="text-primary">Neurology and Neurological Disorders</span> Through Research
               </h2>
               
               <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                Join the most influential power and energy conference of 2025, where cutting-edge research meets practical applications. Connect with power and energy experts, explore breakthrough technologies, and discover solutions that will define the future of power and energy.
+                Join the most influential neurology and neurological disorders conference of 2025, where cutting-edge research meets practical applications. Connect with neurology and neurological disorders experts, explore breakthrough technologies, and discover solutions that will define the future of neurology and neurological disorders.
               </p>
               
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                From power and energy generation and distribution to power and energy storage and management, this three-day immersive experience brings together leading power and energy experts, researchers, and engineers from across the globe to share insights, forge partnerships, and accelerate power and energy innovation.
+                From neurology and neurological disorders research to neurology and neurological disorders applications, this three-day immersive experience brings together leading neurology and neurological disorders experts, researchers, and professionals from across the globe to share insights, forge partnerships, and accelerate neurology and neurological disorders innovation.
               </p>
               
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-primary">75+</div>
+                  <div className="text-3xl font-bold text-primary">150+</div>
                   <div className="text-muted-foreground">Expert Speakers</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-primary">10+</div>
+                  <div className="text-3xl font-bold text-primary">40+</div>
                   <div className="text-muted-foreground">Sessions</div>
                 </div>
               </div>
@@ -777,16 +776,16 @@ const PowerandEnergy = () => {
               </h2>
               
               <blockquote className="text-muted-foreground text-lg leading-relaxed mb-6 italic">
-                "Power and energy is the backbone of modern society. The Global Congress on Power and Energy and Engineering 2025 represents a unique opportunity to witness the convergence of brilliant minds and revolutionary techniques in power and energy."
+                "Neurology and neurological disorders is the bridge between science and human health. The International Experts Summit on Neurology and Neurological Disorders 2026 represents a unique opportunity to witness the convergence of brilliant minds and revolutionary techniques in neurology and neurological disorders."
               </blockquote>
               
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                As we stand at the forefront of power and energy innovation, this conference serves as a catalyst for meaningful collaboration and groundbreaking discoveries. Join us in Seattle as we explore the technologies and methodologies that will shape the future of power and energy and create lasting impact across the power and energy system worldwide.
+                As we stand at the forefront of neurology and neurological disorders innovation, this conference serves as a catalyst for meaningful collaboration and groundbreaking discoveries. Join us in San Francisco as we explore the technologies and methodologies that will shape the future of neurology and neurological disorders and create lasting impact across the neurology and neurological disorders system worldwide.
               </p>
               
               <div className="mb-8">
                 <p className="font-semibold text-foreground">Dr. Carlos Mendes</p>
-                <p className="text-muted-foreground">Conference Chair & Director of Power and Energy, University of Washington</p>
+                <p className="text-muted-foreground">Conference Chair & Director of Neurology and Neurological Disorders, Portuguese National Institute of Neurology and Neurological Disorders</p>
               </div>
             </div>
           </div>
@@ -803,7 +802,7 @@ const PowerandEnergy = () => {
               </div>
               <h2 className="text-3xl font-bold text-foreground mb-4">Submit Your Abstract</h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                Share your research and insights with the global forensic science community. We welcome abstracts on all aspects of forensic science and criminal investigation.
+                Share your research and insights with the global neurology and neurological disorders community. We welcome abstracts on all aspects of neurology and neurological disorders.
               </p>
             </div>
             
@@ -813,23 +812,23 @@ const PowerandEnergy = () => {
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    Power and Energy Generation and Distribution
+                    Neurology and Neurological Disorders Research
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    Power and Energy Storage and Management
+                    Neurology and Neurological Disorders Applications
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    Power and Energy Transmission and Distribution
+                    Neurology and Neurological Disorders Experimental
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    Power and Energy Efficiency and Conservation
+                    Neurology and Neurological Disorders Clinical
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    Power and Energy Policy and Regulation
+                    Neurology and Neurological Disorders Policy
                   </li>
                 </ul>
               </div>
@@ -839,7 +838,7 @@ const PowerandEnergy = () => {
                 <ul className="space-y-3 text-muted-foreground">
                   <li className="flex items-start gap-2">
                     <span className="font-semibold min-w-[120px]">Deadline:</span>
-                    <span>November 30, 2025</span>
+                    <span>February 25, 2026</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="font-semibold min-w-[120px]">Format:</span>
@@ -851,7 +850,7 @@ const PowerandEnergy = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="font-semibold min-w-[120px]">Notification:</span>
-                    <span>December 15, 2025</span>
+                    <span>March 25, 2026</span>
                   </li>
                 </ul>
               </div>
@@ -899,7 +898,7 @@ const PowerandEnergy = () => {
             </h2>
             
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Learn from forensic science pioneers and thought leaders representing forensic institutions across the globe.
+              Learn from neurology and neurological disorders pioneers and thought leaders representing neurology and neurological disorders institutions across the globe.
             </p>
           </div>
 
@@ -1274,7 +1273,7 @@ const PowerandEnergy = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              We're proud to collaborate with leading forensic science publications and media organizations.
+              We're proud to collaborate with leading neurology and neurological disorders publications and media organizations.
             </motion.p>
           </div>
           
@@ -1375,7 +1374,7 @@ const PowerandEnergy = () => {
             </h2>
             
             <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-              Subscribe to our newsletter and be the first to know about upcoming forensic science conferences, 
+              Subscribe to our newsletter and be the first to know about upcoming neurology and neurological disorders conferences, 
               early bird specials, and exclusive research opportunities.
             </p>
           </motion.div>
@@ -1415,7 +1414,7 @@ const PowerandEnergy = () => {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold">Global Opportunities</h4>
-                      <p className="text-white/70 text-sm">Discover forensic science events worldwide</p>
+                      <p className="text-white/70 text-sm">Discover neurology and neurological disorders events worldwide</p>
                     </div>
                   </div>
                 </div>
@@ -1484,7 +1483,7 @@ const PowerandEnergy = () => {
                     animate={{ opacity: 1, scale: 1 }}
                   >
                     <p className="text-green-300 font-medium">
-                      🎉 Welcome aboard! You'll receive updates about future forensic science conferences.
+                      🎉 Welcome aboard! You'll receive updates about future neurology and neurological disorders conferences.
                     </p>
                   </motion.div>
                 )}
@@ -1501,4 +1500,4 @@ const PowerandEnergy = () => {
   );
 };
 
-export default PowerandEnergy;
+export default neurology;

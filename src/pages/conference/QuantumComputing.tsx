@@ -21,7 +21,7 @@ import speaker2 from '@/assets/quantumcomputing/speaker-2.jpg';
 import speaker3 from '@/assets/quantumcomputing/speaker-3.jpg';
 import speaker4 from '@/assets/quantumcomputing/speaker-4.jpg';
 
-const ForensicScience = () => {
+const QuantumComputing = () => {
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -1501,4 +1501,4 @@ const ForensicScience = () => {
   );
 };
 
-export default ForensicScience;
+export default QuantumComputing;

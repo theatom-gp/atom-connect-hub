@@ -21,7 +21,7 @@ import speaker2 from '@/assets/globalhealthcarerevolution/speaker-2.jpg';
 import speaker3 from '@/assets/globalhealthcarerevolution/speaker-3.jpg';
 import speaker4 from '@/assets/globalhealthcarerevolution/speaker-4.jpg';
 
-const ForensicScience = () => {
+const GlobalHealthcareRevolution = () => {
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -504,8 +504,8 @@ const ForensicScience = () => {
               {/* Professional Subtitle */}
               <div className="animate-[staggerUp_1s_ease-out_1s_both] mt-8">
                 <p className="text-xl lg:text-2xl text-white/80 font-light max-w-3xl mx-auto leading-relaxed">
-                  Advancing Healthcare and Revolution Through Innovation and Engineering, 
-                  <span className="text-white font-medium"> Research, and International Collaboration</span>
+                  Advancing Healthcare and Revolution Through Innovation,  
+                  <span className="text-white font-medium"> Research and International Collaboration</span>
                 </p>
               </div>
             </div>
@@ -1501,4 +1501,4 @@ const ForensicScience = () => {
   );
 };
 
-export default ForensicScience;
+export default GlobalHealthcareRevolution;

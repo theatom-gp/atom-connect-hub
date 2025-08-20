@@ -14,6 +14,9 @@ import GlobalFinanceSummit from "./pages/conference/GlobalFinanceSummit";
 import ForensicScience from "./pages/conference/ForensicScience";
 import PowerandEnergy from "./pages/conference/PowerandEnergy";
 import QuantumComputing from "./pages/conference/QuantumComputing";
+import Biomaterials from "./pages/conference/Biomaterials";
+import SurgeryandAnesthesia from "./pages/conference/SurgeryandAnesthesia";
+import Neurology from "./pages/conference/Neurology";
 // import EducationTransformConference from "./pages/EducationTransformConference";
 // import DigitalMarketingMasters from "./pages/DigitalMarketingMasters";
 // import LegalInnovationForum from "./pages/LegalInnovationForum";
@@ -52,13 +55,16 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/presentation-guidelines" element={<PresentationGuidelines />} />
           <Route path="/visa-invitation" element={<VisaInvitation />} />
-          <Route path="/conference/tech-innovation-expo-2025" element={<TechInnovationExpo />} />
+          <Route path="/conference/techinnovationexpo" element={<TechInnovationExpo />} />
           <Route path="/conference/aisummit" element={<AISummit />} />
           <Route path="/conference/globalhealthcarerevolution" element={<GlobalHealthcareRevolution />} />
           <Route path="/conference/globalfinancesummit" element={<GlobalFinanceSummit />} />
           <Route path="/conference/forensicscience" element={<ForensicScience />} />
           <Route path="/conference/powerandenergy" element={<PowerandEnergy />} />
           <Route path="/conference/quantumcomputing" element={<QuantumComputing />} />
+          <Route path="/conference/biomaterials" element={<Biomaterials />} />
+          <Route path="/conference/surgeryandanesthesia" element={<SurgeryandAnesthesia />} />
+          <Route path="/conference/neurology" element={<Neurology />} />
           {/* <Route path="/conference/sustainablefutureconference" element={<SustainableFutureConference />} />
           <Route path="/conference/globalfinancesummit" element={<GlobalFinancesummit />} />
           <Route path="/conference/educationtransformconference" element={<EducationTransformConference />} />
