@@ -134,8 +134,9 @@ const VisaInvitation = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-primary to-primary/80 text-primary-foreground overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIyIi8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
+      <div className="relative bg-cover bg-center bg-no-repeat text-primary-foreground overflow-hidden" style={{backgroundImage: "url('/src/assets/hero-conference.jpg')"}}>
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60"></div>
         <div className="relative container mx-auto px-4 py-20">
           <div className="text-center max-w-4xl mx-auto">
             <Badge variant="secondary" className="text-lg px-6 py-3 mb-6 bg-white/20 backdrop-blur-sm">

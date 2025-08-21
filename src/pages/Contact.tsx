@@ -113,12 +113,14 @@ const Contact = () => {
       <Navigation />
       
       {/* Hero Section - Mobile optimized */}
-      <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 sm:mb-6">
+      <section className="relative bg-cover bg-center bg-no-repeat text-primary-foreground py-20 px-4 text-center overflow-hidden" style={{backgroundImage: "url('/src/assets/hero-conference.jpg')"}}>
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60"></div>
+        <div className="relative max-w-7xl mx-auto text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4 sm:mb-6">
             Get in Touch with Our Team
           </h1>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto mb-6 sm:mb-8">
+          <p className="text-lg sm:text-xl text-primary-foreground/90 max-w-3xl mx-auto mb-6 sm:mb-8">
             Have questions about our conferences? Need support with registration? Want to explore speaking or sponsorship opportunities? 
             We're here to help you every step of the way.
           </p>
@@ -129,11 +131,11 @@ const Contact = () => {
               const IconComponent = signal.icon;
               return (
                 <div key={index} className="flex flex-col items-center">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mb-3 sm:mb-4">
-                    <IconComponent className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                    <IconComponent className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
-                  <div className="text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">{signal.metric}</div>
-                  <div className="text-sm sm:text-base text-muted-foreground">{signal.label}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">{signal.metric}</div>
+                  <div className="text-sm sm:text-base text-white/90">{signal.label}</div>
                 </div>
               );
             })}

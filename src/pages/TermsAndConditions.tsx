@@ -10,8 +10,9 @@ const TermsAndConditions = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-20 px-4 text-center overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIyIi8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
+      <section className="relative bg-cover bg-center bg-no-repeat text-primary-foreground py-20 px-4 text-center overflow-hidden" style={{backgroundImage: "url('/src/assets/hero-conference.jpg')"}}>
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60"></div>
         <div className="relative container mx-auto max-w-4xl">
           <div className="flex items-center justify-center gap-3 mb-6">
             <Shield className="h-8 w-8 text-primary-foreground" />
@@ -283,10 +284,10 @@ const TermsAndConditions = () => {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button variant="default" className="flex-1">
-                    Contact Legal Team
+                    <a href="/contact">Contact Team</a>
                   </Button>
                   <Button variant="outline" className="flex-1">
-                    Download PDF Version
+                    <a href="/terms-and-conditions.pdf" download>Download PDF Version</a>
                   </Button>
                 </div>
                 <div className="text-xs text-muted-foreground text-center pt-4 border-t">
