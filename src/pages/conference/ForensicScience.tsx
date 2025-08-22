@@ -2,15 +2,17 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Check as CheckIcon, Mail, Bell, Calendar, Globe, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react';
+import { Check as CheckIcon, Mail, Bell, Calendar, Globe, ChevronDown, ChevronUp, Eye, EyeOff, X, MapPin, Users, ArrowRight, Star, TrendingUp } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 // import heroBackground from '@/assets/tech-innovation/bg.jpg';
-import heroBackground from '@/assets/forensicscience/bg.jpeg';
+import heroBackground from '@/assets/forensicscience/bg-2.webp';
 import venueInterior from '@/assets/forensicscience/venue-interior-1.jpg';
 import venueConference from '@/assets/forensicscience/venue-conference-room.jpg';
 import venueNetworking from '@/assets/forensicscience/venue-networking.jpg';
@@ -38,6 +40,8 @@ const ForensicScience = () => {
     'Day 2': false,
     'Day 3': false
   });
+  const [selectedSpeaker, setSelectedSpeaker] = useState(null);
+  const [isSpeakerModalOpen, setIsSpeakerModalOpen] = useState(false);
 
   const targetDate = new Date('2025-11-22T09:00:00');
   const earlyBirdDate = new Date(targetDate.getTime() - (100 * 24 * 60 * 60 * 1000));
@@ -95,28 +99,48 @@ const ForensicScience = () => {
       title: "Chief Forensic Scientist, Lisbon Crime Lab",
       country: "Portugal",
       image: speaker1,
-      expertise: "DNA Analysis"
+      expertise: "DNA Analysis",
+      biography: "Dr. Maria Santos is known as 'The DNA Pioneer'. A title earned throughout her 15 years serving as the lead DNA analyst for the Lisbon Crime Lab, where she has processed over 2,000 criminal cases and developed innovative DNA extraction techniques. She has pioneered the use of next-generation sequencing in forensic DNA analysis and has been instrumental in solving numerous high-profile cases across Europe. Dr. Santos has published over 50 peer-reviewed papers on forensic DNA analysis and has trained over 200 forensic scientists worldwide. She is a member of the European Network of Forensic Science Institutes and serves as a consultant for INTERPOL on DNA analysis protocols."
     },
     {
       name: "Prof. James Wilson",
       title: "Director of Forensic Research, London Metropolitan University",
       country: "United Kingdom",
       image: speaker2,
-      expertise: "Digital Forensics"
+      expertise: "Digital Forensics",
+      biography: "Professor James Wilson is recognized as 'The Digital Forensics Master'. With over 20 years of experience in cybersecurity and digital forensics, he has led investigations into major cybercrimes and has developed cutting-edge tools for digital evidence recovery. As Director of Forensic Research at London Metropolitan University, he has established one of the most advanced digital forensics laboratories in Europe. Professor Wilson has authored three textbooks on digital forensics and has trained law enforcement agencies in over 30 countries. He is a certified expert witness in digital forensics and has testified in numerous high-profile cybercrime cases."
     },
     {
       name: "Dr. Elena Rodriguez",
       title: "Senior Forensic Pathologist, Madrid Institute",
       country: "Spain",
       image: speaker3,
-      expertise: "Forensic Pathology"
+      expertise: "Forensic Pathology",
+      biography: "Dr. Elena Rodriguez is acclaimed as 'The Forensic Pathology Expert'. She has conducted over 1,500 autopsies and has been instrumental in developing new protocols for forensic pathology in Spain. Dr. Rodriguez specializes in trauma analysis and has worked on cases involving mass disasters, homicides, and suspicious deaths. She has published extensively on forensic pathology techniques and has been a key figure in establishing international standards for forensic pathology practice. Dr. Rodriguez serves on the editorial board of the Journal of Forensic Pathology and is a member of the International Association of Forensic Pathologists."
     },
     {
       name: "Prof. Hans Mueller",
       title: "Head of Forensic Chemistry, Berlin University",
       country: "Germany",
       image: speaker4,
-      expertise: "Toxicology"
+      expertise: "Toxicology",
+      biography: "Professor Hans Mueller is distinguished as 'The Toxicology Specialist'. With 25 years of experience in forensic toxicology, he has analyzed over 3,000 cases involving drug-related deaths, poisonings, and substance abuse. Professor Mueller has developed innovative analytical methods for detecting novel psychoactive substances and has been at the forefront of research into emerging drug trends. He has published over 80 scientific papers and has received numerous awards for his contributions to forensic toxicology. Professor Mueller is a member of the German Society of Toxicology and serves as a consultant for the European Monitoring Centre for Drugs and Drug Addiction."
+    },
+    {
+      name: "Dr. Sarah Johnson",
+      title: "Forensic Anthropologist, University of Cambridge",
+      country: "United Kingdom",
+      image: speaker1,
+      expertise: "Forensic Anthropology",
+      biography: "Dr. Sarah Johnson is renowned as 'The Skeletal Analysis Expert'. She has examined over 500 sets of human remains and has been instrumental in identifying victims of mass disasters and historical cases. Dr. Johnson specializes in age estimation, sex determination, and trauma analysis from skeletal remains. She has worked on cases ranging from archaeological discoveries to modern criminal investigations. Dr. Johnson has published extensively on forensic anthropology methods and has developed new techniques for analyzing fragmented remains. She is a fellow of the Royal Anthropological Institute and serves as a consultant for the International Commission on Missing Persons."
+    },
+    {
+      name: "Dr. Carlos Fernandez",
+      title: "Forensic Entomologist, Barcelona University",
+      country: "Spain",
+      image: speaker2,
+      expertise: "Forensic Entomology",
+      biography: "Dr. Carlos Fernandez is celebrated as 'The Insect Evidence Specialist'. He has used insect evidence to solve over 200 criminal cases and has pioneered the use of DNA analysis in forensic entomology. Dr. Fernandez has developed databases of insect species distribution across the Mediterranean region and has created new methods for estimating time of death using insect development patterns. He has published over 40 papers on forensic entomology and has trained investigators in 15 countries. Dr. Fernandez is the founder of the Mediterranean Forensic Entomology Network and serves as an expert witness in cases involving insect evidence."
     }
   ];
 
@@ -887,47 +911,128 @@ const ForensicScience = () => {
       </section>
 
       {/* Speakers Section */}
-      <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+        {/* Enhanced Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <svg className="w-full h-full" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Curly lines pattern */}
+            <path d="M50 100 Q150 50 250 100 T450 100" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M600 150 Q700 100 800 150 T1000 150" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M100 300 Q200 250 300 300 T500 300" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M700 350 Q800 300 900 350 T1100 350" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M200 500 Q300 450 400 500 T600 500" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M800 550 Q900 500 1000 550 T1200 550" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M150 650 Q250 600 350 650 T550 650" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M750 700 Q850 650 950 700 T1150 700" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+          </svg>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-6">
+            <div className="inline-block px-4 py-2 bg-primary/20 text-secondary rounded-full text-sm font-semibold mb-6">
               International Experts
             </div>
             
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
               Meet Our Distinguished <span className="text-primary">Speakers</span>
             </h2>
             
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
               Learn from forensic science pioneers and thought leaders representing forensic institutions across the globe.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
             {speakers.map((speaker, index) => (
-              <Card key={index} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
-                <CardHeader className="p-0">
-                  <div className="relative overflow-hidden">
-                    <img 
-                      src={speaker.image} 
-                      alt={speaker.name}
-                      className="w-full h-64 object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                      <div className="text-white font-semibold">{speaker.country}</div>
+              <button
+                key={index}
+                className="text-left w-full group"
+                onClick={() => {
+                  setSelectedSpeaker(speaker);
+                  setIsSpeakerModalOpen(true);
+                }}
+              >
+                <div className="flex items-center gap-6">
+                  {/* Circular Speaker Image */}
+                  <div className="flex-shrink-0">
+                    <div className="relative w-20 h-20 sm:w-24 sm:h-24">
+                      <img 
+                        src={speaker.image} 
+                        alt={speaker.name}
+                        className="w-full h-full object-cover rounded-full border-3 border-white/30 shadow-lg"
+                      />
+                      {/* Country badge */}
+                      {/* <div className="absolute -bottom-2 -right-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
+                        {speaker.country}
+                      </div> */}
                     </div>
                   </div>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <h3 className="text-xl font-bold text-foreground">{speaker.name}</h3>
-                  <p className="text-muted-foreground text-sm mt-1">{speaker.title}</p>
-                </CardContent>
-                <CardFooter className="border-t border-border pt-4">
-                  <div className="text-sm text-primary font-medium">{speaker.expertise}</div>
-                </CardFooter>
-              </Card>
+                  
+                  {/* Speaker Information */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors duration-300 drop-shadow-sm">
+                      {speaker.name}
+                    </h3>
+                    <p className="text-violet-500 font-semibold text-sm mb-2 drop-shadow-sm">
+                      {speaker.title}
+                    </p>
+                    <p className="text-white/90 text-sm leading-relaxed drop-shadow-sm">
+                      {speaker.expertise}
+                    </p>
+                  </div>
+                </div>
+              </button>
             ))}
           </div>
+
+          {/* Speaker Modal */}
+          <Dialog open={isSpeakerModalOpen} onOpenChange={setIsSpeakerModalOpen}>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold text-foreground">
+                  Speaker Profile
+                </DialogTitle>
+              </DialogHeader>
+              
+              {selectedSpeaker && (
+                <div className="flex flex-col lg:flex-row gap-8">
+                  {/* Speaker Image */}
+                  <div className="flex-shrink-0">
+                    <div className="relative w-48 h-64">
+                      <img 
+                        src={selectedSpeaker.image} 
+                        alt={selectedSpeaker.name}
+                        className="w-full h-full object-cover rounded-lg shadow-lg"
+                      />
+                      {/* <div className="absolute top-4 left-4 bg-primary text-white text-sm font-bold px-3 py-1 rounded-full shadow-md">
+                        {selectedSpeaker.country}
+                      </div> */}
+                    </div>
+                  </div>
+                  
+                  {/* Speaker Information */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-3xl font-bold text-foreground mb-2">
+                      {selectedSpeaker.name}
+                    </h3>
+                    <p className="text-violet-500 font-semibold text-lg mb-6">
+                      {selectedSpeaker.title}
+                    </p>
+                    <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                      <p className="text-sm font-semibold text-gray-600 mb-1">Expertise</p>
+                      <p className="text-violet-500 font-medium">{selectedSpeaker.expertise}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-600 mb-3">Biography</p>
+                      <p className="text-foreground leading-relaxed text-base">
+                        {selectedSpeaker.biography}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
         </div>
       </section>
 
@@ -1335,7 +1440,7 @@ const ForensicScience = () => {
             </div>
           </div>
           
-          <div className="mt-12 text-center">
+          <div className="mt-12 text-center text-violet-900">
             <Button variant="outline" onClick={() => navigate('/contact')}>Become a Partner</Button>
           </div>
         </div>
@@ -1375,7 +1480,7 @@ const ForensicScience = () => {
             </h2>
             
             <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-              Subscribe to our newsletter and be the first to know about upcoming forensic science conferences, 
+              Subscribe to our newsletter and be the first to know about upcoming conferences, 
               early bird specials, and exclusive research opportunities.
             </p>
           </motion.div>
@@ -1415,7 +1520,7 @@ const ForensicScience = () => {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold">Global Opportunities</h4>
-                      <p className="text-white/70 text-sm">Discover forensic science events worldwide</p>
+                      <p className="text-white/70 text-sm">Discover Biomaterials and Regenerative Medicine events worldwide</p>
                     </div>
                   </div>
                 </div>
@@ -1484,7 +1589,7 @@ const ForensicScience = () => {
                     animate={{ opacity: 1, scale: 1 }}
                   >
                     <p className="text-green-300 font-medium">
-                      🎉 Welcome aboard! You'll receive updates about future forensic science conferences.
+                      🎉 Welcome aboard! You'll receive updates about future Biomaterials and Regenerative Medicine conferences.
                     </p>
                   </motion.div>
                 )}

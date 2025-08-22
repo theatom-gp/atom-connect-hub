@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Check as CheckIcon, Mail, Bell, Calendar, Globe, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react';
+import { Check as CheckIcon, Mail, Bell, Calendar, Globe, ChevronDown, ChevronUp, Eye, EyeOff, X, MapPin, Users, ArrowRight, Star, TrendingUp } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 // import heroBackground from '@/assets/tech-innovation/bg.jpg';
 import heroBackground from '@/assets/quantumcomputing/bg.jpg';
 import venueInterior from '@/assets/quantumcomputing/venue-interior-1.jpg';
@@ -38,6 +40,9 @@ const QuantumComputing = () => {
     'Day 2': false,
     'Day 3': false
   });
+
+  const [selectedSpeaker, setSelectedSpeaker] = useState(null);
+  const [isSpeakerModalOpen, setIsSpeakerModalOpen] = useState(false);
 
   const targetDate = new Date('2026-01-15T09:00:00');
   const earlyBirdDate = new Date(targetDate.getTime() - (100 * 24 * 60 * 60 * 1000));
@@ -95,28 +100,32 @@ const QuantumComputing = () => {
       title: "Chief Quantum Computing Engineer, San Francisco Quantum Computing Lab",
       country: "Spain",
       image: speaker1,
-      expertise: "Quantum Computing Algorithms and Applications"
+      expertise: "Quantum Computing Algorithms and Applications",
+      biography: "Dr. Maria Santos is a renowned quantum computing engineer with over 20 years of experience in the field. She has worked on numerous projects related to quantum computing, including the development of new algorithms and the implementation of quantum computing solutions. Dr. Santos is a member of the American Society of Quantum Computing Engineers and serves as a consultant for the International Quantum Computing Association."
     },
     {
       name: "Prof. James Wilson",
       title: "Director of Quantum Computing Research, University of California, San Francisco",
       country: "United Kingdom",
       image: speaker2,
-      expertise: "Quantum Computing Algorithms and Applications"
+      expertise: "Quantum Computing Algorithms and Applications",
+      biography: "Prof. James Wilson is a leading quantum computing researcher with over 15 years of experience in the field. He has published numerous papers on quantum computing, including the development of new algorithms and the implementation of quantum computing solutions. Prof. Wilson is a member of the American Society of Quantum Computing Engineers and serves as a consultant for the International Quantum Computing Association."
     },
     {
       name: "Dr. Elena Rodriguez",
       title: "Senior Quantum Computing Engineer, San Francisco Quantum Computing Lab",
       country: "Spain",
       image: speaker3,
-      expertise: "Quantum Computing Algorithms and Applications"
+      expertise: "Quantum Computing Algorithms and Applications",
+      biography: "Dr. Elena Rodriguez is a quantum computing engineer with over 10 years of experience in the field. She has worked on numerous projects related to quantum computing, including the development of new algorithms and the implementation of quantum computing solutions. Dr. Rodriguez is a member of the American Society of Quantum Computing Engineers and serves as a consultant for the International Quantum Computing Association."
     },
     {
       name: "Prof. Hans Mueller",
       title: "Head of Quantum Computing Policy and Regulation, University of California, San Francisco",
       country: "Germany",
       image: speaker4,
-      expertise: "Quantum Computing Algorithms and Applications"
+      expertise: "Quantum Computing Algorithms and Applications",
+      biography: "Prof. Hans Mueller is a quantum computing policy and regulation expert with over 10 years of experience in the field. He has published numerous papers on quantum computing policy and regulation, including the development of new policies and the implementation of quantum computing solutions. Prof. Mueller is a member of the American Society of Quantum Computing Engineers and serves as a consultant for the International Quantum Computing Association."
     }
   ];
 
@@ -887,47 +896,121 @@ const QuantumComputing = () => {
       </section>
 
       {/* Speakers Section */}
-      <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+        {/* Enhanced Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <svg className="w-full h-full" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Curly lines pattern */}
+            <path d="M50 100 Q150 50 250 100 T450 100" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M600 150 Q700 100 800 150 T1000 150" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M100 300 Q200 250 300 300 T500 300" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M700 350 Q800 300 900 350 T1100 350" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M200 500 Q300 450 400 500 T600 500" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M800 550 Q900 500 1000 550 T1200 550" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M150 650 Q250 600 350 650 T550 650" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M750 700 Q850 650 950 700 T1150 700" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+          </svg>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-6">
+            <div className="inline-block px-4 py-2 bg-primary/20 text-secondary rounded-full text-sm font-semibold mb-6">
               International Experts
             </div>
             
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
               Meet Our Distinguished <span className="text-primary">Speakers</span>
             </h2>
             
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Learn from quantum computing pioneers and thought leaders representing quantum computing institutions across the globe.
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              Learn from neurology and neurological disorders pioneers and thought leaders representing neurology and neurological disorders institutions across the globe.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
             {speakers.map((speaker, index) => (
-              <Card key={index} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
-                <CardHeader className="p-0">
-                  <div className="relative overflow-hidden">
-                    <img 
-                      src={speaker.image} 
-                      alt={speaker.name}
-                      className="w-full h-64 object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                      <div className="text-white font-semibold">{speaker.country}</div>
+              <button
+                key={index}
+                className="text-left w-full group"
+                onClick={() => {
+                  setSelectedSpeaker(speaker);
+                  setIsSpeakerModalOpen(true);
+                }}
+              >
+                <div className="flex items-center gap-6">
+                  {/* Circular Speaker Image */}
+                  <div className="flex-shrink-0">
+                    <div className="relative w-20 h-20 sm:w-24 sm:h-24">
+                      <img 
+                        src={speaker.image} 
+                        alt={speaker.name}
+                        className="w-full h-full object-cover rounded-full border-3 border-white/30 shadow-lg"
+                      />
                     </div>
                   </div>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <h3 className="text-xl font-bold text-foreground">{speaker.name}</h3>
-                  <p className="text-muted-foreground text-sm mt-1">{speaker.title}</p>
-                </CardContent>
-                <CardFooter className="border-t border-border pt-4">
-                  <div className="text-sm text-primary font-medium">{speaker.expertise}</div>
-                </CardFooter>
-              </Card>
+                  
+                  {/* Speaker Information */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors duration-300 drop-shadow-sm">
+                      {speaker.name}
+                    </h3>
+                    <p className="text-violet-500 font-semibold text-sm mb-2 drop-shadow-sm">
+                      {speaker.title}
+                    </p>
+                    <p className="text-white/90 text-sm leading-relaxed drop-shadow-sm">
+                      {speaker.expertise}
+                    </p>
+                  </div>
+                </div>
+              </button>
             ))}
           </div>
+
+          {/* Speaker Modal */}
+          <Dialog open={isSpeakerModalOpen} onOpenChange={setIsSpeakerModalOpen}>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+                <DialogTitle className="text-2xl font-bold text-foreground">
+                  Speaker Profile
+                </DialogTitle>
+              </DialogHeader>
+              
+              {selectedSpeaker && (
+                <div className="flex flex-col lg:flex-row gap-8">
+                  {/* Speaker Image */}
+                  <div className="flex-shrink-0">
+                    <div className="relative w-48 h-64">
+                      <img 
+                        src={selectedSpeaker.image} 
+                        alt={selectedSpeaker.name}
+                        className="w-full h-full object-cover rounded-lg shadow-lg"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Speaker Information */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-3xl font-bold text-foreground mb-2">
+                      {selectedSpeaker.name}
+                    </h3>
+                    <p className="text-violet-500 font-semibold text-lg mb-6">
+                      {selectedSpeaker.title}
+                    </p>
+                    <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                      <p className="text-sm font-semibold text-gray-600 mb-1">Expertise</p>
+                      <p className="text-violet-500 font-medium">{selectedSpeaker.expertise}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-600 mb-3">Biography</p>
+                      <p className="text-foreground leading-relaxed text-base">
+                        {selectedSpeaker.biography}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
         </div>
       </section>
 
