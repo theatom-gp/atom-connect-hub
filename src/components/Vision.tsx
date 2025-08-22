@@ -17,7 +17,7 @@ const Vision = () => {
             </h2>
             
             <div className="space-y-4 text-lg text-muted-foreground">
-              <p className="text-lg leading-relaxed">
+              <p className="text-lg sm:text-base leading-relaxed">
                 We envision a future where every professional, regardless of their field or location, 
                 has seamless access to the collective wisdom of humanity's greatest minds, fostering 
                 unprecedented collaboration that solves global challenges.

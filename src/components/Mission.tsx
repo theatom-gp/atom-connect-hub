@@ -34,13 +34,13 @@ const Mission = () => {
             
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-4 sm:mb-6 text-center lg:text-left">
               Empowering Knowledge Exchange 
-              <span className="text-primary"> Across All Disciplines</span>
+              <span className="text-secondary"> Across All Disciplines</span>
             </h2>
             
             <div className="space-y-4 sm:space-y-4 text-base sm:text-lg text-muted-foreground text-center lg:text-left">
-              <p className="text-lg sm:text-lg leading-relaxed">
+              <p className="text-lg sm:text-base leading-relaxed">
                 To democratize access to world-class knowledge by creating an inclusive platform 
-                where businesses and communities can connect, collaborate, and catalyze 
+                where businesses and communities can connect, collaborate, and catalyse 
                 breakthrough innovations that benefit humanity.
               </p>
               

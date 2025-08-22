@@ -8,10 +8,10 @@ const AboutUs = () => {
           {/* Content */}
           <div className="order-2 lg:order-1">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-4 sm:mb-6 text-center lg:text-left">
-              About <span className="text-primary">Atom Conferences</span>
+              About <span className="text-secondary">Atom Conferences</span>
             </h2>
             
-            <div className="space-y-4 text-base sm:text-lg text-muted-foreground text-center lg:text-left">
+            <div className="space-y-4 text-base sm:text-base text-muted-foreground text-center lg:text-left">
               <p>
                 At Atom Conferences, we believe that groundbreaking discoveries happen when brilliant minds 
                 from different disciplines collide. Since our founding, we've been the catalyst that brings 
@@ -27,7 +27,7 @@ const AboutUs = () => {
               </p>
               
               <p>
-                With a community of over 50,000 professionals worldwide, Atom Conferences has become 
+                With a community of over 10,000 professionals worldwide, Atom Conferences has become 
                 the premier destination for those who dare to think differently, challenge conventions, 
                 and build the world of tomorrow.
               </p>
@@ -38,7 +38,7 @@ const AboutUs = () => {
               <div className="text-center lg:text-left">
                 <h4 className="font-semibold text-foreground mb-2">Global Reach</h4>
                 <p className="text-muted-foreground text-sm">
-                  Connecting professionals across 6 continents and 100+ countries
+                  Connecting professionals across 2 continents and 10+ countries
                 </p>
               </div>
               <div className="text-center lg:text-left">
