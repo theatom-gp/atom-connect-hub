@@ -415,119 +415,275 @@ const Meetings = () => {
         </div>
       </section>
 
-      {/* Main Content Section */}
-      <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Category Filter */}
-          <div className="mb-12">
+      {/* Enhanced Main Content Section */}
+      <section className="py-20 bg-gradient-to-br from-slate-50/50 via-blue-50/30 to-purple-50/50 dark:from-slate-900/50 dark:via-slate-800/30 dark:to-slate-900/50 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(59,130,246,0.15)_1px,transparent_0)] [background-size:20px_20px] opacity-30" />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Enhanced Category Filter */}
+          <motion.div 
+            className="mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-foreground mb-3">Choose Your Path to Excellence</h2>
+              <p className="text-muted-foreground text-lg">Select a category to discover life-changing conferences</p>
+            </div>
             <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-              {categories.map((category) => (
-                <Button
+              {categories.map((category, index) => (
+                <motion.div
                   key={category}
-                  variant={selectedCategory === category ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(category)}
-                  className={`
-                    px-4 py-2 text-sm font-medium transition-all duration-200
-                    ${selectedCategory === category 
-                      ? 'bg-primary text-primary-foreground hover:bg-primary/90' 
-                      : 'bg-background text-foreground hover:bg-accent hover:text-accent-foreground border-input'
-                    }
-                  `}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
                 >
-                  {category}
-                </Button>
+                  <Button
+                    variant={selectedCategory === category ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedCategory(category)}
+                    className={`
+                      px-6 py-3 text-sm font-semibold transition-all duration-300 relative overflow-hidden group
+                      ${selectedCategory === category 
+                        ? 'bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105' 
+                        : 'bg-white/80 backdrop-blur-sm text-foreground hover:bg-gradient-to-r hover:from-primary/10 hover:to-blue-50 border-2 border-primary/20 hover:border-primary/40 hover:shadow-md'
+                      }
+                    `}
+                  >
+                    <span className="relative z-10">{category}</span>
+                    {selectedCategory !== category && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    )}
+                  </Button>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Conference Grid */}
-          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
-            {filteredConferences.map((conference) => (
-              <Card 
-                key={conference.id} 
-                className="overflow-hidden hover:shadow-lg transition-all duration-300 group"
-                style={{ boxShadow: 'var(--shadow-card)' }}
+          {/* Stats Banner */}
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16 max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            {stats.map((stat, index) => (
+              <motion.div
+                key={index}
+                className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+                whileHover={{ scale: 1.05, y: -5 }}
               >
-                <CardHeader className="p-0">
-                  <div className="relative overflow-hidden">
-                    <img 
-                      src={conference.image} 
-                      alt={conference.title}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-4 right-4 bg-secondary text-white px-3 py-1 rounded-full text-sm font-semibold">
-                      Featured
-                    </div>
-                  </div>
-                </CardHeader>
-                
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
-                    {conference.title}
-                  </h3>
-                  
-                  <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                    {conference.description}
-                  </p>
-                  
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <svg className="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"/>
-                      </svg>
-                      <span>{conference.date}</span>
-                    </div>
-                    
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <svg className="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
-                      </svg>
-                      <span>{conference.venue}, {conference.location}</span>
-                    </div>
-                  </div>
-                </CardContent>
-                
-                <CardFooter className="p-6 pt-0">
-                  <Button 
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
-                    size="lg"
-                    onClick={() => {
-                      if (conference.id === 1) {
-                        window.location.href = '/conference/aisummit';
-                      } else if (conference.id === 2) {
-                        window.location.href = '/conference/forensicscience';
-                      } else if (conference.id === 3) {
-                        window.location.href = '/conference/powerandenergy';
-                      } else if (conference.id === 4) {
-                        window.location.href = '/conference/quantumcomputing';
-                      } else if (conference.id === 5) {
-                        window.location.href = '/conference/globalhealthcarerevolution';
-                      } else if (conference.id === 6) {
-                        window.location.href = '/conference/biomaterials';
-                      } else if (conference.id === 7) {
-                        window.location.href = '/conference/techinnovationexpo';
-                      } else if (conference.id === 8) {
-                        window.location.href = '/conference/surgeryandanesthesia';
-                      } else if (conference.id === 9) {
-                        window.location.href = '/conference/neurology';
-                      } else if (conference.id === 10) {
-                        window.location.href = '/conference/mentalhealthpsychologycongress';
-                      } else if (conference.id === 11) {
-                        window.location.href = '/conference/creativeartsdesignfestival';
-                      } else if (conference.id === 12) {
-                        window.location.href = '/conference/scientificresearchsymposium';
-                      } else if (conference.id === 13) {
-                        window.location.href = '/conference/globalforensicscienceresearch';
-                      }
-                    }}
-                  >
-                    View Details & Register
-                  </Button>
-                </CardFooter>
-              </Card>
+                <motion.div
+                  className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-primary to-blue-600 rounded-full text-white mb-3 shadow-lg"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  {stat.icon}
+                </motion.div>
+                <motion.div
+                  className="text-2xl font-bold text-foreground mb-1"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  {stat.value}
+                </motion.div>
+                <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
+
+          {/* Enhanced Conference Grid */}
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={selectedCategory}
+              className="grid lg:grid-cols-3 md:grid-cols-2 gap-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.6 }}
+            >
+              {filteredConferences.map((conference, index) => (
+                <motion.div
+                  key={conference.id}
+                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="group"
+                >
+                  <Card className="overflow-hidden bg-white/80 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500 relative">
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none" />
+                    
+                    <CardHeader className="p-0 relative">
+                      <div className="relative overflow-hidden">
+                        <motion.img 
+                          src={conference.image} 
+                          alt={conference.title}
+                          className="w-full h-56 object-cover transition-transform duration-700 group-hover:scale-110"
+                          whileHover={{ scale: 1.1 }}
+                          transition={{ duration: 0.7 }}
+                        />
+                        
+                        {/* Premium Badge */}
+                        <motion.div 
+                          className="absolute top-4 right-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg flex items-center gap-1"
+                          initial={{ scale: 0, rotate: -45 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                        >
+                          <Star className="h-3 w-3 fill-current" />
+                          PREMIUM
+                        </motion.div>
+
+                        {/* Urgency Indicator */}
+                        <motion.div 
+                          className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-semibold animate-pulse shadow-lg"
+                          initial={{ x: -50, opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
+                          transition={{ duration: 0.5, delay: index * 0.1 + 0.4 }}
+                        >
+                          Limited Seats
+                        </motion.div>
+
+                        {/* Overlay Gradient */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </div>
+                    </CardHeader>
+                    
+                    <CardContent className="p-8 relative z-20">
+                      <motion.h3 
+                        className="text-xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors duration-300 line-clamp-2"
+                        whileHover={{ scale: 1.02 }}
+                      >
+                        {conference.title}
+                      </motion.h3>
+                      
+                      <p className="text-muted-foreground mb-6 text-sm leading-relaxed line-clamp-3">
+                        {conference.description}
+                      </p>
+                      
+                      {/* Enhanced Details */}
+                      <div className="space-y-3 mb-6">
+                        <motion.div 
+                          className="flex items-center gap-3 text-sm p-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30"
+                          whileHover={{ scale: 1.02, x: 5 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Calendar className="h-4 w-4 text-primary flex-shrink-0" />
+                          <span className="font-medium text-foreground">{conference.date}</span>
+                        </motion.div>
+                        
+                        <motion.div 
+                          className="flex items-center gap-3 text-sm p-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg border border-green-100 dark:border-green-800/30"
+                          whileHover={{ scale: 1.02, x: 5 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
+                          <span className="font-medium text-foreground">{conference.venue}, {conference.location}</span>
+                        </motion.div>
+                      </div>
+
+                      {/* Benefits Preview */}
+                      <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg border border-purple-100 dark:border-purple-800/30">
+                        <div className="flex items-center gap-2 mb-2">
+                          <TrendingUp className="h-4 w-4 text-primary" />
+                          <span className="text-sm font-semibold text-foreground">Career Impact</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Join 500+ professionals, gain cutting-edge insights, expand your network</p>
+                      </div>
+                    </CardContent>
+                    
+                    <CardFooter className="p-8 pt-0 relative z-20">
+                      <motion.div
+                        className="w-full"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <Button 
+                          className="w-full bg-gradient-to-r from-primary via-blue-600 to-purple-600 hover:from-primary/90 hover:via-blue-700 hover:to-purple-700 text-white font-bold py-4 text-base shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden group"
+                          size="lg"
+                          onClick={() => {
+                            if (conference.id === 1) {
+                              window.location.href = '/conference/aisummit';
+                            } else if (conference.id === 2) {
+                              window.location.href = '/conference/forensicscience';
+                            } else if (conference.id === 3) {
+                              window.location.href = '/conference/powerandenergy';
+                            } else if (conference.id === 4) {
+                              window.location.href = '/conference/quantumcomputing';
+                            } else if (conference.id === 5) {
+                              window.location.href = '/conference/globalhealthcarerevolution';
+                            } else if (conference.id === 6) {
+                              window.location.href = '/conference/biomaterials';
+                            } else if (conference.id === 7) {
+                              window.location.href = '/conference/techinnovationexpo';
+                            } else if (conference.id === 8) {
+                              window.location.href = '/conference/surgeryandanesthesia';
+                            } else if (conference.id === 9) {
+                              window.location.href = '/conference/neurology';
+                            } else if (conference.id === 10) {
+                              window.location.href = '/conference/mentalhealthpsychologycongress';
+                            } else if (conference.id === 11) {
+                              window.location.href = '/conference/creativeartsdesignfestival';
+                            } else if (conference.id === 12) {
+                              window.location.href = '/conference/scientificresearchsymposium';
+                            } else if (conference.id === 13) {
+                              window.location.href = '/conference/globalforensicscienceresearch';
+                            }
+                          }}
+                        >
+                          <span className="relative z-10 flex items-center justify-center gap-2">
+                            🎯 Secure Your Spot Now
+                            <motion.div
+                              animate={{ x: [0, 5, 0] }}
+                              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                            >
+                              <ArrowRight className="h-5 w-5" />
+                            </motion.div>
+                          </span>
+                          
+                          {/* Button Animation Overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          
+                          {/* Pulse Effect */}
+                          <motion.div
+                            className="absolute inset-0 bg-white/20 rounded-md"
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: [0, 1.2, 0], opacity: [0, 0.3, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                          />
+                        </Button>
+                      </motion.div>
+                      
+                      {/* Trust Indicators */}
+                      <motion.div 
+                        className="flex justify-center items-center gap-4 mt-4 text-xs text-muted-foreground"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.6, delay: 0.8 }}
+                      >
+                        <span className="flex items-center gap-1">
+                          <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                          4.9 Rating
+                        </span>
+                        <span>•</span>
+                        <span>100% Refundable</span>
+                        <span>•</span>
+                        <span className="text-green-600 font-semibold">Early Bird 30% OFF</span>
+                      </motion.div>
+                    </CardFooter>
+                  </Card>
+                </motion.div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
     </div>
