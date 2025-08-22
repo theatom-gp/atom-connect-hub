@@ -287,12 +287,13 @@ const PrivacyPolicy = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold mb-2">Phone Support</h4>
-                  <p className="text-sm text-muted-foreground">+1 (555) 123-4567</p>
-                  <p className="text-xs text-muted-foreground">Mon-Fri, 9 AM - 6 PM CST</p>
+                  <p className="text-sm text-muted-foreground">+1 (555) 123-4567, +91 (90000) (94024)</p>
+                  <p className="text-xs text-muted-foreground">Mon-Fri, 9 AM - 6 PM UTC</p>
                 </div>
                 <div>
                   <h4 className="font-semibold mb-2">EU Representative</h4>
-                  <p className="text-sm text-muted-foreground">eu-privacy@atomconferences.com</p>
+                  {/* <p className="text-sm text-muted-foreground">eu-privacy@atomconferences.com</p> */}
+                  <p className="text-sm text-muted-foreground">privacy@atomconferences.com</p>
                   <p className="text-xs text-muted-foreground">GDPR compliance matters</p>
                 </div>
               </div>

@@ -288,7 +288,7 @@ const Hero = () => {
             </motion.div>
             
             {/* Animated Stats */}
-            <motion.div 
+            {/* <motion.div 
               className="grid grid-cols-3 gap-4 sm:gap-6 pt-8 border-t border-white/20"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -322,7 +322,7 @@ const Hero = () => {
                   </div>
                 </motion.div>
               ))}
-            </motion.div>
+            </motion.div> */}
           </div>
           
           {/* Hero Image with Enhanced Animations */}

@@ -1,4 +1,6 @@
 import Navigation from '@/components/Navigation';
+import { Button } from '@/components/ui/button';
+import { FileText } from 'lucide-react';
 
 const CancellationPolicy = () => {
   return (
@@ -17,6 +19,15 @@ const CancellationPolicy = () => {
             
             <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 leading-relaxed">
               Please review our comprehensive cancellation and refund policies before registering for any conference.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
+                <FileText className="h-5 w-5 mr-2" />
+                <a href="/cancellation-policy.pdf" download>Download PDF Version</a>
+              </Button>
+            </div>
+            <p className="text-sm text-primary-foreground/70 mt-6">
+              Last Updated: January 2025 • Effective: January 1, 2025
             </p>
           </div>
         </div>

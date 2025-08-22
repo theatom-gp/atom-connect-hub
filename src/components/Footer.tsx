@@ -27,8 +27,9 @@ const Footer = () => {
   ];
 
   const contactInfo = [
-    { icon: MapPin, text: '123 Conference Avenue, New York, NY 10001' },
-    { icon: Phone, text: '+1 (555) 123-4567' },
+    // { icon: MapPin, text: '123 Conference Avenue, Financial District, Austin, TX 78701' },
+    { icon: MapPin, text: '123 Conference Avenue, Financial District, Vijayawada, AP 520010' },
+    { icon: Phone, text: '+91 (90000) (94024), +91 (81792) (66745)' },
     { icon: Mail, text: 'info@atomconferences.com' },
   ];
 

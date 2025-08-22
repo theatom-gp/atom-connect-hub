@@ -87,10 +87,10 @@ const FAQ = () => {
             Everything you need to know about Atom Conferences. Can't find your answer? 
             Our support team is here to help.
           </p>
-          <Button size="lg" variant="secondary" className="mb-8 text-lg px-8 py-4">
+          {/* <Button size="lg" variant="secondary" className="mb-8 text-lg px-8 py-4">
             <MessageCircle className="h-5 w-5 mr-2" />
             Ask a Question
-          </Button>
+          </Button> */}
         </div>
       </section>
 
@@ -139,10 +139,10 @@ const FAQ = () => {
                   <a href="/contact">Contact Support</a>
                   {/* Contact Support */}
                 </Button>
-                <Button size="lg" variant="outline">
+                {/* <Button size="lg" variant="outline">
                   <MessageCircle className="h-5 w-5 mr-2" />
                   Live Chat
-                </Button>
+                </Button> */}
               </div>
             </CardContent>
           </Card>

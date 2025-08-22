@@ -37,8 +37,8 @@ const Mission = () => {
               <span className="text-primary"> Across All Disciplines</span>
             </h2>
             
-            <div className="space-y-4 sm:space-y-6 text-base sm:text-lg text-muted-foreground text-center lg:text-left">
-              <p className="text-lg sm:text-xl leading-relaxed">
+            <div className="space-y-4 sm:space-y-4 text-base sm:text-lg text-muted-foreground text-center lg:text-left">
+              <p className="text-lg sm:text-lg leading-relaxed">
                 To democratize access to world-class knowledge by creating an inclusive platform 
                 where businesses and communities can connect, collaborate, and catalyze 
                 breakthrough innovations that benefit humanity.

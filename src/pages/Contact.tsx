@@ -45,31 +45,64 @@ const Contact = () => {
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    console.log('Form submitted:', data);
-    toast.success('Thank you! Your message has been sent successfully. We\'ll get back to you within 24 hours.');
-    
-    form.reset();
-    setIsSubmitting(false);
+    try {
+      // Prepare email content
+      const emailSubject = `Contact Form Inquiry: ${data.subject}`;
+      const emailBody = `
+Dear Support Team,
+
+A new inquiry has been submitted through the contact form:
+
+Name: ${data.firstName} ${data.lastName}
+Email: ${data.email}
+Phone: ${data.phone}
+Organization: ${data.organization || 'Not specified'}
+Inquiry Type: ${data.inquiryType}
+Subject: ${data.subject}
+
+Message:
+${data.message}
+
+---
+This message was sent from the Atom Conferences contact form.
+      `.trim();
+
+      // Create mailto link
+      const mailtoLink = `mailto:support@atomconferences.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      
+      // Open email client
+      window.location.href = mailtoLink;
+      
+      // Show success message
+      toast.success('Email client opened! Please send the email to complete your inquiry. We\'ll get back to you within 24 hours.');
+      
+      // Reset form
+      form.reset();
+      
+    } catch (error) {
+      console.error('Error opening email client:', error);
+      toast.error('Unable to open email client. Please send your inquiry directly to support@atomconferences.com');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
     {
       icon: MapPin,
       title: 'Our Location',
-      details: ['123 Conference Avenue', 'Business District', 'New York, NY 10001', 'United States'],
+      // details: ['123 Conference Avenue', 'Financial District', 'Austin, TX 78701', 'United States'],
+      details: ['123 Conference Avenue', 'Financial District', 'Vijayawada, AP 520010', 'India'],
     },
     {
       icon: Phone,
       title: 'Phone Numbers',
-      details: ['+1 (555) 123-4567', '+1 (555) 987-6543', 'Toll-free: 1-800-ATOM-CONF'],
+      details: ['+91 (90000) (94024)', '+91 (81792) (66745)'],
     },
     {
       icon: Mail,
       title: 'Email Addresses',
-      details: ['info@atomconferences.com', 'support@atomconferences.com', 'partnerships@atomconferences.com'],
+      details: ['info@atomconferences.com', 'support@atomconferences.com', 'partnerships@atomconferences.com', 'privacy@atomconferences.com'],
     },
     {
       icon: Clock,
@@ -350,12 +383,12 @@ const Contact = () => {
                         {isSubmitting ? (
                           <>
                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                            Sending Message...
+                            Opening Email...
                           </>
                         ) : (
                           <>
                             <Send className="w-4 h-4 mr-2" />
-                            Send Message
+                            Send Message via Email
                           </>
                         )}
                       </Button>
@@ -363,6 +396,22 @@ const Contact = () => {
                       <p className="text-xs sm:text-sm text-muted-foreground text-center">
                         By submitting this form, you agree to our Privacy Policy and consent to being contacted regarding your inquiry.
                       </p>
+                      
+                      <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                          <div className="text-sm text-blue-800 dark:text-blue-200">
+                            <p className="font-semibold mb-1">How it works:</p>
+                            <p>When you click "Send Message via Email", your default email client will open with a pre-filled message to our support team. Simply click send to complete your inquiry.</p>
+                            <p className="mt-2 text-xs">
+                              <strong>Alternative:</strong> You can also email us directly at{' '}
+                              <a href="mailto:support@atomconferences.com" className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300">
+                                support@atomconferences.com
+                              </a>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     </form>
                   </Form>
                 </CardContent>

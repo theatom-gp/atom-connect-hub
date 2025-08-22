@@ -16,8 +16,8 @@ const Vision = () => {
               <span className="text-secondary"> Knows No Boundaries</span>
             </h2>
             
-            <div className="space-y-6 text-lg text-muted-foreground">
-              <p className="text-xl leading-relaxed">
+            <div className="space-y-4 text-lg text-muted-foreground">
+              <p className="text-lg leading-relaxed">
                 We envision a future where every professional, regardless of their field or location, 
                 has seamless access to the collective wisdom of humanity's greatest minds, fostering 
                 unprecedented collaboration that solves global challenges.
@@ -32,9 +32,9 @@ const Vision = () => {
             </div>
             
             {/* Vision Metrics */}
-            <div className="grid grid-cols-2 gap-6 mt-8 p-6 bg-white rounded-xl" style={{ boxShadow: 'var(--shadow-card)' }}>
+            <div className="grid grid-cols-2 gap-5 mt-8 p-6 bg-white rounded-xl" style={{ boxShadow: 'var(--shadow-card)' }}>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">1M+</div>
+                <div className="text-2xl font-bold text-primary">50K+</div>
                 <div className="text-sm text-muted-foreground">Global Professionals</div>
               </div>
               <div className="text-center">
@@ -42,7 +42,7 @@ const Vision = () => {
                 <div className="text-sm text-muted-foreground">Knowledge Exchange</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">200+</div>
+                <div className="text-2xl font-bold text-primary">20+</div>
                 <div className="text-sm text-muted-foreground">Countries Connected</div>
               </div>
               <div className="text-center">
