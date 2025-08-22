@@ -485,7 +485,7 @@ const Biomaterials = () => {
             
             {/* Professional Animated Title */}
             <div className="overflow-hidden mb-16">
-              <h1 className="text-6xl lg:text-8xl xl:text-9xl font-extralight text-white leading-[0.9] tracking-tight">
+              <h1 className="text-6xl lg:text-7xl xl:text-8xl font-extralight text-white leading-[0.9] tracking-tight">
                 <div className="animate-[staggerUp_1s_ease-out_0.4s_both]">
                   <span className="inline-block font-light">Global Congress on</span>
                 </div>
@@ -503,7 +503,7 @@ const Biomaterials = () => {
               
               {/* Professional Subtitle */}
               <div className="animate-[staggerUp_1s_ease-out_1s_both] mt-8">
-                <p className="text-xl lg:text-2xl text-white/80 font-light max-w-3xl mx-auto leading-relaxed">
+                <p className="text-xl lg:text-xl text-white/80 font-light max-w-3xl mx-auto leading-relaxed">
                   Advancing Biomaterials and Regenerative Medicine Through Innovation, 
                   <span className="text-white font-medium"> Research and International Collaboration</span>
                 </p>

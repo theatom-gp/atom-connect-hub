@@ -36,9 +36,85 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Logo */}
           <div className="flex-shrink-0 min-w-0">
-            <a href="/" className="text-lg sm:text-xl lg:text-2xl font-bold text-primary hover:text-primary/80 transition-colors truncate">
-              <span className="sm:hidden">Atom</span>
-              <span className="hidden sm:inline">Atom Conferences</span>
+            <a href="/" className="flex items-center gap-3 group">
+              {/* Logo Icon */}
+              <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0">
+                <img 
+                  src="/src/assets/atom-logo-1.png" 
+                  alt="The Atom Conferences Logo"
+                  className="w-full h-full object-contain filter drop-shadow-sm hover:drop-shadow-md transition-all duration-300"
+                  style={{
+                    imageRendering: 'crisp-edges'
+                  }}
+                  onError={(e) => {
+                    // Fallback to a simple SVG if image fails to load
+                    const target = e.currentTarget as HTMLImageElement;
+                    const nextElement = target.nextElementSibling as HTMLElement;
+                    if (target && nextElement) {
+                      target.style.display = 'none';
+                      nextElement.style.display = 'block';
+                    }
+                  }}
+                />
+                {/* Fallback SVG */}
+                <svg 
+                  viewBox="0 0 40 40" 
+                  className="w-full h-full hidden"
+                  fill="none"
+                >
+                  {/* Central nucleus point */}
+                  <circle cx="20" cy="20" r="1.5" fill="url(#logoGradient)" />
+                  
+                  {/* Intertwined curved lines forming atomic structure */}
+                  <path 
+                    d="M20 8 Q28 12 32 20 Q28 28 20 32 Q12 28 8 20 Q12 12 20 8" 
+                    stroke="url(#logoGradient)" 
+                    strokeWidth="2" 
+                    fill="none"
+                    opacity="0.9"
+                  />
+                  
+                  <path 
+                    d="M20 6 Q30 15 30 20 Q30 25 20 34 Q10 25 10 20 Q10 15 20 6" 
+                    stroke="url(#logoGradient)" 
+                    strokeWidth="1.5" 
+                    fill="none"
+                    opacity="0.7"
+                  />
+                  
+                  <path 
+                    d="M20 4 Q32 18 32 20 Q32 22 20 36 Q8 22 8 20 Q8 18 20 4" 
+                    stroke="url(#logoGradient)" 
+                    strokeWidth="1" 
+                    fill="none"
+                    opacity="0.5"
+                  />
+                  
+                  {/* Gradient definition */}
+                  <defs>
+                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#06B6D4" />
+                      <stop offset="50%" stopColor="#3B82F6" />
+                      <stop offset="100%" stopColor="#8B5CF6" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              
+              {/* Vertical Separator Line */}
+              <div className="w-px h-6 sm:h-8 bg-border group-hover:bg-primary/50 transition-colors duration-300" />
+              
+              {/* App Name */}
+              <div className="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-1">
+                <span className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-primary via-blue-600 to-secondary bg-clip-text text-transparent group-hover:from-primary/80 group-hover:via-blue-600/80 group-hover:to-secondary/80 transition-all duration-300">
+                  <span className="sm:hidden">The Atom</span>
+                  <span className="hidden sm:inline">The Atom</span>
+                </span>
+                <span className="text-sm sm:text-base lg:text-lg font-semibold text-muted-foreground group-hover:text-foreground transition-colors duration-300">
+                  <span className="sm:hidden">Conf</span>
+                  <span className="hidden sm:inline">Conferences</span>
+                </span>
+              </div>
             </a>
           </div>
 

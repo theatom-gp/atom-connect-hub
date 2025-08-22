@@ -214,8 +214,8 @@ const Meetings = () => {
 
   const stats = [
     { icon: <Calendar className="h-5 w-5" />, value: "50+", label: "Events" },
-    { icon: <Users className="h-5 w-5" />, value: "25K+", label: "Attendees" },
-    { icon: <MapPin className="h-5 w-5" />, value: "15+", label: "Countries" },
+    { icon: <Users className="h-5 w-5" />, value: "10K+", label: "Attendees" },
+    { icon: <MapPin className="h-5 w-5" />, value: "10+", label: "Countries" },
     { icon: <Star className="h-5 w-5" />, value: "4.9", label: "Rating" }
   ];
 
@@ -428,17 +428,44 @@ const Meetings = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-foreground mb-3">Choose Your Path to Excellence</h2>
-              <p className="text-muted-foreground text-lg">Select a category to discover life-changing conferences</p>
-            </div>
-            <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+            <motion.div 
+              className="text-center mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <motion.h2 
+                className="text-3xl md:text-4xl font-bold text-foreground mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                Choose Your Path to <span className="bg-gradient-to-r from-primary via-blue-600 to-secondary bg-clip-text text-transparent">Excellence</span>
+              </motion.h2>
+              <motion.p 
+                className="text-muted-foreground text-lg max-w-2xl mx-auto"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                Select a category to discover life-changing conferences that match your professional goals
+              </motion.p>
+            </motion.div>
+            
+            <motion.div 
+              className="flex flex-wrap justify-center gap-3 md:gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
               {categories.map((category, index) => (
                 <motion.div
                   key={category}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
+                  whileHover={{ scale: 1.05, y: -3 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <Button
                     variant={selectedCategory === category ? "default" : "outline"}
@@ -447,22 +474,42 @@ const Meetings = () => {
                     className={`
                       px-6 py-3 text-sm font-semibold transition-all duration-300 relative overflow-hidden group
                       ${selectedCategory === category 
-                        ? 'bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105' 
-                        : 'bg-white/80 backdrop-blur-sm text-foreground hover:bg-gradient-to-r hover:from-primary/10 hover:to-blue-50 border-2 border-primary/20 hover:border-primary/40 hover:shadow-md'
+                        ? 'bg-gradient-to-r from-primary via-blue-600 to-secondary text-white shadow-xl hover:shadow-2xl transform hover:scale-105 border-0' 
+                        : 'bg-white/90 backdrop-blur-sm text-foreground hover:bg-gradient-to-r hover:from-primary/10 hover:to-blue-50 border-2 border-primary/30 hover:border-primary/50 hover:shadow-lg hover:scale-105'
                       }
                     `}
                   >
-                    <span className="relative z-10">{category}</span>
-                    {selectedCategory !== category && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    {/* Shimmer Effect for Selected */}
+                    {selectedCategory === category && (
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/40 to-white/20"
+                        initial={{ x: '-100%' }}
+                        animate={{ x: '100%' }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      />
                     )}
+                    
+                    {/* Hover Glow Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-blue-600/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md" />
+                    
+                    <span className="relative z-10 flex items-center gap-2">
+                      {category}
+                      {selectedCategory === category && (
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                        >
+                          <Star className="h-4 w-4" />
+                        </motion.div>
+                      )}
+                    </span>
                   </Button>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
 
-          {/* Stats Banner */}
+          {/* Enhanced Stats Banner */}
           <motion.div 
             className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16 max-w-4xl mx-auto"
             initial={{ opacity: 0, y: 30 }}
@@ -472,27 +519,60 @@ const Meetings = () => {
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
-                className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                whileHover={{ scale: 1.05, y: -5 }}
+                className="text-center p-6 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-2xl border border-primary/20 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden group"
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+                whileHover={{ scale: 1.02, y: -3 }}
               >
-                <motion.div
-                  className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-primary to-blue-600 rounded-full text-white mb-3 shadow-lg"
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  {stat.icon}
-                </motion.div>
-                <motion.div
-                  className="text-2xl font-bold text-foreground mb-1"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  {stat.value}
-                </motion.div>
-                <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
+                {/* Background Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-blue-600/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                <div className="relative z-10">
+                  <motion.div
+                    className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary via-blue-600 to-secondary rounded-full text-white mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <motion.div
+                      animate={{ 
+                        scale: [1, 1.02, 1]
+                      }}
+                      transition={{ 
+                        duration: 6, 
+                        repeat: Infinity, 
+                        ease: "easeInOut",
+                        delay: index * 0.5
+                      }}
+                    >
+                      {stat.icon}
+                    </motion.div>
+                  </motion.div>
+                  
+                  <motion.div
+                    className="text-3xl font-bold bg-gradient-to-r from-primary via-blue-600 to-secondary bg-clip-text text-transparent mb-2"
+                    animate={{ 
+                      opacity: [0.9, 1, 0.9]
+                    }}
+                    transition={{ 
+                      duration: 4, 
+                      repeat: Infinity, 
+                      ease: "easeInOut",
+                      delay: index * 0.2
+                    }}
+                  >
+                    {stat.value}
+                  </motion.div>
+                  
+                  <motion.div 
+                    className="text-sm text-muted-foreground font-semibold uppercase tracking-wide"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+                  >
+                    {stat.label}
+                  </motion.div>
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -591,13 +671,13 @@ const Meetings = () => {
                       </div>
 
                       {/* Benefits Preview */}
-                      <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg border border-purple-100 dark:border-purple-800/30">
+                      {/* <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg border border-purple-100 dark:border-purple-800/30">
                         <div className="flex items-center gap-2 mb-2">
                           <TrendingUp className="h-4 w-4 text-primary" />
                           <span className="text-sm font-semibold text-foreground">Career Impact</span>
                         </div>
                         <p className="text-xs text-muted-foreground">Join 500+ professionals, gain cutting-edge insights, expand your network</p>
-                      </div>
+                      </div> */}
                     </CardContent>
                     
                     <CardFooter className="p-8 pt-0 relative z-20">
@@ -640,7 +720,7 @@ const Meetings = () => {
                           }}
                         >
                           <span className="relative z-10 flex items-center justify-center gap-2">
-                            🎯 Secure Your Spot Now
+                            Register Now
                             <motion.div
                               animate={{ x: [0, 5, 0] }}
                               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
@@ -663,7 +743,7 @@ const Meetings = () => {
                       </motion.div>
                       
                       {/* Trust Indicators */}
-                      <motion.div 
+                      {/* <motion.div 
                         className="flex justify-center items-center gap-4 mt-4 text-xs text-muted-foreground"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -676,8 +756,8 @@ const Meetings = () => {
                         <span>•</span>
                         <span>100% Refundable</span>
                         <span>•</span>
-                        <span className="text-green-600 font-semibold">Early Bird 30% OFF</span>
-                      </motion.div>
+                        <span className="text-green-600 font-semibold">Early Bird 20% OFF</span>
+                      </motion.div> */}
                     </CardFooter>
                   </Card>
                 </motion.div>

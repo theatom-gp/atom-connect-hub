@@ -665,9 +665,31 @@ const VisaInvitation = () => {
                 <p className="text-muted-foreground text-sm">Within 24 hours</p>
               </div>
             </div> */}
-            <Button size="lg" className="px-8 py-4">
+            <Button 
+              size="lg" 
+              className="px-8 py-4 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+              onClick={() => {
+                const emailSubject = "Visa Support & Invitation Letter Request";
+                const emailBody = `
+Dear Support Team,
+
+I would like to request assistance with visa support and invitation letter for conference participation.
+
+Please provide me with the necessary information and documents.
+
+Best regards,
+[Your Name]
+`.trim();
+// ---
+// This request was sent from the Atom Conferences Visa & Invitation Letter page.
+//                 `.trim();
+                
+                const mailtoLink = `mailto:support@atomconferences.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+                window.location.href = mailtoLink;
+              }}
+            >
               <Mail className="h-5 w-5 mr-2" />
-              <a href="/contact">Request Invitation Letter</a>
+              Request Invitation Letter
             </Button>
           </div>
         </div>
