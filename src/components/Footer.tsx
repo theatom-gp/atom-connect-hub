@@ -34,8 +34,8 @@ const Footer = () => {
   ];
 
   const achievements = [
-    { icon: Users, number: '50,000+', label: 'Global Attendees' },
-    { icon: Calendar, number: '200+', label: 'Events Organized' },
+    { icon: Users, number: '10,000+', label: 'Global Attendees' },
+    { icon: Calendar, number: '50+', label: 'Events Organized' },
     { icon: Award, number: '98%', label: 'Satisfaction Rate' },
   ];
 

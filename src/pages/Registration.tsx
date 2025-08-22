@@ -693,52 +693,34 @@ const Registration = () => {
 
           <div className="lg:col-span-1">
             <Card className="mb-4">
-              <CardHeader className="pb-3">
+              <CardHeader className="pb-0">
                 <CardTitle className="text-lg">Secure payments by</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <div className="flex items-center justify-center mb-3">
-                    <div className="w-16 h-8 bg-blue-600 rounded flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">PayPal</span>
+              <CardContent className="space-y-1">
+                {/* PayPal Section */}
+                <div className="flex items-center justify-center">
+                  {/* <div className="w-full max-w-xs bg-white rounded-lg border border-gray-200 p-4 shadow-sm"> */}
+                    <div className="flex items-center justify-center mb-3">
+                      <img 
+                        src="/src/assets/paypal.png" 
+                        alt="PayPal" 
+                        className="w-40 h-20 object-contain"
+                      />
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between space-x-2">
-                    <div className="w-8 h-5 bg-gradient-to-r from-orange-400 to-red-500 rounded-sm flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">MC</span>
-                    </div>
-                    <div className="w-8 h-5 bg-blue-900 rounded-sm flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">VISA</span>
-                    </div>
-                    <div className="w-8 h-5 bg-gradient-to-r from-blue-500 to-red-500 rounded-sm flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">M</span>
-                    </div>
-                    <div className="w-8 h-5 bg-blue-600 rounded-sm flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">AMEX</span>
-                    </div>
-                  </div>
+                  {/* </div>*/}
                 </div>
 
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <div className="flex items-center justify-center mb-3">
-                    <div className="w-16 h-8 bg-gradient-to-r from-purple-500 to-purple-700 rounded flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">stripe</span>
+                {/* Stripe Section */}
+                <div className="flex items-center justify-center">
+                  {/* <div className="w-full max-w-xs bg-white rounded-lg border border-gray-200 p-4 shadow-sm"> */}
+                    <div className="flex items-center justify-center mb-1">
+                      <img 
+                        src="/src/assets/stripe-1.webp" 
+                        alt="Stripe" 
+                        className="w-70 h-50 object-contain"
+                      />
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between space-x-2">
-                    <div className="w-8 h-5 bg-gradient-to-r from-orange-400 to-red-500 rounded-sm flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">MC</span>
-                    </div>
-                    <div className="w-8 h-5 bg-blue-900 rounded-sm flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">VISA</span>
-                    </div>
-                    <div className="w-8 h-5 bg-gradient-to-r from-blue-500 to-red-500 rounded-sm flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">M</span>
-                    </div>
-                    <div className="w-8 h-5 bg-blue-600 rounded-sm flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">AMEX</span>
-                    </div>
-                  </div>
+                  {/* </div> */}
                 </div>
               </CardContent>
             </Card>
