@@ -449,7 +449,7 @@ const GlobalFinanceSummit = () => {
               <Button 
                 size="lg" 
                 className="group relative overflow-hidden bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-10 py-4 text-lg font-semibold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/25"
-                onClick={() => navigate('/registration')}
+                onClick={() => navigate('/registration?conference=globalfinancesummit')}
               >
                 <span className="relative z-10 flex items-center gap-2">
                   Register Now
@@ -1003,7 +1003,7 @@ const GlobalFinanceSummit = () => {
                       <Button 
                         className="w-full py-6 text-base font-bold shadow-xl hover:shadow-2xl transition-all duration-300 bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 hover:from-blue-700 hover:via-purple-600 hover:to-blue-800 text-white border-0 relative overflow-hidden group animate-pulse" 
                         variant="default"
-                        onClick={() => navigate('/registration')}
+                        onClick={() => navigate('/registration?conference=globalfinancesummit')}
                       >
                         <motion.span
                           className="relative font-extrabold tracking-wide"

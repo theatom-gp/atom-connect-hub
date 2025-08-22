@@ -599,7 +599,7 @@ const GlobalHealthcareRevolution = () => {
               <Button 
                 size="lg" 
                 className="group relative overflow-hidden bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-10 py-4 text-lg font-semibold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/25"
-                onClick={() => navigate('/registration')}
+                onClick={() => navigate('/registration?conference=globalhealthcare')}
               >
                 <span className="relative z-10 flex items-center gap-2">
                   Register Now
@@ -618,7 +618,7 @@ const GlobalHealthcareRevolution = () => {
                     : "opacity-50 cursor-not-allowed border-muted text-muted-foreground bg-muted"
                 }`}
                 disabled={!isEarlyBird}
-                onClick={() => isEarlyBird && navigate('/registration')}
+                onClick={() => isEarlyBird && navigate('/registration?conference=globalhealthcare')}
               >
                 <span className="relative z-10 flex items-center gap-3">
                   {isEarlyBird ? (
@@ -1086,7 +1086,7 @@ const GlobalHealthcareRevolution = () => {
                   <Button 
                     className="w-full py-3 text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200" 
                     variant="default"
-                    onClick={() => navigate('/registration')}
+                                         onClick={() => navigate('/registration?conference=globalhealthcare')}
                   >
                     Register Now
                   </Button>

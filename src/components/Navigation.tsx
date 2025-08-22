@@ -5,6 +5,8 @@ import { ChevronDown } from 'lucide-react';
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isInformationOpen, setIsInformationOpen] = useState(false);
+  const [isPoliciesOpen, setIsPoliciesOpen] = useState(false);
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState('');
 
   useEffect(() => {
@@ -14,11 +16,17 @@ const Navigation = () => {
   const navItems = [
     { name: 'Home', href: '/' },
     { name: 'Meetings', href: '/meetings' },
+  ];
+
+  const policiesItems = [
     { name: 'Cancellation Policy', href: '/cancellation-policy' },
     { name: 'Privacy Policy', href: '/privacy-policy' },
     { name: 'Terms and Conditions', href: '/terms-and-conditions' },
-    { name: 'FAQ', href: '/faq' },
+  ];
+
+  const moreItems = [
     { name: 'Contact', href: '/contact' },
+    { name: 'FAQ', href: '/faq' },
   ];
 
   const informationItems = [
@@ -102,34 +110,90 @@ const Navigation = () => {
               </div>
               
               {/* Vertical Separator Line */}
-              <div className="w-px h-6 sm:h-8 bg-border group-hover:bg-primary/50 transition-colors duration-300" />
+              <div className="w-0.5 h-8 sm:h-10 bg-gray-400 group-hover:bg-primary transition-colors duration-300" />
               
               {/* App Name */}
-              <div className="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-1">
-                <span className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-primary via-blue-600 to-secondary bg-clip-text text-transparent group-hover:from-primary/80 group-hover:via-blue-600/80 group-hover:to-secondary/80 transition-all duration-300">
-                  <span className="sm:hidden">The Atom</span>
-                  <span className="hidden sm:inline">The Atom</span>
+              <div className="flex flex-col gap-0">
+                <span className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-primary via-blue-600 to-secondary bg-clip-text text-transparent group-hover:from-primary/80 group-hover:via-blue-600/80 group-hover:to-secondary/80 transition-all duration-300 leading-tight">
+                  The Atom
                 </span>
-                <span className="text-sm sm:text-base lg:text-lg font-semibold text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                  <span className="sm:hidden">Conf</span>
-                  <span className="hidden sm:inline">Conferences</span>
+                <span className="text-sm sm:text-base lg:text-lg font-semibold text-muted-foreground group-hover:text-foreground transition-colors duration-300 leading-tight">
+                  Conferences
                 </span>
               </div>
             </a>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex flex-1 justify-center">
-            <div className="flex items-center space-x-6 xl:space-x-8">
+          <div className="hidden lg:flex flex-1 justify-center ml-16">
+            <div className="flex items-center space-x-8 xl:space-x-1">
               {navItems.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-lg hover:bg-secondary/10 whitespace-nowrap"
+                  className="text-foreground hover:text-primary px-4 py-2 text-base font-bold transition-colors duration-200 rounded-lg hover:bg-secondary/10 whitespace-nowrap"
                 >
                   {item.name}
                 </a>
               ))}
+              
+              {/* POLICIES Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsPoliciesOpen(!isPoliciesOpen)}
+                  onBlur={() => setTimeout(() => setIsPoliciesOpen(false), 200)}
+                  className="text-foreground hover:text-primary px-4 py-2 text-base font-bold transition-colors duration-200 rounded-lg hover:bg-secondary/10 whitespace-nowrap flex items-center gap-1"
+                >
+                  Policies
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isPoliciesOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {isPoliciesOpen && (
+                  <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    <div className="py-2">
+                      {policiesItems.map((item) => (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors duration-200"
+                          onClick={() => setIsPoliciesOpen(false)}
+                        >
+                          {item.name}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* MORE Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsMoreOpen(!isMoreOpen)}
+                  onBlur={() => setTimeout(() => setIsMoreOpen(false), 200)}
+                  className="text-foreground hover:text-primary px-4 py-2 text-base font-bold transition-colors duration-200 rounded-lg hover:bg-secondary/10 whitespace-nowrap flex items-center gap-1"
+                >
+                  More
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMoreOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {isMoreOpen && (
+                  <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    <div className="py-2">
+                      {moreItems.map((item) => (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors duration-200"
+                          onClick={() => setIsMoreOpen(false)}
+                        >
+                          {item.name}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
               
               {/* INFORMATION Dropdown - Only show on Conference pages */}
               {(isConferencePage || isVisaInvitationPage || isPresentationGuidelinesPage) && (
@@ -137,9 +201,9 @@ const Navigation = () => {
                   <button
                     onClick={() => setIsInformationOpen(!isInformationOpen)}
                     onBlur={() => setTimeout(() => setIsInformationOpen(false), 200)}
-                    className="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-lg hover:bg-secondary/10 whitespace-nowrap flex items-center gap-1"
+                    className="text-foreground hover:text-primary px-4 py-2 text-base font-bold transition-colors duration-200 rounded-lg hover:bg-secondary/10 whitespace-nowrap flex items-center gap-1"
                   >
-                    INFORMATION
+                    Information
                     <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isInformationOpen ? 'rotate-180' : ''}`} />
                   </button>
                   
@@ -191,19 +255,77 @@ const Navigation = () => {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-foreground hover:text-primary hover:bg-secondary/10 block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 touch-manipulation"
+                  className="text-foreground hover:text-primary hover:bg-secondary/10 block px-4 py-3 text-lg font-bold rounded-lg transition-colors duration-200 touch-manipulation"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
                 </a>
               ))}
               
+              {/* POLICIES Dropdown for Mobile */}
+              <div className="space-y-1">
+                <button
+                  onClick={() => setIsPoliciesOpen(!isPoliciesOpen)}
+                  className="text-foreground hover:text-primary hover:bg-secondary/10 block w-full text-left px-4 py-3 text-lg font-bold rounded-lg transition-colors duration-200 touch-manipulation flex items-center justify-between"
+                >
+                  <span>POLICIES</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isPoliciesOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {isPoliciesOpen && (
+                  <div className="ml-4 space-y-1">
+                    {policiesItems.map((item) => (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        className="text-foreground hover:text-primary hover:bg-secondary/10 block px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 touch-manipulation"
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          setIsPoliciesOpen(false);
+                        }}
+                      >
+                        {item.name}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* MORE Dropdown for Mobile */}
+              <div className="space-y-1">
+                <button
+                  onClick={() => setIsMoreOpen(!isMoreOpen)}
+                  className="text-foreground hover:text-primary hover:bg-secondary/10 block w-full text-left px-4 py-3 text-lg font-bold rounded-lg transition-colors duration-200 touch-manipulation flex items-center justify-between"
+                >
+                  <span>MORE</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMoreOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {isMoreOpen && (
+                  <div className="ml-4 space-y-1">
+                    {moreItems.map((item) => (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        className="text-foreground hover:text-primary hover:bg-secondary/10 block px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 touch-manipulation"
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          setIsMoreOpen(false);
+                        }}
+                      >
+                        {item.name}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
               {/* INFORMATION Dropdown for Mobile - Only show on Conference pages */}
               {(isConferencePage || isVisaInvitationPage || isPresentationGuidelinesPage) && (
                 <div className="space-y-1">
                   <button
                     onClick={() => setIsInformationOpen(!isInformationOpen)}
-                    className="text-foreground hover:text-primary hover:bg-secondary/10 block w-full text-left px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 touch-manipulation flex items-center justify-between"
+                    className="text-foreground hover:text-primary hover:bg-secondary/10 block w-full text-left px-4 py-3 text-lg font-bold rounded-lg transition-colors duration-200 touch-manipulation flex items-center justify-between"
                   >
                     <span>INFORMATION</span>
                     <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isInformationOpen ? 'rotate-180' : ''}`} />
