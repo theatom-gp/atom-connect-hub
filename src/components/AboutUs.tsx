@@ -38,7 +38,7 @@ const AboutUs = () => {
               <div className="text-center lg:text-left">
                 <h4 className="font-semibold text-foreground mb-2">Global Reach</h4>
                 <p className="text-muted-foreground text-sm">
-                  Connecting professionals across 2 continents and 10+ countries
+                  Connecting professionals across 3 continents and 10+ countries
                 </p>
               </div>
               <div className="text-center lg:text-left">
