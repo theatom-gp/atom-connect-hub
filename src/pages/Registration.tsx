@@ -252,7 +252,38 @@ const Registration = () => {
     return calculateTotal() * 0.035;
   };
 
+  // Validation functions
+  const validateStep1 = () => {
+    const requiredFields = ['firstName', 'lastName', 'email', 'organization', 'country'];
+    return requiredFields.every(field => formData[field as keyof RegistrationData] && formData[field as keyof RegistrationData] !== '');
+  };
+
+  const validateStep2 = () => {
+    return selectedRegistration !== null;
+  };
+
+  const canProceedToStep2 = validateStep1();
+  const canProceedToStep3 = validateStep2();
+
   const nextStep = () => {
+    if (currentStep === 1 && !canProceedToStep2) {
+      toast({
+        title: "Please fill all required fields",
+        description: "First Name, Last Name, Email, Organization, and Country are mandatory.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (currentStep === 2 && !canProceedToStep3) {
+      toast({
+        title: "Please select a registration option",
+        description: "You must select at least one registration type to proceed.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setCurrentStep(prev => Math.min(prev + 1, 3));
   };
 
@@ -408,33 +439,6 @@ const Registration = () => {
                       rows={3}
                     />
                   </div>
-
-                  {/* <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="abstractSubmission"
-                        checked={formData.abstractSubmission}
-                        onCheckedChange={(checked) => handleInputChange('abstractSubmission', checked as boolean)}
-                      />
-                      <Label htmlFor="abstractSubmission">I will submit an abstract</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="posterSubmission"
-                        checked={formData.posterSubmission}
-                        onCheckedChange={(checked) => handleInputChange('posterSubmission', checked as boolean)}
-                      />
-                      <Label htmlFor="posterSubmission">I will present a poster</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="accompanyingPerson"
-                        checked={formData.accompanyingPerson}
-                        onCheckedChange={(checked) => handleInputChange('accompanyingPerson', checked as boolean)}
-                      />
-                      <Label htmlFor="accompanyingPerson">I will bring an accompanying person</Label>
-                    </div>
-                  </div> */}
                 </CardContent>
               </Card>
             )}
@@ -680,7 +684,11 @@ const Registration = () => {
                 </Button>
               )}
               {currentStep < 3 ? (
-                <Button onClick={nextStep} className="ml-auto">
+                <Button 
+                  onClick={nextStep} 
+                  className="ml-auto"
+                  disabled={currentStep === 1 ? !canProceedToStep2 : !canProceedToStep3}
+                >
                   Next
                 </Button>
               ) : (
@@ -699,28 +707,24 @@ const Registration = () => {
               <CardContent className="space-y-1">
                 {/* PayPal Section */}
                 <div className="flex items-center justify-center">
-                  {/* <div className="w-full max-w-xs bg-white rounded-lg border border-gray-200 p-4 shadow-sm"> */}
-                    <div className="flex items-center justify-center mb-3">
-                      <img 
-                        src="/src/assets/paypal.png" 
-                        alt="PayPal" 
-                        className="w-40 h-20 object-contain"
-                      />
-                    </div>
-                  {/* </div>*/}
+                  <div className="flex items-center justify-center mb-3">
+                    <img 
+                      src="/src/assets/paypal.png" 
+                      alt="PayPal" 
+                      className="w-40 h-20 object-contain"
+                    />
+                  </div>
                 </div>
 
                 {/* Stripe Section */}
                 <div className="flex items-center justify-center">
-                  {/* <div className="w-full max-w-xs bg-white rounded-lg border border-gray-200 p-4 shadow-sm"> */}
-                    <div className="flex items-center justify-center mb-1">
-                      <img 
-                        src="/src/assets/stripe-1.webp" 
-                        alt="Stripe" 
-                        className="w-70 h-50 object-contain"
-                      />
-                    </div>
-                  {/* </div> */}
+                  <div className="flex items-center justify-center mb-1">
+                    <img 
+                      src="/src/assets/stripe-1.webp" 
+                      alt="Stripe" 
+                      className="w-70 h-50 object-contain"
+                    />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -782,4 +786,4 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default Registration; 
