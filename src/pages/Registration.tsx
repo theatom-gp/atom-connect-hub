@@ -113,75 +113,7 @@ const Registration = () => {
     });
   };
 
-  const generateRegistrationOptions = (targetDate: Date) => {
-    const { preEarlyBird, earlyBird, standard, finalRegistration } = calculateRegistrationDates(targetDate);
-    
-    return [
-      {
-        type: 'SPEAKER (IN PERSON)',
-        tiers: [
-          { name: 'Pre Earlybird', price: 699, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 799, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 899, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 999, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      },
-      {
-        type: 'Package A (Registration + 2 Nights Accommodation)',
-        tiers: [
-          { name: 'Pre Earlybird', price: 1099, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 1149, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 1199, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 1249, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      },
-      {
-        type: 'Package B (Registration + 3 Nights Accommodation)',
-        tiers: [
-          { name: 'Pre Earlybird', price: 1249, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 1299, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 1399, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 1449, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      },
-      {
-        type: 'Virtual (Speaker/Delegate)',
-        tiers: [
-          { name: 'Pre Earlybird', price: 349, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 399, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 499, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 599, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      },
-      {
-        type: 'Delegate/Listener (In-Person)',
-        tiers: [
-          { name: 'Pre Earlybird', price: 749, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 849, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 999, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 1049, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      },
-      {
-        type: 'Student/Poster',
-        tiers: [
-          { name: 'Pre Earlybird', price: 449, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 549, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 649, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 749, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      },
-      {
-        type: 'Sponsor',
-        tiers: [
-          { name: 'Pre Earlybird', price: 5999, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 4999, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 3999, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 2999, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      }
-    ];
-  };
+
 
   useEffect(() => {
     const conferenceParam = searchParams.get('conference');
@@ -213,6 +145,77 @@ const Registration = () => {
       targetDate = new Date('2025-11-22');
       conferenceValue = 'forensicscience';
     }
+
+    // Generate registration options inside useEffect to avoid dependency issues
+    const generateRegistrationOptions = (targetDate: Date) => {
+      const { preEarlyBird, earlyBird, standard, finalRegistration } = calculateRegistrationDates(targetDate);
+      
+      return [
+        {
+          type: 'SPEAKER (IN PERSON)',
+          tiers: [
+            { name: 'Pre Earlybird', price: 699, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 799, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 899, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 999, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        },
+        {
+          type: 'Package A (Registration + 2 Nights Accommodation)',
+          tiers: [
+            { name: 'Pre Earlybird', price: 1099, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 1149, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 1199, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 1249, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        },
+        {
+          type: 'Package B (Registration + 3 Nights Accommodation)',
+          tiers: [
+            { name: 'Pre Earlybird', price: 1249, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 1299, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 1399, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 1449, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        },
+        {
+          type: 'Virtual (Speaker/Delegate)',
+          tiers: [
+            { name: 'Pre Earlybird', price: 349, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 399, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 499, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 599, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        },
+        {
+          type: 'Delegate/Listener (In-Person)',
+          tiers: [
+            { name: 'Pre Earlybird', price: 749, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 849, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 999, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 1049, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        },
+        {
+          type: 'Student/Poster',
+          tiers: [
+            { name: 'Pre Earlybird', price: 449, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 549, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 649, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 749, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        },
+        {
+          type: 'Sponsor',
+          tiers: [
+            { name: 'Pre Earlybird', price: 5999, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 4999, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 3999, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 2999, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        }
+      ];
+    };
 
     setConferenceTargetDate(targetDate);
     setSelectedConference(conferenceValue);
@@ -252,7 +255,38 @@ const Registration = () => {
     return calculateTotal() * 0.035;
   };
 
+  // Validation functions
+  const validateStep1 = () => {
+    const requiredFields = ['firstName', 'lastName', 'email', 'organization', 'country'];
+    return requiredFields.every(field => formData[field as keyof RegistrationData] && formData[field as keyof RegistrationData] !== '');
+  };
+
+  const validateStep2 = () => {
+    return selectedRegistration !== null;
+  };
+
+  const canProceedToStep2 = validateStep1();
+  const canProceedToStep3 = validateStep2();
+
   const nextStep = () => {
+    if (currentStep === 1 && !canProceedToStep2) {
+      toast({
+        title: "Please fill all required fields",
+        description: "First Name, Last Name, Email, Organization, and Country are mandatory.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (currentStep === 2 && !canProceedToStep3) {
+      toast({
+        title: "Please select a registration option",
+        description: "You must select at least one registration type to proceed.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setCurrentStep(prev => Math.min(prev + 1, 3));
   };
 
@@ -408,33 +442,6 @@ const Registration = () => {
                       rows={3}
                     />
                   </div>
-
-                  {/* <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="abstractSubmission"
-                        checked={formData.abstractSubmission}
-                        onCheckedChange={(checked) => handleInputChange('abstractSubmission', checked as boolean)}
-                      />
-                      <Label htmlFor="abstractSubmission">I will submit an abstract</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="posterSubmission"
-                        checked={formData.posterSubmission}
-                        onCheckedChange={(checked) => handleInputChange('posterSubmission', checked as boolean)}
-                      />
-                      <Label htmlFor="posterSubmission">I will present a poster</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="accompanyingPerson"
-                        checked={formData.accompanyingPerson}
-                        onCheckedChange={(checked) => handleInputChange('accompanyingPerson', checked as boolean)}
-                      />
-                      <Label htmlFor="accompanyingPerson">I will bring an accompanying person</Label>
-                    </div>
-                  </div> */}
                 </CardContent>
               </Card>
             )}
@@ -680,7 +687,11 @@ const Registration = () => {
                 </Button>
               )}
               {currentStep < 3 ? (
-                <Button onClick={nextStep} className="ml-auto">
+                <Button 
+                  onClick={nextStep} 
+                  className="ml-auto"
+                  disabled={currentStep === 1 ? !canProceedToStep2 : !canProceedToStep3}
+                >
                   Next
                 </Button>
               ) : (
@@ -699,28 +710,24 @@ const Registration = () => {
               <CardContent className="space-y-1">
                 {/* PayPal Section */}
                 <div className="flex items-center justify-center">
-                  {/* <div className="w-full max-w-xs bg-white rounded-lg border border-gray-200 p-4 shadow-sm"> */}
-                    <div className="flex items-center justify-center mb-3">
-                      <img 
-                        src="/src/assets/paypal.png" 
-                        alt="PayPal" 
-                        className="w-40 h-20 object-contain"
-                      />
-                    </div>
-                  {/* </div>*/}
+                  <div className="flex items-center justify-center mb-3">
+                    <img 
+                      src="/src/assets/paypal.png" 
+                      alt="PayPal" 
+                      className="w-40 h-20 object-contain"
+                    />
+                  </div>
                 </div>
 
                 {/* Stripe Section */}
                 <div className="flex items-center justify-center">
-                  {/* <div className="w-full max-w-xs bg-white rounded-lg border border-gray-200 p-4 shadow-sm"> */}
-                    <div className="flex items-center justify-center mb-1">
-                      <img 
-                        src="/src/assets/stripe-1.webp" 
-                        alt="Stripe" 
-                        className="w-70 h-50 object-contain"
-                      />
-                    </div>
-                  {/* </div> */}
+                  <div className="flex items-center justify-center mb-1">
+                    <img 
+                      src="/src/assets/stripe-1.webp" 
+                      alt="Stripe" 
+                      className="w-70 h-50 object-contain"
+                    />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -782,4 +789,4 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default Registration; 
