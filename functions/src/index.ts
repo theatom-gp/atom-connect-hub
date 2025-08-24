@@ -220,7 +220,7 @@ export const createStripePaymentIntent = functions.https.onRequest(async (req, r
   // Enable CORS
   res.set('Access-Control-Allow-Origin', '*');
   res.set('Access-Control-Allow-Methods', 'GET, POST');
-  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Idempotency-Key');
 
   if (req.method === 'OPTIONS') {
     res.status(204).send('');
@@ -228,21 +228,84 @@ export const createStripePaymentIntent = functions.https.onRequest(async (req, r
   }
 
   try {
-    const { amount, registrationId, currency = 'usd', metadata } = req.body;
+    const { amount, registrationId, userId, conferenceId, currency = 'usd', metadata, idempotencyKey } = req.body;
 
-    if (!amount || !registrationId) {
+    if (!amount || !registrationId || !userId || !conferenceId) {
       res.status(400).json({ success: false, error: 'Missing required fields' });
       return;
     }
 
-    // Create payment intent
+    // Check for idempotency key in headers
+    const headerIdempotencyKey = req.headers['idempotency-key'] as string;
+    const finalIdempotencyKey = idempotencyKey || headerIdempotencyKey;
+
+    if (!finalIdempotencyKey) {
+      res.status(400).json({ success: false, error: 'Idempotency key is required' });
+      return;
+    }
+
+    // Check if payment with this idempotency key already exists
+    const existingPaymentQuery = admin.firestore().collection('payments')
+      .where('idempotencyKey', '==', finalIdempotencyKey)
+      .limit(1);
+    
+    const existingPaymentSnapshot = await existingPaymentQuery.get();
+    if (!existingPaymentSnapshot.empty) {
+      const existingPayment = existingPaymentSnapshot.docs[0];
+      const existingPaymentData = existingPayment.data();
+      
+      // Return existing payment intent if it exists
+      res.json({
+        success: true,
+        paymentIntent: {
+          id: existingPaymentData.id || existingPayment.id,
+          client_secret: existingPaymentData.client_secret,
+          status: existingPaymentData.status,
+          amount: existingPaymentData.amount,
+          currency: existingPaymentData.currency
+        },
+        isExisting: true,
+        message: 'Payment intent already exists with this idempotency key'
+      });
+      return;
+    }
+
+    // Check if registration already has a successful payment
+    const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
+    const registrationDoc = await registrationRef.get();
+    
+    if (registrationDoc.exists) {
+      const registrationData = registrationDoc.data();
+      if (registrationData?.paymentId) {
+        const paymentDoc = await admin.firestore().collection('payments').doc(registrationData.paymentId).get();
+        if (paymentDoc.exists) {
+          const paymentData = paymentDoc.data();
+          if (paymentData?.status === 'succeeded') {
+            return res.status(400).json({ 
+              success: false, 
+              error: 'Registration already has a successful payment' 
+            });
+          }
+        }
+      }
+    }
+
+    // Create payment intent with idempotency key
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to cents
       currency,
-      metadata,
+      metadata: {
+        ...metadata,
+        idempotencyKey: finalIdempotencyKey,
+        registrationId,
+        userId,
+        conferenceId
+      },
       automatic_payment_methods: {
         enabled: true,
-      },
+      }
+    }, {
+      idempotencyKey: finalIdempotencyKey // Stripe's idempotency key in options
     });
 
     res.json({
@@ -253,10 +316,23 @@ export const createStripePaymentIntent = functions.https.onRequest(async (req, r
         status: paymentIntent.status,
         amount: paymentIntent.amount,
         currency: paymentIntent.currency
-      }
+      },
+      idempotencyKey: finalIdempotencyKey,
+      isExisting: false
     });
   } catch (error) {
     console.error('Error creating Stripe payment intent:', error);
+    
+    // Handle Stripe idempotency errors
+    if (error instanceof Error && error.message.includes('idempotency')) {
+      res.status(409).json({ 
+        success: false, 
+        error: 'Payment intent with this idempotency key already exists',
+        code: 'IDEMPOTENCY_CONFLICT'
+      });
+      return;
+    }
+    
     res.status(500).json({ 
       success: false, 
       error: error instanceof Error ? error.message : 'Unknown error' 
@@ -264,7 +340,7 @@ export const createStripePaymentIntent = functions.https.onRequest(async (req, r
   }
 });
 
-// Stripe webhook handler
+// Stripe webhook handler with duplicate prevention
 export const stripeWebhook = functions.https.onRequest(async (req, res) => {
   const sig = req.headers['stripe-signature'];
   const endpointSecret = functions.config().stripe.webhook_secret;
@@ -281,6 +357,26 @@ export const stripeWebhook = functions.https.onRequest(async (req, res) => {
   }
 
   try {
+    // Check if we've already processed this webhook event
+    const eventId = event.id;
+    const eventProcessedQuery = admin.firestore().collection('webhookEvents')
+      .where('stripeEventId', '==', eventId)
+      .limit(1);
+    
+    const eventProcessedSnapshot = await eventProcessedQuery.get();
+    if (!eventProcessedSnapshot.empty) {
+      console.log(`Webhook event ${eventId} already processed, skipping`);
+      return res.json({ received: true, message: 'Event already processed' });
+    }
+
+    // Mark this event as being processed
+    await admin.firestore().collection('webhookEvents').add({
+      stripeEventId: eventId,
+      eventType: event.type,
+      processedAt: admin.firestore.FieldValue.serverTimestamp(),
+      status: 'processing'
+    });
+
     switch (event.type) {
       case 'payment_intent.succeeded':
         await handlePaymentSuccess(event.data.object as Stripe.PaymentIntent);
@@ -292,9 +388,29 @@ export const stripeWebhook = functions.https.onRequest(async (req, res) => {
         console.log(`Unhandled event type: ${event.type}`);
     }
 
+    // Mark event as completed
+    await admin.firestore().collection('webhookEvents').add({
+      stripeEventId: eventId,
+      eventType: event.type,
+      processedAt: admin.firestore.FieldValue.serverTimestamp(),
+      status: 'completed'
+    });
+
     res.json({ received: true });
   } catch (error) {
     console.error('Error processing webhook:', error);
+    
+    // Mark event as failed
+    if (event?.id) {
+      await admin.firestore().collection('webhookEvents').add({
+        stripeEventId: event.id,
+        eventType: event.type,
+        processedAt: admin.firestore.FieldValue.serverTimestamp(),
+        status: 'failed',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+    
     res.status(500).json({ error: 'Webhook processing failed' });
   }
 });
@@ -331,6 +447,7 @@ export const createPayPalOrder = functions.https.onRequest(async (req, res) => {
           value: amount.toString()
         },
         custom_id: registrationId,
+        custom_id_metadata: metadata, // Add metadata to custom_id_metadata
         description: `Conference Registration - ${metadata?.conferenceId || 'Unknown Conference'}`
       }],
       application_context: {
@@ -450,27 +567,62 @@ async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent) {
     const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
     await registrationRef.update({
       status: 'paid',
+      paymentStatus: 'completed',
       paymentInfo: {
         stripePaymentIntentId: paymentIntent.id,
         amount: paymentIntent.amount / 100, // Convert from cents
         currency: paymentIntent.currency,
         status: 'succeeded',
-        paidAt: admin.firestore.FieldValue.serverTimestamp()
+        paidAt: admin.firestore.FieldValue.serverTimestamp(),
+        paymentMethod: 'stripe'
       },
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
     });
+
+    // Update payment record
+    const paymentsQuery = admin.firestore().collection('payments')
+      .where('registrationId', '==', registrationId)
+      .where('paymentMethod', '==', 'stripe');
+    
+    const paymentSnapshot = await paymentsQuery.get();
+    if (!paymentSnapshot.empty) {
+      const paymentDoc = paymentSnapshot.docs[0];
+      await paymentDoc.ref.update({
+        status: 'succeeded',
+        paymentDetails: {
+          stripePaymentIntentId: paymentIntent.id,
+          amount: paymentIntent.amount / 100,
+          currency: paymentIntent.currency,
+          status: 'succeeded',
+          paidAt: admin.firestore.FieldValue.serverTimestamp()
+        },
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+    }
 
     // Update user's registration status
     if (userId) {
       const userRef = admin.firestore().collection('users').doc(userId);
       await userRef.update({
         [`registrations.${registrationId}.status`]: 'paid',
+        [`registrations.${registrationId}.paymentStatus`]: 'completed',
+        [`registrations.${registrationId}.paidAt`]: admin.firestore.FieldValue.serverTimestamp(),
         updatedAt: admin.firestore.FieldValue.serverTimestamp()
       });
+
+      // Update user's payment history
+      if (!paymentSnapshot.empty) {
+        const paymentDoc = paymentSnapshot.docs[0];
+        await userRef.update({
+          [`payments.${paymentDoc.id}.status`]: 'succeeded',
+          [`payments.${paymentDoc.id}.paidAt`]: admin.firestore.FieldValue.serverTimestamp(),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+      }
     }
 
     // TODO: Send confirmation email
-    console.log(`Payment succeeded for registration: ${registrationId}`);
+    console.log(`Payment succeeded for registration: ${registrationId}, user: ${userId}, conference: ${conferenceId}`);
   } catch (error) {
     console.error('Error handling payment success:', error);
   }
@@ -478,24 +630,69 @@ async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent) {
 
 async function handlePaymentFailure(paymentIntent: Stripe.PaymentIntent) {
   try {
-    const { registrationId } = paymentIntent.metadata;
+    const { registrationId, userId } = paymentIntent.metadata;
     
     // Update registration status
     const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
     await registrationRef.update({
       status: 'payment_failed',
+      paymentStatus: 'failed',
       paymentInfo: {
         stripePaymentIntentId: paymentIntent.id,
         amount: paymentIntent.amount / 100,
         currency: paymentIntent.currency,
         status: 'failed',
         failedAt: admin.firestore.FieldValue.serverTimestamp(),
-        failureReason: paymentIntent.last_payment_error?.message || 'Unknown error'
+        failureReason: paymentIntent.last_payment_error?.message || 'Unknown error',
+        paymentMethod: 'stripe'
       },
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
     });
 
-    console.log(`Payment failed for registration: ${registrationId}`);
+    // Update payment record
+    const paymentsQuery = admin.firestore().collection('payments')
+      .where('registrationId', '==', registrationId)
+      .where('paymentMethod', '==', 'stripe');
+    
+    const paymentSnapshot = await paymentsQuery.get();
+    if (!paymentSnapshot.empty) {
+      const paymentDoc = paymentSnapshot.docs[0];
+      await paymentDoc.ref.update({
+        status: 'failed',
+        paymentDetails: {
+          stripePaymentIntentId: paymentIntent.id,
+          amount: paymentIntent.amount / 100,
+          currency: paymentIntent.currency,
+          status: 'failed',
+          failedAt: admin.firestore.FieldValue.serverTimestamp(),
+          failureReason: paymentIntent.last_payment_error?.message || 'Unknown error'
+        },
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    // Update user's registration status
+    if (userId) {
+      const userRef = admin.firestore().collection('users').doc(userId);
+      await userRef.update({
+        [`registrations.${registrationId}.status`]: 'payment_failed',
+        [`registrations.${registrationId}.paymentStatus`]: 'failed',
+        [`registrations.${registrationId}.failedAt`]: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+
+      // Update user's payment history
+      if (!paymentSnapshot.empty) {
+        const paymentDoc = paymentSnapshot.docs[0];
+        await userRef.update({
+          [`payments.${paymentDoc.id}.status`]: 'failed',
+          [`payments.${paymentDoc.id}.failedAt`]: admin.firestore.FieldValue.serverTimestamp(),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+      }
+    }
+
+    console.log(`Payment failed for registration: ${registrationId}, user: ${userId}`);
   } catch (error) {
     console.error('Error handling payment failure:', error);
   }
@@ -504,22 +701,67 @@ async function handlePaymentFailure(paymentIntent: Stripe.PaymentIntent) {
 async function handlePayPalPaymentSuccess(capture: any) {
   try {
     const registrationId = capture.custom_id;
+    const { userId, conferenceId } = capture.custom_id_metadata || {};
     
     // Update registration status
     const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
     await registrationRef.update({
       status: 'paid',
+      paymentStatus: 'completed',
       paymentInfo: {
         paypalCaptureId: capture.id,
         amount: parseFloat(capture.amount.value),
         currency: capture.amount.currency_code,
         status: 'succeeded',
-        paidAt: admin.firestore.FieldValue.serverTimestamp()
+        paidAt: admin.firestore.FieldValue.serverTimestamp(),
+        paymentMethod: 'paypal'
       },
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
     });
 
-    console.log(`PayPal payment succeeded for registration: ${registrationId}`);
+    // Update payment record
+    const paymentsQuery = admin.firestore().collection('payments')
+      .where('registrationId', '==', registrationId)
+      .where('paymentMethod', '==', 'paypal');
+    
+    const paymentSnapshot = await paymentsQuery.get();
+    if (!paymentSnapshot.empty) {
+      const paymentDoc = paymentSnapshot.docs[0];
+      await paymentDoc.ref.update({
+        status: 'succeeded',
+        paymentDetails: {
+          paypalCaptureId: capture.id,
+          amount: parseFloat(capture.amount.value),
+          currency: capture.amount.currency_code,
+          status: 'succeeded',
+          paidAt: admin.firestore.FieldValue.serverTimestamp()
+        },
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    // Update user's registration status
+    if (userId) {
+      const userRef = admin.firestore().collection('users').doc(userId);
+      await userRef.update({
+        [`registrations.${registrationId}.status`]: 'paid',
+        [`registrations.${registrationId}.paymentStatus`]: 'completed',
+        [`registrations.${registrationId}.paidAt`]: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+
+      // Update user's payment history
+      if (!paymentSnapshot.empty) {
+        const paymentDoc = paymentSnapshot.docs[0];
+        await userRef.update({
+          [`payments.${paymentDoc.id}.status`]: 'succeeded',
+          [`payments.${paymentDoc.id}.paidAt`]: admin.firestore.FieldValue.serverTimestamp(),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+      }
+    }
+
+    console.log(`PayPal payment succeeded for registration: ${registrationId}, user: ${userId}, conference: ${conferenceId}`);
   } catch (error) {
     console.error('Error handling PayPal payment success:', error);
   }
@@ -528,22 +770,67 @@ async function handlePayPalPaymentSuccess(capture: any) {
 async function handlePayPalPaymentFailure(capture: any) {
   try {
     const registrationId = capture.custom_id;
+    const { userId } = capture.custom_id_metadata || {};
     
     // Update registration status
     const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
     await registrationRef.update({
       status: 'payment_failed',
+      paymentStatus: 'failed',
       paymentInfo: {
         paypalCaptureId: capture.id,
         amount: parseFloat(capture.amount.value),
         currency: capture.amount.currency_code,
         status: 'failed',
-        failedAt: admin.firestore.FieldValue.serverTimestamp()
+        failedAt: admin.firestore.FieldValue.serverTimestamp(),
+        paymentMethod: 'paypal'
       },
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
     });
 
-    console.log(`PayPal payment failed for registration: ${registrationId}`);
+    // Update payment record
+    const paymentsQuery = admin.firestore().collection('payments')
+      .where('registrationId', '==', registrationId)
+      .where('paymentMethod', '==', 'paypal');
+    
+    const paymentSnapshot = await paymentsQuery.get();
+    if (!paymentSnapshot.empty) {
+      const paymentDoc = paymentSnapshot.docs[0];
+      await paymentDoc.ref.update({
+        status: 'failed',
+        paymentDetails: {
+          paypalCaptureId: capture.id,
+          amount: parseFloat(capture.amount.value),
+          currency: capture.amount.currency_code,
+          status: 'failed',
+          failedAt: admin.firestore.FieldValue.serverTimestamp()
+        },
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    // Update user's registration status
+    if (userId) {
+      const userRef = admin.firestore().collection('users').doc(userId);
+      await userRef.update({
+        [`registrations.${registrationId}.status`]: 'payment_failed',
+        [`registrations.${registrationId}.paymentStatus`]: 'failed',
+        [`registrations.${registrationId}.failedAt`]: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+
+      // Update user's payment history
+      if (!paymentSnapshot.empty) {
+        const paymentDoc = paymentSnapshot.docs[0];
+        await userRef.update({
+          [`payments.${paymentDoc.id}.status`]: 'failed',
+          [`payments.${paymentDoc.id}.failedAt`]: admin.firestore.FieldValue.serverTimestamp(),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+      }
+    }
+
+    console.log(`PayPal payment failed for registration: ${registrationId}, user: ${userId}`);
   } catch (error) {
     console.error('Error handling PayPal payment failure:', error);
   }

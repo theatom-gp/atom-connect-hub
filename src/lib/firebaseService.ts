@@ -9,7 +9,8 @@ import {
   where, 
   orderBy,
   serverTimestamp,
-  arrayUnion 
+  arrayUnion,
+  limit 
 } from 'firebase/firestore';
 import { 
   ref, 
@@ -458,22 +459,169 @@ export const getAbstractsByConference = async (conferenceId: string) => {
 
 // ===== PAYMENT SERVICES =====
 
-export const createStripePaymentIntent = async (amount: number, registrationId: string) => {
+// ===== DUPLICATE PAYMENT PREVENTION =====
+
+// Generate unique idempotency key for payment requests
+export const generateIdempotencyKey = (userId: string, registrationId: string, amount: number): string => {
+  const timestamp = Date.now();
+  const hash = btoa(`${userId}_${registrationId}_${amount}_${timestamp}`).replace(/[^a-zA-Z0-9]/g, '');
+  return `payment_${hash}`;
+};
+
+// Check if payment already exists for a registration
+export const checkExistingPayment = async (registrationId: string): Promise<{
+  exists: boolean;
+  payment?: any;
+  error?: string;
+}> => {
   try {
-    // Call your Firebase Function that creates real Stripe payment intent
+    // Check if registration already has a payment
+    const registrationDoc = await getDoc(doc(db, 'registrations', registrationId));
+    if (!registrationDoc.exists()) {
+      return { exists: false, error: 'Registration not found' };
+    }
+
+    const registrationData = registrationDoc.data();
+    
+    // If registration already has a paymentId, check if payment exists
+    if (registrationData.paymentId) {
+      const paymentDoc = await getDoc(doc(db, 'payments', registrationData.paymentId));
+      if (paymentDoc.exists()) {
+        const paymentData = paymentDoc.data();
+        
+        // Check payment status
+        if (paymentData.status === 'succeeded') {
+          return { 
+            exists: true, 
+            payment: { id: paymentDoc.id, ...paymentData },
+            error: 'Payment already completed successfully'
+          };
+        } else if (paymentData.status === 'pending') {
+          return { 
+            exists: true, 
+            payment: { id: paymentDoc.id, ...paymentData },
+            error: 'Payment already in progress'
+          };
+        } else if (paymentData.status === 'failed') {
+          // Allow retry for failed payments
+          return { exists: false, payment: { id: paymentDoc.id, ...paymentData } };
+        }
+      }
+    }
+
+    // Check for any existing payments for this registration
+    const paymentsQuery = query(
+      collection(db, 'payments'),
+      where('registrationId', '==', registrationId),
+      orderBy('createdAt', 'desc'),
+      limit(1)
+    );
+    
+    const paymentsSnapshot = await getDocs(paymentsQuery);
+    if (!paymentsSnapshot.empty) {
+      const latestPayment = paymentsSnapshot.docs[0];
+      const paymentData = latestPayment.data();
+      
+      // If latest payment is recent (within 5 minutes) and pending, prevent duplicate
+      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+      if (paymentData.createdAt && paymentData.createdAt.toDate() > fiveMinutesAgo && paymentData.status === 'pending') {
+        return { 
+          exists: true, 
+          payment: { id: latestPayment.id, ...paymentData },
+          error: 'Recent payment already in progress'
+        };
+      }
+    }
+
+    return { exists: false };
+  } catch (error) {
+    console.error('Error checking existing payment:', error);
+    return { exists: false, error: 'Error checking payment status' };
+  }
+};
+
+// Enhanced payment creation with duplicate prevention
+export const createStripePaymentIntentSafe = async (
+  amount: number, 
+  registrationId: string, 
+  userId: string, 
+  conferenceId: string,
+  idempotencyKey?: string
+) => {
+  try {
+    // Generate idempotency key if not provided
+    const paymentKey = idempotencyKey || generateIdempotencyKey(userId, registrationId, amount);
+    
+    // Check for existing payments
+    const existingPayment = await checkExistingPayment(registrationId);
+    if (existingPayment.exists) {
+      if (existingPayment.payment?.status === 'succeeded') {
+        throw new Error('Payment already completed successfully');
+      } else if (existingPayment.payment?.status === 'pending') {
+        // Return existing payment intent if it's still pending
+        return {
+          success: true,
+          paymentIntent: {
+            id: existingPayment.payment.id,
+            client_secret: existingPayment.payment.client_secret,
+            status: existingPayment.payment.status
+          },
+          paymentId: existingPayment.payment.id,
+          isExisting: true
+        };
+      }
+    }
+
+    // Check if user already has a pending payment for this conference
+    const userPendingPaymentsQuery = query(
+      collection(db, 'payments'),
+      where('userId', '==', userId),
+      where('conferenceId', '==', conferenceId),
+      where('status', '==', 'pending'),
+      where('paymentType', '==', 'conference_registration')
+    );
+    
+    const userPendingSnapshot = await getDocs(userPendingPaymentsQuery);
+    if (!userPendingSnapshot.empty) {
+      const pendingPayment = userPendingSnapshot.docs[0];
+      const paymentData = pendingPayment.data();
+      
+      // If there's a recent pending payment, return it instead of creating new
+      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+      if (paymentData.createdAt && paymentData.createdAt.toDate() > fiveMinutesAgo) {
+        return {
+          success: true,
+          paymentIntent: {
+            id: paymentData.id,
+            client_secret: paymentData.client_secret,
+            status: paymentData.status
+          },
+          paymentId: pendingPayment.id,
+          isExisting: true
+        };
+      }
+    }
+
+    // Create new payment intent
     const response = await fetch(`${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/createStripePaymentIntent`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Idempotency-Key': paymentKey
       },
       body: JSON.stringify({
         amount,
         registrationId,
+        userId,
+        conferenceId,
         currency: 'usd',
+        idempotencyKey: paymentKey,
         metadata: {
           registrationId,
-          conferenceId: 'conference-id', // You'll need to pass this
-          userId: 'user-id' // You'll need to pass this
+          conferenceId,
+          userId,
+          paymentType: 'conference_registration',
+          idempotencyKey: paymentKey
         }
       })
     });
@@ -485,7 +633,7 @@ export const createStripePaymentIntent = async (amount: number, registrationId: 
     const result = await response.json();
     
     if (result.success) {
-      // Store payment intent in Firestore for tracking
+      // Store comprehensive payment intent in Firestore for tracking
       const paymentIntent = {
         id: result.paymentIntent.id,
         amount,
@@ -493,14 +641,47 @@ export const createStripePaymentIntent = async (amount: number, registrationId: 
         status: result.paymentIntent.status,
         client_secret: result.paymentIntent.client_secret,
         registrationId,
-        createdAt: serverTimestamp()
+        userId,
+        conferenceId,
+        paymentType: 'conference_registration',
+        paymentMethod: 'stripe',
+        idempotencyKey: paymentKey,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
       };
       
-      await addDoc(collection(db, 'paymentIntents'), paymentIntent);
+      const paymentRef = await addDoc(collection(db, 'payments'), paymentIntent);
+      
+      // Update registration with payment reference
+      await updateDoc(doc(db, 'registrations', registrationId), {
+        paymentId: paymentRef.id,
+        paymentStatus: 'pending',
+        idempotencyKey: paymentKey,
+        updatedAt: serverTimestamp()
+      });
+      
+      // Update user's payment history
+      await updateDoc(doc(db, 'users', userId), {
+        [`payments.${paymentRef.id}`]: {
+          type: 'conference_registration',
+          amount,
+          currency: 'usd',
+          status: 'pending',
+          registrationId,
+          conferenceId,
+          paymentMethod: 'stripe',
+          idempotencyKey: paymentKey,
+          createdAt: serverTimestamp()
+        },
+        updatedAt: serverTimestamp()
+      });
       
       return {
         success: true,
-        paymentIntent: result.paymentIntent
+        paymentIntent: result.paymentIntent,
+        paymentId: paymentRef.id,
+        idempotencyKey: paymentKey,
+        isExisting: false
       };
     } else {
       throw new Error(result.error || 'Failed to create payment intent');
@@ -511,23 +692,88 @@ export const createStripePaymentIntent = async (amount: number, registrationId: 
   }
 };
 
-export const createPayPalOrder = async (amount: number, registrationId: string) => {
+export const createPayPalOrderSafe = async (
+  amount: number, 
+  registrationId: string, 
+  userId: string, 
+  conferenceId: string,
+  idempotencyKey?: string
+) => {
   try {
-    // Call your Firebase Function that creates real PayPal order
+    // Generate idempotency key if not provided
+    const paymentKey = idempotencyKey || generateIdempotencyKey(userId, registrationId, amount);
+    
+    // Check for existing payments
+    const existingPayment = await checkExistingPayment(registrationId);
+    if (existingPayment.exists) {
+      if (existingPayment.payment?.status === 'succeeded') {
+        throw new Error('Payment already completed successfully');
+      } else if (existingPayment.payment?.status === 'pending') {
+        // Return existing PayPal order if it's still pending
+        return {
+          success: true,
+          paypalOrder: {
+            id: existingPayment.payment.id,
+            status: existingPayment.payment.status,
+            intent: existingPayment.payment.intent
+          },
+          paymentId: existingPayment.payment.id,
+          isExisting: true
+        };
+      }
+    }
+
+    // Check if user already has a pending payment for this conference
+    const userPendingPaymentsQuery = query(
+      collection(db, 'payments'),
+      where('userId', '==', userId),
+      where('conferenceId', '==', conferenceId),
+      where('status', '==', 'pending'),
+      where('paymentType', '==', 'conference_registration')
+    );
+    
+    const userPendingSnapshot = await getDocs(userPendingPaymentsQuery);
+    if (!userPendingSnapshot.empty) {
+      const pendingPayment = userPendingSnapshot.docs[0];
+      const paymentData = pendingPayment.data();
+      
+      // If there's a recent pending payment, return it instead of creating new
+      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+      if (paymentData.createdAt && paymentData.createdAt.toDate() > fiveMinutesAgo) {
+        return {
+          success: true,
+          paypalOrder: {
+            id: paymentData.id,
+            status: paymentData.status,
+            intent: paymentData.intent
+          },
+          paymentId: pendingPayment.id,
+          isExisting: true
+        };
+      }
+    }
+
+    // Create new PayPal order
     const response = await fetch(`${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/createPayPalOrder`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Idempotency-Key': paymentKey
       },
       body: JSON.stringify({
         amount,
         registrationId,
+        userId,
+        conferenceId,
         currency: 'USD',
         intent: 'CAPTURE',
+        idempotencyKey: paymentKey,
         metadata: {
           registrationId,
-          conferenceId: 'conference-id', // You'll need to pass this
-          userId: 'user-id' // You'll need to pass this
+          conferenceId,
+          userId,
+          paymentType: 'conference_registration',
+          idempotencyKey: paymentKey
         }
       })
     });
@@ -539,7 +785,7 @@ export const createPayPalOrder = async (amount: number, registrationId: string) 
     const result = await response.json();
     
     if (result.success) {
-      // Store PayPal order in Firestore for tracking
+      // Store comprehensive PayPal order in Firestore for tracking
       const paypalOrder = {
         id: result.order.id,
         status: result.order.status,
@@ -549,20 +795,183 @@ export const createPayPalOrder = async (amount: number, registrationId: string) 
           value: amount.toString()
         },
         registrationId,
-        createdAt: serverTimestamp()
+        userId,
+        conferenceId,
+        paymentType: 'conference_registration',
+        paymentMethod: 'paypal',
+        idempotencyKey: paymentKey,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
       };
       
-      await addDoc(collection(db, 'paypalOrders'), paypalOrder);
+      const paymentRef = await addDoc(collection(db, 'payments'), paypalOrder);
+      
+      // Update registration with payment reference
+      await updateDoc(doc(db, 'registrations', registrationId), {
+        paymentId: paymentRef.id,
+        paymentStatus: 'pending',
+        idempotencyKey: paymentKey,
+        updatedAt: serverTimestamp()
+      });
+      
+      // Update user's payment history
+      await updateDoc(doc(db, 'users', userId), {
+        [`payments.${paymentRef.id}`]: {
+          type: 'conference_registration',
+          amount,
+          currency: 'USD',
+          status: 'pending',
+          registrationId,
+          conferenceId,
+          paymentMethod: 'paypal',
+          idempotencyKey: paymentKey,
+          createdAt: serverTimestamp()
+        },
+        updatedAt: serverTimestamp()
+      });
       
       return {
         success: true,
-        paypalOrder: result.order
+        paypalOrder: result.order,
+        paymentId: paymentRef.id,
+        idempotencyKey: paymentKey,
+        isExisting: false
       };
     } else {
       throw new Error(result.error || 'Failed to create PayPal order');
     }
   } catch (error) {
     console.error('Error creating PayPal order:', error);
+    throw error;
+  }
+};
+
+// ===== PAYMENT TRACKING SERVICES =====
+
+export const getPaymentById = async (paymentId: string) => {
+  try {
+    const paymentDoc = await getDoc(doc(db, 'payments', paymentId));
+    if (paymentDoc.exists()) {
+      return { id: paymentDoc.id, ...paymentDoc.data() };
+    }
+    return null;
+  } catch (error) {
+    console.error('Error getting payment:', error);
+    throw error;
+  }
+};
+
+export const getPaymentsByUserId = async (userId: string) => {
+  try {
+    const paymentsQuery = query(
+      collection(db, 'payments'),
+      where('userId', '==', userId),
+      orderBy('createdAt', 'desc')
+    );
+    
+    const querySnapshot = await getDocs(paymentsQuery);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Error getting user payments:', error);
+    throw error;
+  }
+};
+
+export const getPaymentsByRegistrationId = async (registrationId: string) => {
+  try {
+    const paymentsQuery = query(
+      collection(db, 'payments'),
+      where('registrationId', '==', registrationId),
+      orderBy('createdAt', 'desc')
+    );
+    
+    const querySnapshot = await getDocs(paymentsQuery);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Error getting registration payments:', error);
+    throw error;
+  }
+};
+
+export const getUserCompletePaymentHistory = async (email: string) => {
+  try {
+    // Get user by email
+    const userResult = await getUserByEmail(email);
+    if (!userResult.success) {
+      throw new Error('User not found');
+    }
+
+    const userId = userResult.userId!;
+
+    // Get all user's payments
+    const payments = await getPaymentsByUserId(userId);
+    
+    // Get all user's registrations
+    const registrations = [];
+    for (const payment of payments) {
+      if ((payment as any).registrationId) {
+        try {
+          const regResult = await getRegistration((payment as any).registrationId);
+          if (regResult.success) {
+            registrations.push(regResult.registration);
+          }
+        } catch (error) {
+          console.error(`Error fetching registration ${(payment as any).registrationId}:`, error);
+        }
+      }
+    }
+    
+    // Get all user's abstracts
+    const abstracts = [];
+    for (const payment of payments) {
+      if ((payment as any).abstractId) {
+        try {
+          const abstractResult = await getAbstract((payment as any).abstractId);
+          if (abstractResult.success) {
+            abstracts.push(abstractResult.abstract);
+          }
+        } catch (error) {
+          console.error(`Error fetching abstract ${(payment as any).abstractId}:`, error);
+        }
+      }
+    }
+    
+    // Create comprehensive user profile with all linked data
+    const userProfile = {
+      ...userResult.user,
+      payments: payments.map(payment => ({
+        ...payment,
+        // Link to registration details
+        registration: registrations.find(reg => reg.id === (payment as any).registrationId),
+        // Link to conference details (you'll need to implement this)
+        conference: null // TODO: Implement conference lookup
+      })),
+      registrations: registrations.map(registration => ({
+        ...registration,
+        // Link to payment details
+        payment: payments.find(pay => (pay as any).registrationId === registration.id),
+        // Link to conference details
+        conference: null // TODO: Implement conference lookup
+      })),
+      abstracts: abstracts.map(abstract => ({
+        ...abstract,
+        // Link to conference details
+        conference: null // TODO: Implement conference lookup
+      }))
+    };
+    
+    return {
+      success: true,
+      user: userProfile
+    };
+  } catch (error) {
+    console.error('Error getting user complete payment history:', error);
     throw error;
   }
 };

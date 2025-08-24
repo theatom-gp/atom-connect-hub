@@ -14,8 +14,8 @@ import { useSearchParams } from 'react-router-dom';
 import { 
   createRegistration, 
   uploadDocument, 
-  createStripePaymentIntent, 
-  createPayPalOrder,
+  createStripePaymentIntentSafe, 
+  createPayPalOrderSafe,
   PersonalInfo
 } from '@/lib/firebaseService';
 
@@ -365,12 +365,44 @@ const Registration = () => {
       if (result.success) {
         setRegistrationId(result.registrationId);
         
+        // Create payment intent for the registration
+        try {
+          console.log('💳 Creating payment intent...');
+          const paymentResult = await createStripePaymentIntentSafe(
+            calculateTotal(),
+            result.registrationId,
+            result.userId!, // This comes from the createRegistration response
+            selectedConference
+          );
+          
+          if (paymentResult.success) {
+            console.log('✅ Payment intent created:', paymentResult);
+            toast({
+              title: "Registration & Payment Ready!",
+              description: `Registration ID: ${result.registrationId}. Payment intent created successfully.`,
+            });
+          } else {
+            console.log('⚠️ Payment intent creation failed:', paymentResult);
+            toast({
+              title: "Registration Created, Payment Pending",
+              description: `Registration ID: ${result.registrationId}. Payment setup will be completed separately.`,
+              variant: "default",
+            });
+          }
+        } catch (paymentError) {
+          console.error('Payment intent creation error:', paymentError);
+          toast({
+            title: "Registration Created, Payment Pending",
+            description: `Registration ID: ${result.registrationId}. Payment setup will be completed separately.`,
+            variant: "default",
+          });
+        }
+        
         toast({
           title: "Registration Submitted Successfully!",
           description: `Your registration ID is: ${result.registrationId}. You will receive a confirmation email shortly.`,
         });
 
-        // TODO: Redirect to payment page or show payment options
         console.log('Registration created:', result);
       } else {
         throw new Error('Failed to create registration');
