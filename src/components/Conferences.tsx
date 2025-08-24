@@ -219,7 +219,7 @@ const Conferences = () => {
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             >
-              50,000+
+              10,000+
             </motion.span>{" "}
             professionals transforming their careers through knowledge exchange
           </motion.p>
