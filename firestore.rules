@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read/write access to user registrations
+    match /registrations/{registrationId} {
+      allow read, write: if true; // For now, allow all access
+    }
+    
+    // Allow read/write access to conferences
+    match /conferences/{conferenceId} {
+      allow read: if true;
+      allow write: if false; // Only admins can modify conferences
+    }
+    
+    // Allow read/write access to user documents
+    match /userDocuments/{documentId} {
+      allow read, write: if true; // For now, allow all access
+    }
+    
+    // Allow read/write access to abstracts
+    match /abstracts/{abstractId} {
+      allow read, write: if true; // For now, allow all access
+    }
+  }
+}

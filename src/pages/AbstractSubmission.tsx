@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,12 +9,56 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { AlertCircle, Upload, Download, CheckCircle2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
+import { submitAbstract, uploadDocument, AbstractData, PersonalInfo } from "@/lib/firebaseService";
+import { getConferencesForAbstractSubmission, Conference } from "@/lib/conferences";
 
 const AbstractSubmission = () => {
   const [file, setFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [availableConferences, setAvailableConferences] = useState<Conference[]>([]);
+  const [isLoadingConferences, setIsLoadingConferences] = useState(true);
   const { toast } = useToast();
+
+  // Form data state
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    affiliation: '',
+    position: '',
+    country: '',
+    experience: '',
+    conference: '', // Conference selection
+    title: '',
+    presentation: '',
+    keywords: '',
+    summary: '',
+    agreement: false
+  });
+
+  // Load available conferences on component mount
+  useEffect(() => {
+    setIsLoadingConferences(true);
+    try {
+      const conferences = getConferencesForAbstractSubmission();
+      setAvailableConferences(conferences);
+    } catch (error) {
+      console.error('Error loading conferences:', error);
+      toast({
+        title: "Error Loading Conferences",
+        description: "Failed to load available conferences. Please refresh the page.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoadingConferences(false);
+    }
+  }, [toast]);
+
+  const handleInputChange = (field: string, value: string | boolean) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -70,16 +114,106 @@ const AbstractSubmission = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.conference) {
+      toast({
+        title: "Conference Selection Required",
+        description: "Please select a conference before submitting your abstract.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.agreement) {
+      toast({
+        title: "Agreement Required",
+        description: "Please agree to the terms and conditions before submitting.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!file) {
+      toast({
+        title: "Document Required",
+        description: "Please upload your abstract document before submitting.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
-    // Simulate submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      // Upload document to Firebase Storage
+      const documentURL = await uploadDocument(file, formData.email, 'abstract');
+      
+      // Prepare personal info for Firebase
+      const personalInfo: PersonalInfo = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        organization: formData.affiliation,
+        country: formData.country,
+        city: '',
+        address: formData.position,
+        postalCode: formData.experience
+      };
+
+              // Prepare abstract data for Firebase
+        const abstractData = {
+          conferenceId: formData.conference, // Use selected conference ID
+          authorInfo: personalInfo,
+          abstractTitle: formData.title,
+          abstractText: formData.summary || '',
+          keywords: formData.keywords.split(',').map(k => k.trim()),
+          documentFile: documentURL,
+          status: 'pending'
+        } as any; // Type assertion since userId is handled by the service
+
+      // Submit abstract to Firebase
+      const result = await submitAbstract(abstractData);
+      
+      if (result.success) {
+        toast({
+          title: "Abstract submitted successfully!",
+          description: `Your abstract ID is: ${result.abstractId}. You will receive a confirmation email within 24 hours.`,
+        });
+        
+        // Reset form
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          affiliation: '',
+          position: '',
+          country: '',
+          experience: '',
+          conference: '', // Reset conference selection
+          title: '',
+          presentation: '',
+          keywords: '',
+          summary: '',
+          agreement: false
+        });
+        setFile(null);
+      } else {
+        throw new Error('Failed to submit abstract');
+      }
+    } catch (error) {
+      console.error('Abstract submission error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      
       toast({
-        title: "Abstract submitted successfully!",
-        description: "You will receive a confirmation email within 24 hours.",
+        title: "Abstract submission failed",
+        description: `Error: ${errorMessage}. Please try again or contact support.`,
+        variant: "destructive",
       });
-    }, 2000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const downloadSampleAbstract = () => {
@@ -161,22 +295,47 @@ const AbstractSubmission = () => {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">First Name *</Label>
-                    <Input id="firstName" placeholder="Enter your first name" required />
+                    <Input 
+                      id="firstName" 
+                      placeholder="Enter your first name" 
+                      value={formData.firstName}
+                      onChange={(e) => handleInputChange('firstName', e.target.value)}
+                      required 
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName">Last Name *</Label>
-                    <Input id="lastName" placeholder="Enter your last name" required />
+                    <Input 
+                      id="lastName" 
+                      placeholder="Enter your last name" 
+                      value={formData.lastName}
+                      onChange={(e) => handleInputChange('lastName', e.target.value)}
+                      required 
+                    />
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address *</Label>
-                    <Input id="email" type="email" placeholder="your.email@example.com" required />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      placeholder="your.email@example.com" 
+                      value={formData.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      required 
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone Number *</Label>
-                    <Input id="phone" placeholder="+1 (555) 123-4567" required />
+                    <Input 
+                      id="phone" 
+                      placeholder="+1 (555) 123-4567" 
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      required 
+                    />
                   </div>
                 </div>
 
@@ -184,22 +343,40 @@ const AbstractSubmission = () => {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="affiliation">Institution/Organization *</Label>
-                    <Input id="affiliation" placeholder="University or Company Name" required />
+                    <Input 
+                      id="affiliation" 
+                      placeholder="University or Company Name" 
+                      value={formData.affiliation}
+                      onChange={(e) => handleInputChange('affiliation', e.target.value)}
+                      required 
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="position">Position/Title *</Label>
-                    <Input id="position" placeholder="Professor, Researcher, Engineer, etc." required />
+                    <Input 
+                      id="position" 
+                      placeholder="Professor, Researcher, Engineer, etc." 
+                      value={formData.position}
+                      onChange={(e) => handleInputChange('position', e.target.value)}
+                      required 
+                    />
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="country">Country *</Label>
-                    <Input id="country" placeholder="Your country" required />
+                    <Input 
+                      id="country" 
+                      placeholder="Your country" 
+                      value={formData.country}
+                      onChange={(e) => handleInputChange('country', e.target.value)}
+                      required 
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="experience">Years of Experience</Label>
-                    <Select>
+                    <Select value={formData.experience} onValueChange={(value) => handleInputChange('experience', value)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select experience level" />
                       </SelectTrigger>
@@ -214,36 +391,59 @@ const AbstractSubmission = () => {
                   </div>
                 </div>
 
+                {/* Conference Selection */}
+                <div className="space-y-2">
+                  <Label htmlFor="conference">Conference *</Label>
+                                    <Select 
+                    value={formData.conference} 
+                    onValueChange={(value) => handleInputChange('conference', value)} 
+                    required
+                    disabled={isLoadingConferences}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={isLoadingConferences ? "Loading conferences..." : "Select conference"} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {isLoadingConferences ? (
+                        <SelectItem value="" disabled>
+                          Loading conferences...
+                        </SelectItem>
+                      ) : availableConferences.length > 0 ? (
+                        availableConferences.map(conference => (
+                          <SelectItem key={conference.id} value={conference.id}>
+                            {conference.title} (Deadline: {conference.abstractDeadline || 'TBD'})
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="" disabled>
+                          No conferences currently accepting abstracts
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {availableConferences.length === 0 && (
+                    <p className="text-sm text-amber-600">
+                      All abstract submission deadlines have passed. Please check back later for new opportunities.
+                    </p>
+                  )}
+                </div>
+
                 {/* Abstract Information */}
                 <div className="space-y-2">
                   <Label htmlFor="title">Abstract Title *</Label>
-                  <Input id="title" placeholder="Enter your abstract title (max 150 characters)" required maxLength={150} />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="track">Conference Track *</Label>
-                  <Select required>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select conference track" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ai-ml">Artificial Intelligence & Machine Learning</SelectItem>
-                      <SelectItem value="blockchain">Blockchain & Cryptocurrency</SelectItem>
-                      <SelectItem value="cybersecurity">Cybersecurity</SelectItem>
-                      <SelectItem value="data-science">Data Science & Analytics</SelectItem>
-                      <SelectItem value="iot">Internet of Things (IoT)</SelectItem>
-                      <SelectItem value="cloud">Cloud Computing</SelectItem>
-                      <SelectItem value="mobile">Mobile Development</SelectItem>
-                      <SelectItem value="web">Web Technologies</SelectItem>
-                      <SelectItem value="ar-vr">AR/VR & Metaverse</SelectItem>
-                      <SelectItem value="sustainability">Green Technology & Sustainability</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Input 
+                    id="title" 
+                    placeholder="Enter your abstract title (max 150 characters)" 
+                    value={formData.title}
+                    onChange={(e) => handleInputChange('title', e.target.value)}
+                    required 
+                    maxLength={150} 
+                  />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="presentation">Presentation Type *</Label>
-                  <Select required>
+                  <Select value={formData.presentation} onValueChange={(value) => handleInputChange('presentation', value)} required>
                     <SelectTrigger>
                       <SelectValue placeholder="Select presentation type" />
                     </SelectTrigger>
@@ -257,7 +457,13 @@ const AbstractSubmission = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="keywords">Keywords *</Label>
-                  <Input id="keywords" placeholder="Enter 3-5 keywords separated by commas" required />
+                  <Input 
+                    id="keywords" 
+                    placeholder="Enter 3-5 keywords separated by commas" 
+                    value={formData.keywords}
+                    onChange={(e) => handleInputChange('keywords', e.target.value)}
+                    required 
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -265,6 +471,8 @@ const AbstractSubmission = () => {
                   <Textarea 
                     id="summary" 
                     placeholder="Provide a brief summary of your research (max 500 characters)" 
+                    value={formData.summary}
+                    onChange={(e) => handleInputChange('summary', e.target.value)}
                     maxLength={500}
                     rows={4}
                   />
@@ -332,7 +540,12 @@ const AbstractSubmission = () => {
 
                 {/* Agreement */}
                 <div className="flex items-start space-x-3">
-                  <Checkbox id="agreement" required />
+                  <Checkbox 
+                    id="agreement" 
+                    checked={formData.agreement}
+                    onCheckedChange={(checked) => handleInputChange('agreement', checked as boolean)}
+                    required 
+                  />
                   <div className="grid gap-1.5 leading-none">
                     <Label 
                       htmlFor="agreement"
@@ -372,7 +585,14 @@ const AbstractSubmission = () => {
                   className="w-full"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Submitting..." : "Submit Abstract"}
+                  {isSubmitting ? (
+                    <div className="flex items-center gap-2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Submitting...
+                    </div>
+                  ) : (
+                    "Submit Abstract"
+                  )}
                 </Button>
               </form>
             </CardContent>

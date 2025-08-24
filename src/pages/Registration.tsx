@@ -11,6 +11,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import Navigation from '@/components/Navigation';
 import { useSearchParams } from 'react-router-dom';
+import { 
+  createRegistration, 
+  uploadDocument, 
+  createStripePaymentIntent, 
+  createPayPalOrder,
+  PersonalInfo
+} from '@/lib/firebaseService';
 
 interface RegistrationData {
   firstName: string;
@@ -84,6 +91,11 @@ const Registration = () => {
     nights: string;
     price: number;
   } | null>(null);
+
+  // Firebase-related state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [registrationId, setRegistrationId] = useState<string | null>(null);
 
   const calculateRegistrationDates = (targetDate: Date) => {
     const preEarlyBird = new Date(targetDate);
@@ -294,11 +306,88 @@ const Registration = () => {
     setCurrentStep(prev => Math.max(prev - 1, 1));
   };
 
-  const handleSubmit = () => {
-    toast({
-      title: "Registration Submitted!",
-      description: "Thank you for registering. You will receive a confirmation email shortly.",
-    });
+  const handleSubmit = async () => {
+    if (!selectedRegistration) {
+      toast({
+        title: "Registration Error",
+        description: "Please select a registration type before submitting.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    console.log('🚀 Starting registration submission...');
+    console.log('Selected conference:', selectedConference);
+    console.log('Selected registration:', selectedRegistration);
+    
+    setIsSubmitting(true);
+    setSubmissionError(null);
+
+    try {
+      // Prepare personal info for Firebase
+      const personalInfo: PersonalInfo = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        organization: formData.organization,
+        country: formData.country,
+        city: '', // Default empty city
+        address: formData.dietaryRestrictions || '',
+        postalCode: formData.specialRequirements || ''
+      };
+
+      // Prepare registration data for Firebase
+      const firebaseRegistrationData = {
+        conferenceId: selectedConference,
+        registrationType: selectedRegistration.type,
+        personalInfo,
+        status: 'pending',
+        documents: [],
+        paymentInfo: {
+          amount: calculateTotal(),
+          processingFee: calculateProcessingFee(),
+          totalAmount: calculateTotal() + calculateProcessingFee(),
+          accommodation: selectedAccommodation ? {
+            type: selectedAccommodation.type,
+            occupancy: selectedAccommodation.occupancy,
+            nights: selectedAccommodation.nights,
+            price: selectedAccommodation.price
+          } : null
+        }
+      } as any; // Type assertion since userId is handled by the service
+
+      // Submit registration to Firebase
+      console.log('📤 Submitting to Firebase:', firebaseRegistrationData);
+      const result = await createRegistration(firebaseRegistrationData);
+      console.log('📥 Firebase response:', result);
+      
+      if (result.success) {
+        setRegistrationId(result.registrationId);
+        
+        toast({
+          title: "Registration Submitted Successfully!",
+          description: `Your registration ID is: ${result.registrationId}. You will receive a confirmation email shortly.`,
+        });
+
+        // TODO: Redirect to payment page or show payment options
+        console.log('Registration created:', result);
+      } else {
+        throw new Error('Failed to create registration');
+      }
+    } catch (error) {
+      console.error('Registration submission error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      setSubmissionError(errorMessage);
+      
+      toast({
+        title: "Registration Failed",
+        description: `Error: ${errorMessage}. Please try again or contact support.`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const accommodationOptions = [
@@ -608,6 +697,27 @@ const Registration = () => {
                   <CardTitle className="text-2xl text-blue-600">Step 3: Review & Submit</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
+                  {/* Loading State */}
+                  {isSubmitting && (
+                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                      <div className="flex items-center space-x-2">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                        <p className="text-sm text-blue-800">
+                          <strong>Submitting registration...</strong> Please wait while we process your information.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Error Display */}
+                  {submissionError && !registrationId && (
+                    <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                      <p className="text-sm text-red-800">
+                        <strong>Error:</strong> {submissionError}
+                      </p>
+                    </div>
+                  )}
+
                   <div className="bg-blue-50 p-4 rounded-lg">
                     <p className="text-sm text-blue-800">
                       <strong>Note:</strong> A 3.5% processing fee will be added for all online/wire transfer payments
@@ -680,6 +790,42 @@ const Registration = () => {
               </Card>
             )}
 
+            {/* Success Message */}
+            {registrationId && (
+              <Card className="border-green-200 bg-green-50">
+                <CardHeader>
+                  <CardTitle className="text-green-800">✅ Registration Successful!</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="bg-white p-4 rounded-lg border border-green-200">
+                      <p className="font-semibold text-green-800">Registration ID: {registrationId}</p>
+                      <p className="text-green-700 text-sm mt-2">
+                        Your registration has been submitted successfully. You will receive a confirmation email shortly.
+                      </p>
+                    </div>
+                    
+                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                      <h4 className="font-semibold text-blue-800 mb-2">Next Steps:</h4>
+                      <ul className="text-blue-700 text-sm space-y-1">
+                        <li>• Check your email for confirmation</li>
+                        {/* <li>• Complete payment to secure your spot</li> */}
+                        <li>• Prepare for the conference</li>
+                      </ul>
+                    </div>
+
+                    {submissionError && (
+                      <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                        <p className="text-red-800 text-sm">
+                          <strong>Note:</strong> {submissionError}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             <div className="flex justify-between mt-6">
               {currentStep > 1 && (
                 <Button onClick={prevStep} variant="outline">
@@ -695,8 +841,12 @@ const Registration = () => {
                   Next
                 </Button>
               ) : (
-                <Button onClick={handleSubmit} className="ml-auto bg-blue-600 hover:bg-blue-700">
-                  Register Now
+                <Button 
+                  onClick={handleSubmit} 
+                  className="ml-auto bg-blue-600 hover:bg-blue-700"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Submitting...' : 'Register Now'}
                 </Button>
               )}
             </div>

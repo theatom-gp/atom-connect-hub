@@ -34,6 +34,7 @@ import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import PresentationGuidelines from "./pages/PresentationGuidelines";
 import VisaInvitation from "./pages/VisaInvitation";
+import FirebaseTest from "./components/FirebaseTest";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,7 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/presentation-guidelines" element={<PresentationGuidelines />} />
           <Route path="/visa-invitation" element={<VisaInvitation />} />
+          <Route path="/firebase-test" element={<FirebaseTest />} />
           <Route path="/conference/techinnovationexpo" element={<TechInnovationExpo />} />
           <Route path="/conference/aisummit" element={<AISummit />} />
           <Route path="/conference/globalhealthcarerevolution" element={<GlobalHealthcareRevolution />} />
