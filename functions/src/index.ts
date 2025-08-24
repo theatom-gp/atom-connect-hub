@@ -1,9 +1,22 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import * as cors from 'cors';
+import Stripe from 'stripe';
+import { PayPalClient } from '@paypal/checkout-server-sdk';
 
 // Initialize Firebase Admin
 admin.initializeApp();
+
+// Initialize Stripe
+const stripe = new Stripe(functions.config().stripe.secret_key, {
+  apiVersion: '2023-10-16',
+});
+
+// Initialize PayPal
+const paypalClient = new PayPalClient({
+  clientId: functions.config().paypal.client_id,
+  clientSecret: functions.config().paypal.client_secret,
+  environment: functions.config().paypal.environment || 'sandbox'
+});
 
 // Initialize Firestore
 const db = admin.firestore();
@@ -12,15 +25,17 @@ const db = admin.firestore();
 const storage = admin.storage();
 
 // CORS middleware - allow specific origins
-const corsHandler = cors({ 
-  origin: [
-    'http://localhost:8080',
-    'http://127.0.0.1:8080',
-    'http://localhost:5000',
-    'http://127.0.0.1:5000'
-  ],
-  credentials: true 
-});
+const corsHandler = (req: any, res: any, next: any) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+  next();
+};
 
 // ===== USER REGISTRATION FUNCTIONS =====
 
@@ -199,92 +214,172 @@ export const uploadDocument = functions.https.onRequest((request, response) => {
   });
 });
 
-// ===== PAYMENT PROCESSING FUNCTIONS =====
+// ===== STRIPE PAYMENT FUNCTIONS =====
 
-export const createStripePaymentIntent = functions.https.onRequest((request, response) => {
-  return corsHandler(request, response, async () => {
-    try {
-      const { amount, currency = 'usd', registrationId } = request.body;
+export const createStripePaymentIntent = functions.https.onRequest(async (req, res) => {
+  // Enable CORS
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
 
-      if (!amount || !registrationId) {
-        response.status(400).json({ error: 'Amount and registration ID are required' });
-        return;
-      }
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
 
-      // Here you would integrate with Stripe
-      // For now, we'll create a mock payment intent
-      const paymentIntent = {
-        id: `pi_${Date.now()}`,
-        amount,
-        currency,
-        status: 'requires_payment_method',
-        client_secret: `pi_${Date.now()}_secret_${Math.random().toString(36).substr(2, 9)}`
-      };
+  try {
+    const { amount, registrationId, currency = 'usd', metadata } = req.body;
 
-      // Update registration with payment info
-      await db.collection('registrations').doc(registrationId).update({
-        paymentInfo: {
-          stripePaymentIntentId: paymentIntent.id,
-          amount,
-          currency,
-          status: 'pending'
-        },
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
-      });
-
-      response.status(200).json({
-        success: true,
-        paymentIntent
-      });
-    } catch (error) {
-      console.error('Error creating payment intent:', error);
-      response.status(500).json({ error: 'Internal server error' });
+    if (!amount || !registrationId) {
+      res.status(400).json({ success: false, error: 'Missing required fields' });
+      return;
     }
-  });
+
+    // Create payment intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(amount * 100), // Convert to cents
+      currency,
+      metadata,
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+
+    res.json({
+      success: true,
+      paymentIntent: {
+        id: paymentIntent.id,
+        client_secret: paymentIntent.client_secret,
+        status: paymentIntent.status,
+        amount: paymentIntent.amount,
+        currency: paymentIntent.currency
+      }
+    });
+  } catch (error) {
+    console.error('Error creating Stripe payment intent:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error' 
+    });
+  }
 });
 
-export const createPayPalOrder = functions.https.onRequest((request, response) => {
-  return corsHandler(request, response, async () => {
-    try {
-      const { amount, currency = 'USD', registrationId } = request.body;
+// Stripe webhook handler
+export const stripeWebhook = functions.https.onRequest(async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  const endpointSecret = functions.config().stripe.webhook_secret;
 
-      if (!amount || !registrationId) {
-        response.status(400).json({ error: 'Amount and registration ID are required' });
-        return;
-      }
+  let event: Stripe.Event;
 
-      // Here you would integrate with PayPal
-      // For now, we'll create a mock order
-      const paypalOrder = {
-        id: `PAY-${Date.now()}`,
-        status: 'CREATED',
-        intent: 'CAPTURE',
+  try {
+    event = stripe.webhooks.constructEvent(req.rawBody, sig!, endpointSecret);
+  } catch (err) {
+    console.error('Webhook signature verification failed:', err);
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+    res.status(400).send(`Webhook Error: ${errorMessage}`);
+    return;
+  }
+
+  try {
+    switch (event.type) {
+      case 'payment_intent.succeeded':
+        await handlePaymentSuccess(event.data.object as Stripe.PaymentIntent);
+        break;
+      case 'payment_intent.payment_failed':
+        await handlePaymentFailure(event.data.object as Stripe.PaymentIntent);
+        break;
+      default:
+        console.log(`Unhandled event type: ${event.type}`);
+    }
+
+    res.json({ received: true });
+  } catch (error) {
+    console.error('Error processing webhook:', error);
+    res.status(500).json({ error: 'Webhook processing failed' });
+  }
+});
+
+// ===== PAYPAL PAYMENT FUNCTIONS =====
+
+export const createPayPalOrder = functions.https.onRequest(async (req, res) => {
+  // Enable CORS
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  try {
+    const { amount, registrationId, currency = 'USD', intent = 'CAPTURE', metadata } = req.body;
+
+    if (!amount || !registrationId) {
+      res.status(400).json({ success: false, error: 'Missing required fields' });
+      return;
+    }
+
+    // Create PayPal order
+    const request = new paypalClient.orders.OrdersCreateRequest();
+    request.prefer("return=representation");
+    request.requestBody({
+      intent: intent,
+      purchase_units: [{
         amount: {
           currency_code: currency,
           value: amount.toString()
-        }
-      };
-
-      // Update registration with payment info
-      await db.collection('registrations').doc(registrationId).update({
-        paymentInfo: {
-          paypalOrderId: paypalOrder.id,
-          amount,
-          currency,
-          status: 'pending'
         },
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
-      });
+        custom_id: registrationId,
+        description: `Conference Registration - ${metadata?.conferenceId || 'Unknown Conference'}`
+      }],
+      application_context: {
+        return_url: `${functions.config().app.url}/payment/success`,
+        cancel_url: `${functions.config().app.url}/payment/cancel`
+      }
+    });
 
-      response.status(200).json({
-        success: true,
-        paypalOrder
-      });
-    } catch (error) {
-      console.error('Error creating PayPal order:', error);
-      response.status(500).json({ error: 'Internal server error' });
+    const order = await paypalClient.execute(request);
+
+    res.json({
+      success: true,
+      order: {
+        id: order.result.id,
+        status: order.result.status,
+        intent: order.result.intent,
+        links: order.result.links
+      }
+    });
+  } catch (error) {
+    console.error('Error creating PayPal order:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error' 
+    });
+  }
+});
+
+// PayPal webhook handler
+export const paypalWebhook = functions.https.onRequest(async (req, res) => {
+  try {
+    const event = req.body;
+    
+    switch (event.event_type) {
+      case 'PAYMENT.CAPTURE.COMPLETED':
+        await handlePayPalPaymentSuccess(event.resource);
+        break;
+      case 'PAYMENT.CAPTURE.DENIED':
+        await handlePayPalPaymentFailure(event.resource);
+        break;
+      default:
+        console.log(`Unhandled PayPal event: ${event.event_type}`);
     }
-  });
+
+    res.json({ received: true });
+  } catch (error) {
+    console.error('Error processing PayPal webhook:', error);
+    res.status(500).json({ error: 'PayPal webhook processing failed' });
+  }
 });
 
 // ===== ABSTRACT SUBMISSION FUNCTIONS =====
@@ -335,10 +430,121 @@ export const submitAbstract = functions.https.onRequest((request, response) => {
 
 // ===== UTILITY FUNCTIONS =====
 
-export const healthCheck = functions.https.onRequest((request, response) => {
-  response.status(200).json({
+export const healthCheck = functions.https.onRequest(async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.json({
     success: true,
     message: 'Firebase Functions are running',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    environment: functions.config().app.environment || 'development'
   });
 });
+
+// ===== WEBHOOK HANDLERS =====
+
+async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent) {
+  try {
+    const { registrationId, conferenceId, userId } = paymentIntent.metadata;
+    
+    // Update registration status
+    const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
+    await registrationRef.update({
+      status: 'paid',
+      paymentInfo: {
+        stripePaymentIntentId: paymentIntent.id,
+        amount: paymentIntent.amount / 100, // Convert from cents
+        currency: paymentIntent.currency,
+        status: 'succeeded',
+        paidAt: admin.firestore.FieldValue.serverTimestamp()
+      },
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    // Update user's registration status
+    if (userId) {
+      const userRef = admin.firestore().collection('users').doc(userId);
+      await userRef.update({
+        [`registrations.${registrationId}.status`]: 'paid',
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    // TODO: Send confirmation email
+    console.log(`Payment succeeded for registration: ${registrationId}`);
+  } catch (error) {
+    console.error('Error handling payment success:', error);
+  }
+}
+
+async function handlePaymentFailure(paymentIntent: Stripe.PaymentIntent) {
+  try {
+    const { registrationId } = paymentIntent.metadata;
+    
+    // Update registration status
+    const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
+    await registrationRef.update({
+      status: 'payment_failed',
+      paymentInfo: {
+        stripePaymentIntentId: paymentIntent.id,
+        amount: paymentIntent.amount / 100,
+        currency: paymentIntent.currency,
+        status: 'failed',
+        failedAt: admin.firestore.FieldValue.serverTimestamp(),
+        failureReason: paymentIntent.last_payment_error?.message || 'Unknown error'
+      },
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    console.log(`Payment failed for registration: ${registrationId}`);
+  } catch (error) {
+    console.error('Error handling payment failure:', error);
+  }
+}
+
+async function handlePayPalPaymentSuccess(capture: any) {
+  try {
+    const registrationId = capture.custom_id;
+    
+    // Update registration status
+    const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
+    await registrationRef.update({
+      status: 'paid',
+      paymentInfo: {
+        paypalCaptureId: capture.id,
+        amount: parseFloat(capture.amount.value),
+        currency: capture.amount.currency_code,
+        status: 'succeeded',
+        paidAt: admin.firestore.FieldValue.serverTimestamp()
+      },
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    console.log(`PayPal payment succeeded for registration: ${registrationId}`);
+  } catch (error) {
+    console.error('Error handling PayPal payment success:', error);
+  }
+}
+
+async function handlePayPalPaymentFailure(capture: any) {
+  try {
+    const registrationId = capture.custom_id;
+    
+    // Update registration status
+    const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
+    await registrationRef.update({
+      status: 'payment_failed',
+      paymentInfo: {
+        paypalCaptureId: capture.id,
+        amount: parseFloat(capture.amount.value),
+        currency: capture.amount.currency_code,
+        status: 'failed',
+        failedAt: admin.firestore.FieldValue.serverTimestamp()
+      },
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    console.log(`PayPal payment failed for registration: ${registrationId}`);
+  } catch (error) {
+    console.error('Error handling PayPal payment failure:', error);
+  }
+}

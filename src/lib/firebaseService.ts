@@ -460,24 +460,51 @@ export const getAbstractsByConference = async (conferenceId: string) => {
 
 export const createStripePaymentIntent = async (amount: number, registrationId: string) => {
   try {
-    // For now, create a mock payment intent and store in Firestore
-    const paymentIntent = {
-      id: `pi_${Date.now()}`,
-      amount,
-      currency: 'usd',
-      status: 'requires_payment_method',
-      client_secret: `pi_${Date.now()}_secret_${Math.random().toString(36).substr(2, 9)}`,
-      registrationId,
-      createdAt: serverTimestamp()
-    };
+    // Call your Firebase Function that creates real Stripe payment intent
+    const response = await fetch(`${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/createStripePaymentIntent`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        amount,
+        registrationId,
+        currency: 'usd',
+        metadata: {
+          registrationId,
+          conferenceId: 'conference-id', // You'll need to pass this
+          userId: 'user-id' // You'll need to pass this
+        }
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
     
-    // Store payment intent in Firestore
-    const docRef = await addDoc(collection(db, 'paymentIntents'), paymentIntent);
-    
-    return {
-      success: true,
-      paymentIntent: { ...paymentIntent, id: docRef.id }
-    };
+    if (result.success) {
+      // Store payment intent in Firestore for tracking
+      const paymentIntent = {
+        id: result.paymentIntent.id,
+        amount,
+        currency: 'usd',
+        status: result.paymentIntent.status,
+        client_secret: result.paymentIntent.client_secret,
+        registrationId,
+        createdAt: serverTimestamp()
+      };
+      
+      await addDoc(collection(db, 'paymentIntents'), paymentIntent);
+      
+      return {
+        success: true,
+        paymentIntent: result.paymentIntent
+      };
+    } else {
+      throw new Error(result.error || 'Failed to create payment intent');
+    }
   } catch (error) {
     console.error('Error creating Stripe payment intent:', error);
     throw error;
@@ -486,31 +513,59 @@ export const createStripePaymentIntent = async (amount: number, registrationId: 
 
 export const createPayPalOrder = async (amount: number, registrationId: string) => {
   try {
-    // For now, create a mock PayPal order and store in Firestore
-    const paypalOrder = {
-      id: `PAY-${Date.now()}`,
-      status: 'CREATED',
-      intent: 'CAPTURE',
-      amount: {
-        currency_code: 'USD',
-        value: amount.toString()
+    // Call your Firebase Function that creates real PayPal order
+    const response = await fetch(`${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/createPayPalOrder`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      registrationId,
-      createdAt: serverTimestamp()
-    };
+      body: JSON.stringify({
+        amount,
+        registrationId,
+        currency: 'USD',
+        intent: 'CAPTURE',
+        metadata: {
+          registrationId,
+          conferenceId: 'conference-id', // You'll need to pass this
+          userId: 'user-id' // You'll need to pass this
+        }
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
     
-    // Store PayPal order in Firestore
-    const docRef = await addDoc(collection(db, 'paypalOrders'), paypalOrder);
-    
-    return {
-      success: true,
-      paypalOrder: { ...paypalOrder, id: docRef.id }
-    };
+    if (result.success) {
+      // Store PayPal order in Firestore for tracking
+      const paypalOrder = {
+        id: result.order.id,
+        status: result.order.status,
+        intent: result.order.intent,
+        amount: {
+          currency_code: 'USD',
+          value: amount.toString()
+        },
+        registrationId,
+        createdAt: serverTimestamp()
+      };
+      
+      await addDoc(collection(db, 'paypalOrders'), paypalOrder);
+      
+      return {
+        success: true,
+        paypalOrder: result.order
+      };
+    } else {
+      throw new Error(result.error || 'Failed to create PayPal order');
+    }
   } catch (error) {
     console.error('Error creating PayPal order:', error);
     throw error;
   }
- };
+};
 
 // ===== UTILITY SERVICES =====
 
