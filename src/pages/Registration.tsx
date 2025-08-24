@@ -113,75 +113,7 @@ const Registration = () => {
     });
   };
 
-  const generateRegistrationOptions = (targetDate: Date) => {
-    const { preEarlyBird, earlyBird, standard, finalRegistration } = calculateRegistrationDates(targetDate);
-    
-    return [
-      {
-        type: 'SPEAKER (IN PERSON)',
-        tiers: [
-          { name: 'Pre Earlybird', price: 699, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 799, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 899, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 999, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      },
-      {
-        type: 'Package A (Registration + 2 Nights Accommodation)',
-        tiers: [
-          { name: 'Pre Earlybird', price: 1099, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 1149, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 1199, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 1249, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      },
-      {
-        type: 'Package B (Registration + 3 Nights Accommodation)',
-        tiers: [
-          { name: 'Pre Earlybird', price: 1249, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 1299, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 1399, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 1449, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      },
-      {
-        type: 'Virtual (Speaker/Delegate)',
-        tiers: [
-          { name: 'Pre Earlybird', price: 349, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 399, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 499, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 599, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      },
-      {
-        type: 'Delegate/Listener (In-Person)',
-        tiers: [
-          { name: 'Pre Earlybird', price: 749, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 849, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 999, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 1049, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      },
-      {
-        type: 'Student/Poster',
-        tiers: [
-          { name: 'Pre Earlybird', price: 449, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 549, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 649, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 749, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      },
-      {
-        type: 'Sponsor',
-        tiers: [
-          { name: 'Pre Earlybird', price: 5999, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
-          { name: 'Earlybird', price: 4999, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
-          { name: 'Standard', price: 3999, deadline: standard, isAvailable: isTierAvailable(standard) },
-          { name: 'Final Registration', price: 2999, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
-        ]
-      }
-    ];
-  };
+
 
   useEffect(() => {
     const conferenceParam = searchParams.get('conference');
@@ -213,6 +145,77 @@ const Registration = () => {
       targetDate = new Date('2025-11-22');
       conferenceValue = 'forensicscience';
     }
+
+    // Generate registration options inside useEffect to avoid dependency issues
+    const generateRegistrationOptions = (targetDate: Date) => {
+      const { preEarlyBird, earlyBird, standard, finalRegistration } = calculateRegistrationDates(targetDate);
+      
+      return [
+        {
+          type: 'SPEAKER (IN PERSON)',
+          tiers: [
+            { name: 'Pre Earlybird', price: 699, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 799, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 899, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 999, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        },
+        {
+          type: 'Package A (Registration + 2 Nights Accommodation)',
+          tiers: [
+            { name: 'Pre Earlybird', price: 1099, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 1149, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 1199, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 1249, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        },
+        {
+          type: 'Package B (Registration + 3 Nights Accommodation)',
+          tiers: [
+            { name: 'Pre Earlybird', price: 1249, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 1299, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 1399, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 1449, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        },
+        {
+          type: 'Virtual (Speaker/Delegate)',
+          tiers: [
+            { name: 'Pre Earlybird', price: 349, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 399, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 499, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 599, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        },
+        {
+          type: 'Delegate/Listener (In-Person)',
+          tiers: [
+            { name: 'Pre Earlybird', price: 749, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 849, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 999, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 1049, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        },
+        {
+          type: 'Student/Poster',
+          tiers: [
+            { name: 'Pre Earlybird', price: 449, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 549, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 649, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 749, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        },
+        {
+          type: 'Sponsor',
+          tiers: [
+            { name: 'Pre Earlybird', price: 5999, deadline: preEarlyBird, isAvailable: isTierAvailable(preEarlyBird) },
+            { name: 'Earlybird', price: 4999, deadline: earlyBird, isAvailable: isTierAvailable(earlyBird) },
+            { name: 'Standard', price: 3999, deadline: standard, isAvailable: isTierAvailable(standard) },
+            { name: 'Final Registration', price: 2999, deadline: finalRegistration, isAvailable: isTierAvailable(finalRegistration) }
+          ]
+        }
+      ];
+    };
 
     setConferenceTargetDate(targetDate);
     setSelectedConference(conferenceValue);
