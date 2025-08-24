@@ -370,7 +370,7 @@ const GlobalFinanceSummit = () => {
             </div>
             
             {/* Professional Info Cards with Advanced Animations */}
-            <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-16">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 sm:p-6 lg:p-8 mb-16">
               <div className="group animate-[staggerUp_1s_ease-out_1.2s_both]">
                 <div className="relative overflow-hidden bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 transition-all duration-700 hover:bg-white/8 hover:border-white/20 hover:scale-105 hover:shadow-2xl hover:shadow-primary/10 p-6">
                   <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -413,7 +413,7 @@ const GlobalFinanceSummit = () => {
             </div>
 
             {/* Ultra-Professional Countdown Timer */}
-            <div className="flex justify-center gap-4 mb-16 animate-[staggerUp_1s_ease-out_1.6s_both]">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-16 animate-[staggerUp_1s_ease-out_1.6s_both] px-4">
               {Object.entries(timeLeft).map(([unit, value], index) => (
                 <div key={unit} className="group">
                   <div className="relative">
@@ -421,7 +421,7 @@ const GlobalFinanceSummit = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-70 transition-all duration-700 scale-110" />
                     
                     {/* Main Card */}
-                    <div className="relative bg-white/5 backdrop-blur-2xl rounded-3xl p-8 min-w-[110px] border border-white/10 transition-all duration-700 hover:bg-white/8 hover:border-white/20 hover:scale-105 hover:shadow-2xl">
+                    <div className="relative bg-white/5 backdrop-blur-2xl rounded-3xl p-4 sm:p-6 lg:p-4 sm:p-6 lg:p-8 min-w-[80px] sm:min-w-[100px] lg:min-w-[80px] sm:min-w-[100px] lg:min-w-[110px] border border-white/10 transition-all duration-700 hover:bg-white/8 hover:border-white/20 hover:scale-105 hover:shadow-2xl">
                       {/* Animated Border */}
                       <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/30 via-secondary/30 to-accent/30 p-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                         <div className="w-full h-full bg-white/5 rounded-3xl" />
@@ -429,13 +429,13 @@ const GlobalFinanceSummit = () => {
                       
                       {/* Content */}
                       <div className="relative text-center">
-                        <div className="text-4xl lg:text-5xl font-bold text-white mb-2 transition-all duration-500 group-hover:scale-110 tabular-nums">
+                        <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-1 sm:mb-1 sm:mb-2 transition-all duration-500 group-hover:scale-110 tabular-nums">
                           {value.toString().padStart(2, '0')}
                         </div>
-                        <div className="text-xs uppercase tracking-widest text-white/60 font-medium">{unit}</div>
+                        <div className="text-xs sm:text-xs sm:text-xs uppercase tracking-widest text-white/60 font-medium leading-tight leading-tight">{unit}</div>
                         
                         {/* Micro Animation Dot */}
-                        <div className="absolute -top-2 -right-2 w-2 h-2 bg-primary rounded-full animate-[techPulse_2s_ease-in-out_infinite] opacity-60" 
+                        <div className="absolute -top-1 sm:-top-2 -right-1 sm:-right-2 w-1.5 sm:w-2 h-1.5 sm:h-2 bg-primary rounded-full animate-[techPulse_2s_ease-out_infinite] opacity-60" 
                              style={{ animationDelay: `${index * 0.2}s` }} />
                       </div>
                     </div>
@@ -611,7 +611,7 @@ const GlobalFinanceSummit = () => {
       {/* Abstract Submission Section - Now Separate */}
       <section className="py-16 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-secondary/10 rounded-lg p-8 max-w-4xl mx-auto">
+          <div className="bg-secondary/10 rounded-lg p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
             <div className="text-center mb-8">
               <div className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-semibold mb-4">
                 Call for Papers
@@ -622,7 +622,7 @@ const GlobalFinanceSummit = () => {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-8 mb-8">
+            <div className="grid md:grid-cols-2 gap-4 sm:p-6 lg:p-8 mb-8">
               <div className="bg-white/50 backdrop-blur-sm p-6 rounded-lg shadow-sm">
                 <h3 className="text-xl font-semibold text-foreground mb-3">Key Topics</h3>
                 <ul className="space-y-2 text-muted-foreground">
@@ -731,7 +731,7 @@ const GlobalFinanceSummit = () => {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4 sm:p-6 lg:p-8">
             {speakers.map((speaker, index) => (
               <button
                 key={index}
@@ -755,10 +755,10 @@ const GlobalFinanceSummit = () => {
                   
                   {/* Speaker Information */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors duration-300 drop-shadow-sm">
+                    <h3 className="text-xl font-bold text-white mb-1 sm:mb-2 group-hover:text-primary transition-colors duration-300 drop-shadow-sm">
                       {speaker.name}
                     </h3>
-                    <p className="text-violet-500 font-semibold text-sm mb-2 drop-shadow-sm">
+                    <p className="text-violet-500 font-semibold text-sm mb-1 sm:mb-2 drop-shadow-sm">
                       {speaker.title}
                     </p>
                     <p className="text-white/90 text-sm leading-relaxed drop-shadow-sm">
@@ -780,7 +780,7 @@ const GlobalFinanceSummit = () => {
               </DialogHeader>
               
               {selectedSpeaker && (
-                <div className="flex flex-col lg:flex-row gap-8">
+                <div className="flex flex-col lg:flex-row gap-4 sm:p-6 lg:p-8">
                   {/* Speaker Image */}
                   <div className="flex-shrink-0">
                     <div className="relative w-48 h-64">
@@ -794,7 +794,7 @@ const GlobalFinanceSummit = () => {
                   
                   {/* Speaker Information */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-3xl font-bold text-foreground mb-2">
+                    <h3 className="text-3xl font-bold text-foreground mb-1 sm:mb-2">
                       {selectedSpeaker.name}
                     </h3>
                     <p className="text-violet-500 font-semibold text-lg mb-6">
@@ -860,7 +860,7 @@ const GlobalFinanceSummit = () => {
             </motion.p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 sm:p-6 lg:p-8 mb-12">
             {pricingTiers.map((tier, index) => (
               <motion.div 
                 key={index}
@@ -1111,7 +1111,7 @@ const GlobalFinanceSummit = () => {
               {scheduleData.map((day) => (
                 <TabsContent key={day.day} value={day.day} className="p-0">
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-foreground mb-2">{day.day}: {day.date}</h3>
+                    <h3 className="text-xl font-bold text-foreground mb-1 sm:mb-2">{day.day}: {day.date}</h3>
                     <p className="text-muted-foreground mb-6">All times are in Eastern Standard Time (EST)</p>
                     
                     <Table>

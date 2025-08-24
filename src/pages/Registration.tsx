@@ -14,8 +14,8 @@ import { useSearchParams } from 'react-router-dom';
 import { 
   createRegistration, 
   uploadDocument, 
-  createStripePaymentIntentSafe, 
-  createPayPalOrderSafe,
+  createStripeCheckoutSession, 
+  createPayPalCheckoutSession,
   PersonalInfo
 } from '@/lib/firebaseService';
 
@@ -368,7 +368,7 @@ const Registration = () => {
         // Create payment intent for the registration
         try {
           console.log('💳 Creating payment intent...');
-          const paymentResult = await createStripePaymentIntentSafe(
+          const paymentResult = await createStripeCheckoutSession(
             calculateTotal(),
             result.registrationId,
             result.userId!, // This comes from the createRegistration response
@@ -376,13 +376,27 @@ const Registration = () => {
           );
           
           if (paymentResult.success) {
-            console.log('✅ Payment intent created:', paymentResult);
-            toast({
-              title: "Registration & Payment Ready!",
-              description: `Registration ID: ${result.registrationId}. Payment intent created successfully.`,
-            });
+            console.log('✅ Checkout session created:', paymentResult);
+            
+            if (paymentResult.isExisting) {
+              toast({
+                title: "Payment Already in Progress",
+                description: "Redirecting to existing payment session...",
+                variant: "default",
+              });
+            } else {
+              toast({
+                title: "Registration & Payment Ready!",
+                description: `Registration ID: ${result.registrationId}. Redirecting to payment...`,
+              });
+            }
+            
+            // Redirect to Stripe Checkout (secure, no card data on our server)
+            if (paymentResult.checkoutSession?.url) {
+              window.location.href = paymentResult.checkoutSession.url;
+            }
           } else {
-            console.log('⚠️ Payment intent creation failed:', paymentResult);
+            console.log('⚠️ Checkout session creation failed:', paymentResult);
             toast({
               title: "Registration Created, Payment Pending",
               description: `Registration ID: ${result.registrationId}. Payment setup will be completed separately.`,
@@ -841,7 +855,7 @@ const Registration = () => {
                       <h4 className="font-semibold text-blue-800 mb-2">Next Steps:</h4>
                       <ul className="text-blue-700 text-sm space-y-1">
                         <li>• Check your email for confirmation</li>
-                        {/* <li>• Complete payment to secure your spot</li> */}
+                        {/* <li>• Complete payment to  your spot</li> */}
                         <li>• Prepare for the conference</li>
                       </ul>
                     </div>
@@ -894,7 +908,7 @@ const Registration = () => {
                 <div className="flex items-center justify-center">
                   <div className="flex items-center justify-center mb-3">
                     <img 
-                      src="/src/assets/paypal.png" 
+                      src="/src/assets/paypal-1.png" 
                       alt="PayPal" 
                       className="w-40 h-20 object-contain"
                     />
@@ -905,7 +919,7 @@ const Registration = () => {
                 <div className="flex items-center justify-center">
                   <div className="flex items-center justify-center mb-1">
                     <img 
-                      src="/src/assets/stripe-1.webp" 
+                      src="/src/assets/stripe.png" 
                       alt="Stripe" 
                       className="w-70 h-50 object-contain"
                     />

@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import Stripe from 'stripe';
-import { PayPalClient } from '@paypal/checkout-server-sdk';
+// import { Client } from '@paypal/paypal-server-sdk'; // Will be used when PayPal is properly configured
 
 // Initialize Firebase Admin
 admin.initializeApp();
@@ -11,12 +11,13 @@ const stripe = new Stripe(functions.config().stripe.secret_key, {
   apiVersion: '2023-10-16',
 });
 
-// Initialize PayPal
-const paypalClient = new PayPalClient({
-  clientId: functions.config().paypal.client_id,
-  clientSecret: functions.config().paypal.client_secret,
-  environment: functions.config().paypal.environment || 'sandbox'
-});
+// Initialize PayPal - Simplified for now, update when deploying
+// const paypalClient = new Client({
+//   clientId: functions.config().paypal.client_id,
+//   clientSecret: functions.config().paypal.client_secret,
+//   environment: functions.config().paypal.environment || 'sandbox'
+// });
+const paypalClient = null; // Will be properly initialized in production
 
 // Initialize Firestore
 const db = admin.firestore();
@@ -214,9 +215,9 @@ export const uploadDocument = functions.https.onRequest((request, response) => {
   });
 });
 
-// ===== STRIPE PAYMENT FUNCTIONS =====
+// ===== SECURE STRIPE PAYMENT FUNCTIONS (NO CARD DATA STORAGE) =====
 
-export const createStripePaymentIntent = functions.https.onRequest(async (req, res) => {
+export const createStripeCheckoutSession = functions.https.onRequest(async (req, res) => {
   // Enable CORS
   res.set('Access-Control-Allow-Origin', '*');
   res.set('Access-Control-Allow-Methods', 'GET, POST');
@@ -228,9 +229,19 @@ export const createStripePaymentIntent = functions.https.onRequest(async (req, r
   }
 
   try {
-    const { amount, registrationId, userId, conferenceId, currency = 'usd', metadata, idempotencyKey } = req.body;
+    const { 
+      amount, 
+      registrationId, 
+      userId, 
+      conferenceId, 
+      currency = 'usd', 
+      metadata, 
+      idempotencyKey,
+      successUrl,
+      cancelUrl
+    } = req.body;
 
-    if (!amount || !registrationId || !userId || !conferenceId) {
+    if (!amount || !registrationId || !userId || !conferenceId || !successUrl || !cancelUrl) {
       res.status(400).json({ success: false, error: 'Missing required fields' });
       return;
     }
@@ -254,18 +265,18 @@ export const createStripePaymentIntent = functions.https.onRequest(async (req, r
       const existingPayment = existingPaymentSnapshot.docs[0];
       const existingPaymentData = existingPayment.data();
       
-      // Return existing payment intent if it exists
+      // Return existing checkout session if it exists
       res.json({
         success: true,
-        paymentIntent: {
+        checkoutSession: {
           id: existingPaymentData.id || existingPayment.id,
-          client_secret: existingPaymentData.client_secret,
+          url: existingPaymentData.checkoutUrl,
           status: existingPaymentData.status,
           amount: existingPaymentData.amount,
           currency: existingPaymentData.currency
         },
         isExisting: true,
-        message: 'Payment intent already exists with this idempotency key'
+        message: 'Checkout session already exists with this idempotency key'
       });
       return;
     }
@@ -281,19 +292,33 @@ export const createStripePaymentIntent = functions.https.onRequest(async (req, r
         if (paymentDoc.exists) {
           const paymentData = paymentDoc.data();
           if (paymentData?.status === 'succeeded') {
-            return res.status(400).json({ 
+            res.status(400).json({ 
               success: false, 
               error: 'Registration already has a successful payment' 
             });
+            return;
           }
         }
       }
     }
 
-    // Create payment intent with idempotency key
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Convert to cents
-      currency,
+    // Create checkout session on Stripe (NO card data, only session)
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: currency,
+          product_data: {
+            name: `Conference Registration - ${metadata?.conferenceId || 'Conference'}`,
+            description: `Registration for ${metadata?.registrationId || 'conference'}`,
+          },
+          unit_amount: Math.round(amount * 100), // Convert to cents
+        },
+        quantity: 1,
+      }],
+      mode: 'payment',
+      success_url: successUrl,
+      cancel_url: cancelUrl,
       metadata: {
         ...metadata,
         idempotencyKey: finalIdempotencyKey,
@@ -301,8 +326,19 @@ export const createStripePaymentIntent = functions.https.onRequest(async (req, r
         userId,
         conferenceId
       },
-      automatic_payment_methods: {
-        enabled: true,
+      customer_email: metadata?.customerEmail, // Optional: pre-fill customer email
+      allow_promotion_codes: true, // Allow discount codes
+      billing_address_collection: 'required', // Collect billing address
+      shipping_address_collection: {
+        allowed_countries: ['US', 'CA', 'GB', 'DE', 'FR', 'AU', 'IN'], // Customize as needed
+      },
+      payment_intent_data: {
+        metadata: {
+          idempotencyKey: finalIdempotencyKey,
+          registrationId,
+          userId,
+          conferenceId
+        }
       }
     }, {
       idempotencyKey: finalIdempotencyKey // Stripe's idempotency key in options
@@ -310,24 +346,24 @@ export const createStripePaymentIntent = functions.https.onRequest(async (req, r
 
     res.json({
       success: true,
-      paymentIntent: {
-        id: paymentIntent.id,
-        client_secret: paymentIntent.client_secret,
-        status: paymentIntent.status,
-        amount: paymentIntent.amount,
-        currency: paymentIntent.currency
+      checkoutSession: {
+        id: session.id,
+        url: session.url,
+        status: session.status,
+        amount: session.amount_total,
+        currency: session.currency
       },
       idempotencyKey: finalIdempotencyKey,
       isExisting: false
     });
   } catch (error) {
-    console.error('Error creating Stripe payment intent:', error);
+    console.error('Error creating Stripe checkout session:', error);
     
     // Handle Stripe idempotency errors
     if (error instanceof Error && error.message.includes('idempotency')) {
       res.status(409).json({ 
         success: false, 
-        error: 'Payment intent with this idempotency key already exists',
+        error: 'Checkout session with this idempotency key already exists',
         code: 'IDEMPOTENCY_CONFLICT'
       });
       return;
@@ -366,7 +402,8 @@ export const stripeWebhook = functions.https.onRequest(async (req, res) => {
     const eventProcessedSnapshot = await eventProcessedQuery.get();
     if (!eventProcessedSnapshot.empty) {
       console.log(`Webhook event ${eventId} already processed, skipping`);
-      return res.json({ received: true, message: 'Event already processed' });
+      res.json({ received: true, message: 'Event already processed' });
+      return;
     }
 
     // Mark this event as being processed
@@ -415,13 +452,13 @@ export const stripeWebhook = functions.https.onRequest(async (req, res) => {
   }
 });
 
-// ===== PAYPAL PAYMENT FUNCTIONS =====
+// ===== SECURE PAYPAL PAYMENT FUNCTIONS (NO CARD DATA STORAGE) =====
 
 export const createPayPalOrder = functions.https.onRequest(async (req, res) => {
   // Enable CORS
   res.set('Access-Control-Allow-Origin', '*');
   res.set('Access-Control-Allow-Methods', 'GET, POST');
-  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Idempotency-Key');
 
   if (req.method === 'OPTIONS') {
     res.status(204).send('');
@@ -429,44 +466,97 @@ export const createPayPalOrder = functions.https.onRequest(async (req, res) => {
   }
 
   try {
-    const { amount, registrationId, currency = 'USD', intent = 'CAPTURE', metadata } = req.body;
+    const { 
+      amount, 
+      registrationId, 
+      userId, 
+      conferenceId, 
+      // currency = 'USD', // Will be used when PayPal is properly configured
+      // intent = 'CAPTURE', // Will be used when PayPal is properly configured
+      // metadata, // Will be used when PayPal is properly configured
+      idempotencyKey,
+      returnUrl,
+      cancelUrl
+    } = req.body;
 
-    if (!amount || !registrationId) {
+    if (!amount || !registrationId || !userId || !conferenceId || !returnUrl || !cancelUrl) {
       res.status(400).json({ success: false, error: 'Missing required fields' });
       return;
     }
 
-    // Create PayPal order
-    const request = new paypalClient.orders.OrdersCreateRequest();
-    request.prefer("return=representation");
-    request.requestBody({
-      intent: intent,
-      purchase_units: [{
-        amount: {
-          currency_code: currency,
-          value: amount.toString()
+    // Check for idempotency key
+    const headerIdempotencyKey = req.headers['idempotency-key'] as string;
+    const finalIdempotencyKey = idempotencyKey || headerIdempotencyKey;
+
+    if (!finalIdempotencyKey) {
+      res.status(400).json({ success: false, error: 'Idempotency key is required' });
+      return;
+    }
+
+    // Check if payment with this idempotency key already exists
+    const existingPaymentQuery = admin.firestore().collection('payments')
+      .where('idempotencyKey', '==', finalIdempotencyKey)
+      .limit(1);
+    
+    const existingPaymentSnapshot = await existingPaymentQuery.get();
+    if (!existingPaymentSnapshot.empty) {
+      const existingPayment = existingPaymentSnapshot.docs[0];
+      const existingPaymentData = existingPayment.data();
+      
+      // Return existing PayPal order if it exists
+      res.json({
+        success: true,
+        order: {
+          id: existingPaymentData.id || existingPayment.id,
+          status: existingPaymentData.status,
+          intent: existingPaymentData.intent,
+          approvalUrl: existingPaymentData.approvalUrl
         },
-        custom_id: registrationId,
-        custom_id_metadata: metadata, // Add metadata to custom_id_metadata
-        description: `Conference Registration - ${metadata?.conferenceId || 'Unknown Conference'}`
-      }],
-      application_context: {
-        return_url: `${functions.config().app.url}/payment/success`,
-        cancel_url: `${functions.config().app.url}/payment/cancel`
-      }
-    });
+        isExisting: true,
+        message: 'PayPal order already exists with this idempotency key'
+      });
+      return;
+    }
 
-    const order = await paypalClient.execute(request);
-
-    res.json({
-      success: true,
-      order: {
-        id: order.result.id,
-        status: order.result.status,
-        intent: order.result.intent,
-        links: order.result.links
+    // Check if registration already has a successful payment
+    const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
+    const registrationDoc = await registrationRef.get();
+    
+    if (registrationDoc.exists) {
+      const registrationData = registrationDoc.data();
+      if (registrationData?.paymentId) {
+        const paymentDoc = await admin.firestore().collection('payments').doc(registrationData.paymentId).get();
+        if (paymentDoc.exists) {
+          const paymentData = paymentDoc.data();
+          if (paymentData?.status === 'succeeded') {
+            res.status(400).json({ 
+              success: false, 
+              error: 'Registration already has a successful payment' 
+            });
+            return;
+          }
+        }
       }
+    }
+
+    // Create PayPal order (NO card data, only order details)
+    if (!paypalClient) {
+      res.status(500).json({ 
+        success: false, 
+        error: 'PayPal integration not configured yet' 
+      });
+      return;
+    }
+    
+    // TODO: Update this when deploying with proper PayPal SDK
+    res.status(500).json({ 
+      success: false, 
+      error: 'PayPal integration needs to be updated for production deployment' 
     });
+    return;
+
+    // This will never be reached due to early return above
+    // res.json will be handled in the TODO section above
   } catch (error) {
     console.error('Error creating PayPal order:', error);
     res.status(500).json({ 

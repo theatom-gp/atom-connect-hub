@@ -459,7 +459,7 @@ export const getAbstractsByConference = async (conferenceId: string) => {
 
 // ===== PAYMENT SERVICES =====
 
-// ===== DUPLICATE PAYMENT PREVENTION =====
+// ===== SECURE PAYMENT SERVICES (NO CARD DATA STORAGE) =====
 
 // Generate unique idempotency key for payment requests
 export const generateIdempotencyKey = (userId: string, registrationId: string, amount: number): string => {
@@ -540,8 +540,8 @@ export const checkExistingPayment = async (registrationId: string): Promise<{
   }
 };
 
-// Enhanced payment creation with duplicate prevention
-export const createStripePaymentIntentSafe = async (
+// SECURE STRIPE PAYMENT - Redirect to Stripe Checkout (NO card data on server)
+export const createStripeCheckoutSession = async (
   amount: number, 
   registrationId: string, 
   userId: string, 
@@ -558,12 +558,12 @@ export const createStripePaymentIntentSafe = async (
       if (existingPayment.payment?.status === 'succeeded') {
         throw new Error('Payment already completed successfully');
       } else if (existingPayment.payment?.status === 'pending') {
-        // Return existing payment intent if it's still pending
+        // Return existing checkout session if it's still pending
         return {
           success: true,
-          paymentIntent: {
+          checkoutSession: {
             id: existingPayment.payment.id,
-            client_secret: existingPayment.payment.client_secret,
+            url: existingPayment.payment.checkoutUrl,
             status: existingPayment.payment.status
           },
           paymentId: existingPayment.payment.id,
@@ -591,9 +591,9 @@ export const createStripePaymentIntentSafe = async (
       if (paymentData.createdAt && paymentData.createdAt.toDate() > fiveMinutesAgo) {
         return {
           success: true,
-          paymentIntent: {
-            id: paymentData.id,
-            client_secret: paymentData.client_secret,
+          checkoutSession: {
+            id: pendingPayment.id,
+            url: paymentData.checkoutUrl,
             status: paymentData.status
           },
           paymentId: pendingPayment.id,
@@ -602,8 +602,8 @@ export const createStripePaymentIntentSafe = async (
       }
     }
 
-    // Create new payment intent
-    const response = await fetch(`${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/createStripePaymentIntent`, {
+    // Create checkout session on Stripe (server only creates session, no card data)
+    const response = await fetch(`${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/createStripeCheckoutSession`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -616,6 +616,8 @@ export const createStripePaymentIntentSafe = async (
         conferenceId,
         currency: 'usd',
         idempotencyKey: paymentKey,
+        successUrl: `${window.location.origin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl: `${window.location.origin}/payment/cancel`,
         metadata: {
           registrationId,
           conferenceId,
@@ -633,13 +635,13 @@ export const createStripePaymentIntentSafe = async (
     const result = await response.json();
     
     if (result.success) {
-      // Store comprehensive payment intent in Firestore for tracking
-      const paymentIntent = {
-        id: result.paymentIntent.id,
+      // Store payment session in Firestore (NO card data, only session info)
+      const paymentSession = {
+        id: result.checkoutSession.id,
         amount,
         currency: 'usd',
-        status: result.paymentIntent.status,
-        client_secret: result.paymentIntent.client_secret,
+        status: 'pending',
+        checkoutUrl: result.checkoutSession.url,
         registrationId,
         userId,
         conferenceId,
@@ -650,7 +652,7 @@ export const createStripePaymentIntentSafe = async (
         updatedAt: serverTimestamp()
       };
       
-      const paymentRef = await addDoc(collection(db, 'payments'), paymentIntent);
+      const paymentRef = await addDoc(collection(db, 'payments'), paymentSession);
       
       // Update registration with payment reference
       await updateDoc(doc(db, 'registrations', registrationId), {
@@ -678,21 +680,22 @@ export const createStripePaymentIntentSafe = async (
       
       return {
         success: true,
-        paymentIntent: result.paymentIntent,
+        checkoutSession: result.checkoutSession,
         paymentId: paymentRef.id,
         idempotencyKey: paymentKey,
         isExisting: false
       };
     } else {
-      throw new Error(result.error || 'Failed to create payment intent');
+      throw new Error(result.error || 'Failed to create checkout session');
     }
   } catch (error) {
-    console.error('Error creating Stripe payment intent:', error);
+    console.error('Error creating Stripe checkout session:', error);
     throw error;
   }
 };
 
-export const createPayPalOrderSafe = async (
+// SECURE PAYPAL PAYMENT - Redirect to PayPal (NO card data on server)
+export const createPayPalCheckoutSession = async (
   amount: number, 
   registrationId: string, 
   userId: string, 
@@ -709,13 +712,13 @@ export const createPayPalOrderSafe = async (
       if (existingPayment.payment?.status === 'succeeded') {
         throw new Error('Payment already completed successfully');
       } else if (existingPayment.payment?.status === 'pending') {
-        // Return existing PayPal order if it's still pending
+        // Return existing PayPal session if it's still pending
         return {
           success: true,
-          paypalOrder: {
+          paypalSession: {
             id: existingPayment.payment.id,
-            status: existingPayment.payment.status,
-            intent: existingPayment.payment.intent
+            approvalUrl: existingPayment.payment.approvalUrl,
+            status: existingPayment.payment.status
           },
           paymentId: existingPayment.payment.id,
           isExisting: true
@@ -742,10 +745,10 @@ export const createPayPalOrderSafe = async (
       if (paymentData.createdAt && paymentData.createdAt.toDate() > fiveMinutesAgo) {
         return {
           success: true,
-          paypalOrder: {
-            id: paymentData.id,
-            status: paymentData.status,
-            intent: paymentData.intent
+          paypalSession: {
+            id: pendingPayment.id,
+            approvalUrl: paymentData.approvalUrl,
+            status: paymentData.status
           },
           paymentId: pendingPayment.id,
           isExisting: true
@@ -753,7 +756,7 @@ export const createPayPalOrderSafe = async (
       }
     }
 
-    // Create new PayPal order
+    // Create PayPal order (server only creates order, no card data)
     const response = await fetch(`${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/createPayPalOrder`, {
       method: 'POST',
       headers: {
@@ -768,6 +771,8 @@ export const createPayPalOrderSafe = async (
         currency: 'USD',
         intent: 'CAPTURE',
         idempotencyKey: paymentKey,
+        returnUrl: `${window.location.origin}/payment/success`,
+        cancelUrl: `${window.location.origin}/payment/cancel`,
         metadata: {
           registrationId,
           conferenceId,
@@ -785,8 +790,8 @@ export const createPayPalOrderSafe = async (
     const result = await response.json();
     
     if (result.success) {
-      // Store comprehensive PayPal order in Firestore for tracking
-      const paypalOrder = {
+      // Store PayPal session in Firestore (NO card data, only session info)
+      const paypalSession = {
         id: result.order.id,
         status: result.order.status,
         intent: result.order.intent,
@@ -794,6 +799,7 @@ export const createPayPalOrderSafe = async (
           currency_code: 'USD',
           value: amount.toString()
         },
+        approvalUrl: result.order.approvalUrl,
         registrationId,
         userId,
         conferenceId,
@@ -804,7 +810,7 @@ export const createPayPalOrderSafe = async (
         updatedAt: serverTimestamp()
       };
       
-      const paymentRef = await addDoc(collection(db, 'payments'), paypalOrder);
+      const paymentRef = await addDoc(collection(db, 'payments'), paypalSession);
       
       // Update registration with payment reference
       await updateDoc(doc(db, 'registrations', registrationId), {
@@ -832,7 +838,7 @@ export const createPayPalOrderSafe = async (
       
       return {
         success: true,
-        paypalOrder: result.order,
+        paypalSession: result.order,
         paymentId: paymentRef.id,
         idempotencyKey: paymentKey,
         isExisting: false
