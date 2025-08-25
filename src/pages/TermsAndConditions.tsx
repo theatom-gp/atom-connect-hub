@@ -2,7 +2,7 @@ import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Users, Clock, BookOpen, AlertCircle, CheckCircle } from "lucide-react";
+import { Shield, Users, Clock, BookOpen, AlertCircle, CheckCircle, FileText } from "lucide-react";
 
 const TermsAndConditions = () => {
   return (
@@ -27,7 +27,13 @@ const TermsAndConditions = () => {
             Clear, fair terms that protect both you and Atom Conferences. 
             Last updated: January 2025
           </p>
-          <div className="flex items-center justify-center gap-4 text-sm text-primary-foreground/80">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
+                <FileText className="h-5 w-5 mr-2" />
+                <a href="/terms-and-conditions.pdf" download>Download PDF Version</a>
+              </Button>
+            </div>
+          <div className="flex items-center justify-center gap-4 text-sm text-primary-foreground/80 mt-6">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-yellow-300" />
               <span>Transparent</span>
