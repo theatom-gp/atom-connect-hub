@@ -122,6 +122,18 @@ export const conferences: Conference[] = [
     category: "Healthcare",
     abstractDeadline: "February 25, 2026",
     registrationDeadline: "March 10, 2026"
+  },
+  {
+    id: 'sustainability',
+    title: "Global Sustainability and Green Technology Summit",
+    date: "Apr 15-17, 2026",
+    venue: "Eco Innovation Center",
+    location: "Portland, OR",
+    image: "/src/assets/conference-sustainability.jpg",
+    description: "Join environmental leaders and sustainability experts to explore green technologies and sustainable development solutions.",
+    category: "Sustainability",
+    abstractDeadline: "March 15, 2026",
+    registrationDeadline: "April 1, 2026"
   }
 ];
 
@@ -150,4 +162,19 @@ export const getConferencesForAbstractSubmission = (): Conference[] => {
     const deadline = new Date(conference.abstractDeadline);
     return deadline > now;
   });
+};
+
+// Get unique categories from conferences
+export const getUniqueCategories = (): string[] => {
+  const categories = conferences.map(conference => conference.category);
+  return ['All Events', ...Array.from(new Set(categories))];
+};
+
+// Get conference count by category
+export const getConferenceCountByCategory = (): { [key: string]: number } => {
+  const counts: { [key: string]: number } = {};
+  conferences.forEach(conference => {
+    counts[conference.category] = (counts[conference.category] || 0) + 1;
+  });
+  return counts;
 };

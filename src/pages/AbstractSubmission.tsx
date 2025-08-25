@@ -248,7 +248,7 @@ const AbstractSubmission = () => {
 
         {/* Benefits Section */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <Card className="text-center">
+          <Card className="text-center bg-white/5 backdrop-blur-lg rounded-2xl p-4 sm:p-6 lg:p-8 border border-secondary/25 shadow-lg">
             <CardHeader>
               <CheckCircle2 className="h-12 w-12 text-primary mx-auto mb-2" />
               <CardTitle className="text-lg">Global Recognition</CardTitle>
@@ -258,7 +258,7 @@ const AbstractSubmission = () => {
             </CardContent>
           </Card>
           
-          <Card className="text-center">
+          <Card className="text-center bg-white/5 backdrop-blur-lg rounded-2xl p-4 sm:p-6 lg:p-8 border border-secondary/25 shadow-lg">
             <CardHeader>
               <CheckCircle2 className="h-12 w-12 text-primary mx-auto mb-2" />
               <CardTitle className="text-lg">Published Proceedings</CardTitle>
@@ -268,7 +268,7 @@ const AbstractSubmission = () => {
             </CardContent>
           </Card>
           
-          <Card className="text-center">
+          <Card className="text-center bg-white/5 backdrop-blur-lg rounded-2xl p-4 sm:p-6 lg:p-8 border border-secondary/25 shadow-lg">
             <CardHeader>
               <CheckCircle2 className="h-12 w-12 text-primary mx-auto mb-2" />
               <CardTitle className="text-lg">Networking Opportunities</CardTitle>
@@ -441,7 +441,7 @@ const AbstractSubmission = () => {
                   />
                 </div>
 
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <Label htmlFor="presentation">Presentation Type *</Label>
                   <Select value={formData.presentation} onValueChange={(value) => handleInputChange('presentation', value)} required>
                     <SelectTrigger>
@@ -453,7 +453,7 @@ const AbstractSubmission = () => {
                       <SelectItem value="workshop">Workshop Session (60 minutes)</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
+                </div> */}
 
                 <div className="space-y-2">
                   <Label htmlFor="keywords">Keywords *</Label>

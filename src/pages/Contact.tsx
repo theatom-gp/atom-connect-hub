@@ -126,12 +126,12 @@ This message was sent from the Atom Conferences contact form.
   const trustSignals = [
     {
       icon: Users,
-      metric: '50,000+',
+      metric: '10,000+',
       label: 'Attendees Served',
     },
     {
       icon: Calendar,
-      metric: '200+',
+      metric: '50+',
       label: 'Events Organized',
     },
     {

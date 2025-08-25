@@ -157,7 +157,7 @@ const TechInnovationExpo = () => {
     {
       title: "Student",
       subtitle: "",
-      price: 499,
+      price: 549,
       features: [
         "Entry to all session and workshops",
         "Lunch & Coffee breaks",
@@ -169,7 +169,7 @@ const TechInnovationExpo = () => {
     {
       title: "Virtual",
       subtitle: "(Speaker/Delegate)",
-      price: 449,
+      price: 399,
       features: [
         "Conference recorded video access",
         "Conference schedule handout",

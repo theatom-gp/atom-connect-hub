@@ -910,7 +910,7 @@ const Registration = () => {
                     <img 
                       src="/src/assets/paypal-1.png" 
                       alt="PayPal" 
-                      className="w-40 h-20 object-contain"
+                      className="w-50 h-30 object-contain"
                     />
                   </div>
                 </div>
@@ -919,9 +919,9 @@ const Registration = () => {
                 <div className="flex items-center justify-center">
                   <div className="flex items-center justify-center mb-1">
                     <img 
-                      src="/src/assets/stripe.png" 
+                      src="/src/assets/stripe-1.png" 
                       alt="Stripe" 
-                      className="w-70 h-50 object-contain"
+                      className="w-30 h-30 object-contain"
                     />
                   </div>
                 </div>

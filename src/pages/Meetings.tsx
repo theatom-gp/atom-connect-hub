@@ -5,192 +5,43 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, MapPin, Users, ArrowRight, Star, TrendingUp } from 'lucide-react';
-import conferenceAI from '@/assets/conference-ai.jpg';
-import conferenceMedical from '@/assets/conference-medical.jpg';
-import conferenceSustainability from '@/assets/conference-sustainability.jpg';
-import aisummit from '@/assets/aisummit/bg.avif'; 
-import forensicscience from '@/assets/forensicscience/bg.jpeg'; 
-import powerandenergy from '@/assets/powerandenergy/bg.jpeg';
-import quantumcomputing from '@/assets/quantumcomputing/bg.jpg';
-import globalhealthcarerevolution from '@/assets/globalhealthcarerevolution/bg.jpg';
-import biomaterials from '@/assets/biomaterials/bg.jpeg';
-import techinnovationexpo from '@/assets/techinnovationexpo/bg.jpeg';
-import surgeryandanesthesia from '@/assets/surgeryandanesthesia/bg.jpeg';
-import neurology from '@/assets/neurology/bg.jpeg';  
-import conferenceFinance from '@/assets/conference-finance.jpg';
-import conferenceEducation from '@/assets/conference-education.jpg';
-import conferenceMarketing from '@/assets/conference-marketing.jpg';
-import conferenceLegal from '@/assets/conference-legal.jpg';
-import conferenceEngineering from '@/assets/conference-engineering.jpg';
-import conferencePsychology from '@/assets/conference-psychology.jpg';
-import conferenceArts from '@/assets/conference-arts.jpg';
-import conferenceScience from '@/assets/conference-science.jpg';
+import { conferences, getConferencesByCategory, getUniqueCategories, getConferenceCountByCategory, Conference } from '@/lib/conferences';
+
+// Helper function to get conference image
+const getConferenceImage = (imagePath: string) => {
+  // Handle different image path formats
+  if (imagePath.startsWith('/src/assets/')) {
+    // Convert relative path to import path
+    const assetPath = imagePath.replace('/src/assets/', '');
+    try {
+      // Try to import the image dynamically
+      return new URL(`../assets/${assetPath}`, import.meta.url).href;
+    } catch {
+      // Fallback to a default image
+      return '/src/assets/conference-ai.jpg';
+    }
+  }
+  return imagePath;
+};
 
 const Meetings = () => {
   const [selectedCategory, setSelectedCategory] = useState('All Events');
 
-  const categories = [
-    'All Events',
-    'Technology',
-    'Finance',
-    'Education', 
-    'AI & Innovation',
-    'Healthcare',
-    'Sustainability',
-    'Marketing',
-    'Legal',
-    'Engineering',
-    'Psychology',
-    'Arts & Design',
-    'Science'
-  ];
+  // Get dynamic categories from conferences data
+  const categories = getUniqueCategories();
 
-  const conferences = [
-    {
-      id: 1,
-      title: "AI Innovation Summit 2025",
-      date: "November 15-17, 2025",
-      venue: "Silicon Valley Convention Center",
-      location: "San Francisco, CA",
-      image: aisummit,
-      description: "Join leading AI researchers, tech executives, and innovators as they unveil the future of artificial intelligence.",
-      category: "Technology"
-    },
-    {
-      id: 2,
-      title: "Global Congress on Forensic Science and Research",
-      date: "November 22-24, 2025",
-      venue: "Academic Excellence Center",
-      location: "Lisbon, Portugal",
-      image: forensicscience,
-      description: "Discover breakthrough Forensic Science technologies and innovations.",
-      category: "Education"
-    },
-    {
-      id: 3,
-      title: "Global Congress on Power and Energy Engineering",
-      date: "December 10-12, 2025",
-      venue: "Green Technology Center",
-      location: "Seattle, WA",
-      image: powerandenergy,
-      description: "Unite with environmental leaders and Power tech pioneers driving development worldwide.",
-      category: "Engineering"
-    },
-    {
-      id: 4,
-      title: "Global Congress on Quantum Computing and Applications",
-      date: "Jan 15-17, 2026",
-      venue: "Quantum Computing Center",
-      location: "San Francisco, CA",
-      image: quantumcomputing,
-      description: "Explore the latest quantum computing technologies and applications driving successful brand transformations.",
-      category: "Technology"
-    },
-    {
-      id: 5,
-      title: "Global Healthcare Revolution",
-      date: "Feb 10-12, 2026",
-      venue: "Medical Innovation Hub",
-      location: "Boston, MA",
-      image: globalhealthcarerevolution,
-      description: "Discover breakthrough medical technologies and treatment innovations shaping the future of healthcare.",
-      category: "Healthcare"
-    },
-    {
-      id: 6,
-      title: "Global Congress on Biomaterials and Regenerative Medicine",
-      date: "Feb 22-24, 2026",
-      venue: "Green Technology Center",
-      location: "Seattle, WA",
-      image: biomaterials,
-      description: "Unite with industry experts and Regenerative Medicine pioneers driving sustainable development worldwide.",
-      category: "Education"
-    },
-    {
-      id: 7,
-      title: "Tech Innovation Expo 2026",
-      date: "Mar 15-17, 2026",
-      venue: "Technology Convention Center",
-      location: "Austin, TX",
-      image: conferenceAI,
-      description: "Explore cutting-edge technologies and connect with industry leaders shaping tomorrow's digital landscape.",
-      category: "Technology"
-    },
-    {
-      id: 8,
-      title: "International Experts Summit on Surgery and Anesthesia",
-      date: "Mar 16-18, 2026",
-      venue: "Medical Innovation Hub",
-      location: "Boston, MA",
-      image: surgeryandanesthesia,
-      description: "Connect with Global experts in Surgery and Anesthesia.",
-      category: "Healthcare"
-    },
-    {
-      id: 9,
-      title: "International Experts Summit on Neurology and Neurological Disorders",
-      date: "Mar 25-27, 2026",
-      venue: "Neurology Center",
-      location: "San Francisco, CA",
-      image: neurology,
-      description: "Explore how technology is reshaping Neurology and discover new approaches to Neurological Disorders.",
-      category: "Healthcare"
-    },
-    // {
-    //   id: 9,
-    //   title: "Engineering Excellence Summit",
-    //   date: "April 25-27, 2026",
-    //   venue: "Industrial Innovation Center",
-    //   location: "Detroit, MI",
-    //   image: conferenceEngineering,
-    //   description: "Advance engineering practices with breakthrough technologies and sustainable design methodologies.",
-    //   category: "Engineering"
-    // },
-    // {
-    //   id: 10,
-    //   title: "Mental Health & Psychology Congress",
-    //   date: "May 12-14, 2026",
-    //   venue: "Wellness Convention Center",
-    //   location: "Denver, CO",
-    //   image: conferencePsychology,
-    //   description: "Transform mental healthcare with innovative therapeutic approaches and psychological research findings.",
-    //   category: "Psychology"
-    // },
-    // {
-    //   id: 11,
-    //   title: "Creative Arts & Design Festival",
-    //   date: "May 26-28, 2026",
-    //   venue: "Arts & Culture Center",
-    //   location: "Miami, FL",
-    //   image: conferenceArts,
-    //   description: "Celebrate creativity and innovation in arts, design, and digital media with industry visionaries.",
-    //   category: "Arts & Design"
-    // },
-    // {
-    //   id: 12,
-    //   title: "Scientific Research Symposium",
-    //   date: "June 9-11, 2026",
-    //   venue: "Research Innovation Campus",
-    //   location: "San Diego, CA",
-    //   image: conferenceScience,
-    //   description: "Advance scientific knowledge through collaborative research and breakthrough discoveries across disciplines.",
-    //   category: "Science"
-    // },
-    // {
-    //   id: 13,
-    //   title: "Global Congress on Forensic Science and Research",
-    //   date: "June 19-21, 2026",
-    //   venue: "Research Innovation Campus",
-    //   location: "San Diego, CA",
-    //   image: conferenceScience,
-    //   description: "Advance Forensic scientific knowledge through collaborative research and breakthrough discoveries across disciplines.",
-    //   category: "Science"
-    // }
-  ];
+  // Use dynamic conferences from shared data source
+  const [filteredConferences, setFilteredConferences] = useState<Conference[]>(conferences);
 
-  const filteredConferences = selectedCategory === 'All Events' 
-    ? conferences 
-    : conferences.filter(conference => conference.category === selectedCategory);
+  // Update filtered conferences when category changes
+  useEffect(() => {
+    const filtered = getConferencesByCategory(selectedCategory);
+    setFilteredConferences(filtered);
+  }, [selectedCategory]);
+
+  // Hardcoded conferences array removed - now using dynamic data from conferences.ts
+
+  // Remove the old filteredConferences logic - now using dynamic data from conferences.ts
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -212,11 +63,13 @@ const Meetings = () => {
     delay: Math.random() * 5
   }));
 
+  // Dynamic stats based on actual conference data
   const stats = [
     { icon: <Calendar className="h-5 w-5" />, value: "50+", label: "Events" },
+    // { icon: <Calendar className="h-5 w-5" />, value: `${conferences.length}`, label: "Events" },
     { icon: <Users className="h-5 w-5" />, value: "10K+", label: "Attendees" },
-    { icon: <MapPin className="h-5 w-5" />, value: "10+", label: "Countries" },
-    { icon: <Star className="h-5 w-5" />, value: "4.9", label: "Rating" }
+    { icon: <MapPin className="h-5 w-5" />, value: `${new Set(conferences.map(c => c.location.split(', ')[1])).size}`, label: "Countries" },
+    { icon: <Star className="h-5 w-5" />, value: `${getUniqueCategories().length - 1}`, label: "Categories" }
   ];
 
   return (
@@ -494,6 +347,11 @@ const Meetings = () => {
                     
                     <span className="relative z-10 flex items-center gap-2">
                       {category}
+                      {category !== 'All Events' && (
+                        <Badge variant="secondary" className="text-xs px-2 py-1">
+                          {getConferenceCountByCategory()[category] || 0}
+                        </Badge>
+                      )}
                       {selectedCategory === category && (
                         <motion.div
                           animate={{ rotate: 360 }}
@@ -603,7 +461,7 @@ const Meetings = () => {
                     <CardHeader className="p-0 relative">
                       <div className="relative overflow-hidden">
                         <motion.img 
-                          src={conference.image} 
+                          src={getConferenceImage(conference.image)} 
                           alt={conference.title}
                           className="w-full h-56 object-cover transition-transform duration-700 group-hover:scale-110"
                           whileHover={{ scale: 1.1 }}
@@ -690,33 +548,8 @@ const Meetings = () => {
                           className="w-full bg-gradient-to-r from-primary via-blue-600 to-purple-600 hover:from-primary/90 hover:via-blue-700 hover:to-purple-700 text-white font-bold py-4 text-base shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden group"
                           size="lg"
                           onClick={() => {
-                            if (conference.id === 1) {
-                              window.location.href = '/conference/aisummit';
-                            } else if (conference.id === 2) {
-                              window.location.href = '/conference/forensicscience';
-                            } else if (conference.id === 3) {
-                              window.location.href = '/conference/powerandenergy';
-                            } else if (conference.id === 4) {
-                              window.location.href = '/conference/quantumcomputing';
-                            } else if (conference.id === 5) {
-                              window.location.href = '/conference/globalhealthcarerevolution';
-                            } else if (conference.id === 6) {
-                              window.location.href = '/conference/biomaterials';
-                            } else if (conference.id === 7) {
-                              window.location.href = '/conference/techinnovationexpo';
-                            } else if (conference.id === 8) {
-                              window.location.href = '/conference/surgeryandanesthesia';
-                            } else if (conference.id === 9) {
-                              window.location.href = '/conference/neurology';
-                            } else if (conference.id === 10) {
-                              window.location.href = '/conference/mentalhealthpsychologycongress';
-                            } else if (conference.id === 11) {
-                              window.location.href = '/conference/creativeartsdesignfestival';
-                            } else if (conference.id === 12) {
-                              window.location.href = '/conference/scientificresearchsymposium';
-                            } else if (conference.id === 13) {
-                              window.location.href = '/conference/globalforensicscienceresearch';
-                            }
+                            // Use conference ID directly from shared data
+                            window.location.href = `/conference/${conference.id}`;
                           }}
                         >
                           <span className="relative z-10 flex items-center justify-center gap-2">
