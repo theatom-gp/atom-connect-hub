@@ -1440,7 +1440,7 @@ const AISummit = () => {
             </div>
           </div>
           
-          <div className="mt-12 text-center text-violet-900">
+          <div className="mt-12 text-center text-primary rounded-full text-sm font-semibold mb-6">
             <Button variant="outline" onClick={() => navigate('/contact')}>Become a Partner</Button>
           </div>
         </div>
@@ -1471,7 +1471,7 @@ const AISummit = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <div className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-semibold mb-6">
+            <div className="inline-block px-4 py-2 bg-white text-secondary rounded-full text-sm font-semibold mb-6">
               Stay Updated
             </div>
             

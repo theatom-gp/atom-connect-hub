@@ -64,7 +64,7 @@ export const conferences: Conference[] = [
     registrationDeadline: "January 1, 2026"
   },
   {
-    id: 'globalhealthcare',
+    id: 'globalhealthcarerevolution',
     title: "Global Healthcare Revolution",
     date: "Feb 10-12, 2026",
     venue: "Medical Innovation Hub",
@@ -88,7 +88,7 @@ export const conferences: Conference[] = [
     registrationDeadline: "February 8, 2026"
   },
   {
-    id: 'techinnovation',
+    id: 'techinnovationexpo',
     title: "Tech Innovation Expo 2026",
     date: "Mar 15-17, 2026",
     venue: "Technology Convention Center",
