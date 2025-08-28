@@ -386,19 +386,24 @@ export const deleteDocument = async (filePath: string) => {
 
 export const submitAbstract = async (abstractData: AbstractData) => {
   try {
-    // First, ensure user exists or create one
-    let userResult = await getUserByEmail(abstractData.authorInfo.email);
+    // Check if userId is already provided (from component)
+    let userId = abstractData.userId;
     
-    if (!userResult.success) {
-      // Create new user if doesn't exist
-      userResult = await createUser(abstractData.authorInfo);
+    if (!userId) {
+      // First, ensure user exists or create one
+      let userResult = await getUserByEmail(abstractData.authorInfo.email);
+      
+      if (!userResult.success) {
+        // Create new user if doesn't exist
+        userResult = await createUser(abstractData.authorInfo);
+      }
+      
+      if (!userResult.success) {
+        throw new Error('Failed to create or find user');
+      }
+      
+      userId = userResult.userId!;
     }
-    
-    if (!userResult.success) {
-      throw new Error('Failed to create or find user');
-    }
-    
-    const userId = userResult.userId!;
     
     // Create abstract with user ID
     const data = {

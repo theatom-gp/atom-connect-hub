@@ -1,19 +1,24 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    // Allow users to upload documents
+    // Allow users to upload documents (using email as userId for now)
     match /userDocuments/{userId}/{documentId} {
-      allow read, write: if true; // For now, allow all access
+      allow read, write: if true; // For development, allow all access
     }
     
     // Allow users to upload abstracts
     match /abstracts/{conferenceId}/{abstractId} {
-      allow read, write: if true; // For now, allow all access
+      allow read, write: if true; // For development, allow all access
     }
     
     // Allow users to upload profile pictures
     match /profilePictures/{userId} {
-      allow read, write: if true; // For now, allow all access
+      allow read, write: if true; // For development, allow all access
+    }
+    
+    // Allow all uploads for development (fallback)
+    match /{allPaths=**} {
+      allow read, write: if true; // For development only
     }
   }
 }

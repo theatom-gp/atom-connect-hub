@@ -7,17 +7,42 @@ const stripe_1 = require("stripe");
 // import { Client } from '@paypal/paypal-server-sdk'; // Will be used when PayPal is properly configured
 // Initialize Firebase Admin
 admin.initializeApp();
-// Initialize Stripe
-const stripe = new stripe_1.default(functions.config().stripe.secret_key, {
-    apiVersion: '2023-10-16',
-});
+// Initialize Stripe - Handle missing configuration gracefully
+let stripe = null;
+try {
+    const stripeConfig = functions.config().stripe;
+    if (stripeConfig && stripeConfig.secret_key) {
+        stripe = new stripe_1.default(stripeConfig.secret_key, {
+            apiVersion: '2023-10-16',
+        });
+        console.log('✅ Stripe initialized successfully');
+    }
+    else {
+        console.log('⚠️ Stripe configuration not found - payment functions will be disabled');
+    }
+}
+catch (error) {
+    console.log('⚠️ Failed to initialize Stripe:', error);
+}
 // Initialize PayPal - Simplified for now, update when deploying
-// const paypalClient = new Client({
-//   clientId: functions.config().paypal.client_id,
-//   clientSecret: functions.config().paypal.client_secret,
-//   environment: functions.config().paypal.environment || 'sandbox'
-// });
-const paypalClient = null; // Will be properly initialized in production
+let paypalClient = null;
+try {
+    const paypalConfig = functions.config().paypal;
+    if (paypalConfig && paypalConfig.client_id && paypalConfig.client_secret) {
+        // const paypalClient = new Client({
+        //   clientId: paypalConfig.client_id,
+        //   clientSecret: paypalConfig.client_secret,
+        //   environment: paypalConfig.environment || 'sandbox'
+        // });
+        console.log('✅ PayPal configuration found - will be enabled in production');
+    }
+    else {
+        console.log('⚠️ PayPal configuration not found - payment functions will be disabled');
+    }
+}
+catch (error) {
+    console.log('⚠️ Failed to initialize PayPal:', error);
+}
 // Initialize Firestore
 const db = admin.firestore();
 // Initialize Storage
@@ -243,6 +268,14 @@ exports.createStripeCheckoutSession = functions.https.onRequest(async (req, res)
                 }
             }
         }
+        // Check if Stripe is initialized
+        if (!stripe) {
+            res.status(503).json({
+                success: false,
+                error: 'Payment processing is not configured. Please contact support.'
+            });
+            return;
+        }
         // Create checkout session on Stripe (NO card data, only session)
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -312,8 +345,18 @@ exports.createStripeCheckoutSession = functions.https.onRequest(async (req, res)
 });
 // Stripe webhook handler with duplicate prevention
 exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
+    var _a;
+    // Check if Stripe is initialized
+    if (!stripe) {
+        res.status(503).json({ error: 'Payment processing is not configured' });
+        return;
+    }
     const sig = req.headers['stripe-signature'];
-    const endpointSecret = functions.config().stripe.webhook_secret;
+    const endpointSecret = (_a = functions.config().stripe) === null || _a === void 0 ? void 0 : _a.webhook_secret;
+    if (!endpointSecret) {
+        res.status(500).json({ error: 'Webhook secret not configured' });
+        return;
+    }
     let event;
     try {
         event = stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);

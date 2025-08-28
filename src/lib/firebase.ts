@@ -42,11 +42,11 @@ export const functions = getFunctions(app, 'us-central1');
 if (import.meta.env.DEV) {
   try {
     console.log('Attempting to connect to Firebase emulators...');
-    console.log('Firestore: localhost:8081');
+    console.log('Firestore: localhost:8082');
     console.log('Storage: localhost:9199');
     console.log('Functions: localhost:5001');
     
-    connectFirestoreEmulator(db, 'localhost', 8081);
+    connectFirestoreEmulator(db, 'localhost', 8082);
     connectStorageEmulator(storage, 'localhost', 9199);
     connectFunctionsEmulator(functions, 'localhost', 5001);
     

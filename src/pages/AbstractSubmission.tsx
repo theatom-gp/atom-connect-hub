@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { AlertCircle, Upload, Download, CheckCircle2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
-import { submitAbstract, uploadDocument, AbstractData, PersonalInfo } from "@/lib/firebaseService";
+import { submitAbstract, uploadDocument, AbstractData, PersonalInfo, getUserByEmail, createUser } from "@/lib/firebaseService";
 import { getConferencesForAbstractSubmission, Conference } from "@/lib/conferences";
 
 const AbstractSubmission = () => {
@@ -96,10 +96,10 @@ const AbstractSubmission = () => {
       return;
     }
 
-    if (uploadedFile.size > 10 * 1024 * 1024) { // 10MB limit
+    if (uploadedFile.size > 5 * 1024 * 1024) { // 5MB limit
       toast({
         title: "File too large",
-        description: "Please upload a file smaller than 10MB",
+        description: "Please upload a file smaller than 5MB",
         variant: "destructive",
       });
       return;
@@ -145,9 +145,6 @@ const AbstractSubmission = () => {
     setIsSubmitting(true);
 
     try {
-      // Upload document to Firebase Storage
-      const documentURL = await uploadDocument(file, formData.email, 'abstract');
-      
       // Prepare personal info for Firebase
       const personalInfo: PersonalInfo = {
         firstName: formData.firstName,
@@ -161,19 +158,39 @@ const AbstractSubmission = () => {
         postalCode: formData.experience
       };
 
-              // Prepare abstract data for Firebase
-        const abstractData = {
-          conferenceId: formData.conference, // Use selected conference ID
-          authorInfo: personalInfo,
-          abstractTitle: formData.title,
-          abstractText: formData.summary || '',
-          keywords: formData.keywords.split(',').map(k => k.trim()),
-          documentFile: documentURL,
-          status: 'pending'
-        } as any; // Type assertion since userId is handled by the service
+      // First, ensure user exists or create one to get proper userId
+      let userResult = await getUserByEmail(formData.email);
+      
+      if (!userResult.success) {
+        // Create new user if doesn't exist
+        userResult = await createUser(personalInfo);
+      }
+      
+      if (!userResult.success) {
+        throw new Error('Failed to create or find user');
+      }
+      
+      const userId = userResult.userId!;
+      
+      // Now upload document with proper userId
+      const documentURL = await uploadDocument(file, userId, 'abstract');
+      
+      // Prepare abstract data for Firebase
+      const abstractData = {
+        conferenceId: formData.conference, // Use selected conference ID
+        authorInfo: personalInfo,
+        abstractTitle: formData.title,
+        abstractText: formData.summary || '',
+        keywords: formData.keywords.split(',').map(k => k.trim()),
+        documentFile: documentURL,
+        status: 'pending'
+      } as any; // Type assertion since userId is handled by the service
 
-      // Submit abstract to Firebase
-      const result = await submitAbstract(abstractData);
+      // Submit abstract to Firebase (user already created above)
+      const result = await submitAbstract({
+        ...abstractData,
+        userId // Pass the userId we already have
+      });
       
       if (result.success) {
         toast({
@@ -531,7 +548,7 @@ const AbstractSubmission = () => {
                           or click to browse files
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Accepted formats: .doc, .docx, .pdf (max 10MB)
+                          Accepted formats: .doc, .docx, .pdf (max 5MB)
                         </p>
                       </div>
                     )}

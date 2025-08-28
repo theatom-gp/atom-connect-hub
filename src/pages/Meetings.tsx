@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+  import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, MapPin, Users, ArrowRight, Star, TrendingUp } from 'lucide-react';
 import { conferences, getConferencesByCategory, getUniqueCategories, getConferenceCountByCategory, Conference } from '@/lib/conferences';
+import Footer  from '@/components/Footer';
 
 // Helper function to get conference image
 const getConferenceImage = (imagePath: string) => {
@@ -481,14 +482,14 @@ const Meetings = () => {
                         </motion.div>
 
                         {/* Urgency Indicator */}
-                        <motion.div 
+                        {/* <motion.div 
                           className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-semibold animate-pulse shadow-lg"
                           initial={{ x: -50, opacity: 0 }}
                           animate={{ x: 0, opacity: 1 }}
                           transition={{ duration: 0.5, delay: index * 0.1 + 0.4 }}
                         >
                           Limited Seats
-                        </motion.div>
+                        </motion.div> */}
 
                         {/* Overlay Gradient */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -599,6 +600,8 @@ const Meetings = () => {
           </AnimatePresence>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 };

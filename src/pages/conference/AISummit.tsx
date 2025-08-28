@@ -427,7 +427,7 @@ const AISummit = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center">
             {/* Early Bird Special Banner */}
-            {isEarlyBird && (
+            {/* {isEarlyBird && (
               <motion.div 
                 className="mb-8 animate-[staggerUp_0.6s_ease-out_0.1s_both]"
                 initial={{ opacity: 0, y: -20 }}
@@ -485,7 +485,7 @@ const AISummit = () => {
                   </div>
                 </div>
               </motion.div>
-            )}
+            )} */}
 
             {/* Professional Animated Badge */}
             <div className="inline-block animate-[staggerUp_0.8s_ease-out_0.2s_both]">

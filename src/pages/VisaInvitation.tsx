@@ -255,12 +255,12 @@ const VisaInvitation = () => {
                     Visa decisions are made by respective embassies and consulates based on their own criteria and requirements.
                   </p>
                 </div>
-                <div className="mt-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                {/* <div className="mt-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
                   <p className="text-sm text-orange-800 font-semibold">
                     <strong>Visa Information Notice:</strong> Visa requirements and processing times are subject to change by respective countries. 
                     We recommend checking the official embassy/consulate websites for the most current information before applying.
                   </p>
-                </div>
+                </div> */}
               </CardContent>
             </Card>
           </div>
