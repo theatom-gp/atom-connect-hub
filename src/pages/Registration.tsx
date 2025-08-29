@@ -18,6 +18,7 @@ import {
   createPayPalCheckoutSession,
   PersonalInfo
 } from '@/lib/firebaseService';
+import { getImagePath } from '@/lib/imageUtils';
 
 interface RegistrationData {
   firstName: string;
@@ -908,7 +909,7 @@ const Registration = () => {
                 <div className="flex items-center justify-center">
                   <div className="flex items-center justify-center mb-3">
                     <img 
-                      src="/src/assets/paypal-1.png" 
+                      src={getImagePath("paypal-1.png")} 
                       alt="PayPal" 
                       className="w-50 h-30 object-contain"
                     />
@@ -919,7 +920,7 @@ const Registration = () => {
                 <div className="flex items-center justify-center">
                   <div className="flex items-center justify-center mb-1">
                     <img 
-                      src="/src/assets/stripe-1.png" 
+                      src={getImagePath("stripe-1.png")} 
                       alt="Stripe" 
                       className="w-30 h-30 object-contain"
                     />

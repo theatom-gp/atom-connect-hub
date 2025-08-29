@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Shield, Users, Database, Eye, Lock, Mail, CheckCircle, FileText, Heart, Award } from "lucide-react";
+import { getImagePath } from '@/lib/imageUtils';
 
 const PrivacyPolicy = () => {
   const trustSignals = [
@@ -63,7 +64,7 @@ const PrivacyPolicy = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <div className="relative bg-cover bg-center bg-no-repeat text-primary-foreground overflow-hidden" style={{backgroundImage: "url('/src/assets/hero-conference.jpg')"}}>
+      <div className="relative bg-cover bg-center bg-no-repeat text-primary-foreground overflow-hidden" style={{backgroundImage: "url('" + getImagePath("hero-conference.jpg") + "')"}}>
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60"></div>
         <div className="relative container mx-auto px-4 py-20">

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Users, Clock, BookOpen, AlertCircle, CheckCircle, FileText } from "lucide-react";
+import { getImagePath } from "@/lib/imageUtils";
 
 const TermsAndConditions = () => {
   return (
@@ -10,7 +11,7 @@ const TermsAndConditions = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative bg-cover bg-center bg-no-repeat text-primary-foreground py-20 px-4 text-center overflow-hidden" style={{backgroundImage: "url('/src/assets/hero-conference.jpg')"}}>
+      <section className="relative bg-cover bg-center bg-no-repeat text-primary-foreground py-20 px-4 text-center overflow-hidden" style={{backgroundImage: "url('" + getImagePath("hero-conference.jpg") + "')"}}>
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60"></div>
         <div className="relative container mx-auto max-w-4xl">

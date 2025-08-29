@@ -22,6 +22,7 @@ import speaker1 from '@/assets/aisummit/speaker-1.jpg';
 import speaker2 from '@/assets/aisummit/speaker-2.jpg';
 import speaker3 from '@/assets/aisummit/speaker-3.jpg';
 import speaker4 from '@/assets/aisummit/speaker-4.jpg';
+import { getImagePath } from '@/lib/imageUtils';
 
 const AISummit = () => {
   const navigate = useNavigate();
@@ -785,7 +786,7 @@ const AISummit = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <img 
-                src={chairpersonImage} 
+                src={getImagePath("aisummit/chairperson-tech.jpg")} 
                 alt="Conference Chairperson"
                 className="w-full max-w-md mx-auto h-[500px] object-cover rounded-lg shadow-lg"
               />
