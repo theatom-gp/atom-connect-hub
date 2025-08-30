@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:images": "node scripts/build-images.js",
+    "build:images": "node scripts/build-images.mjs",
     "build:full": "npm run build:images && npm run build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"

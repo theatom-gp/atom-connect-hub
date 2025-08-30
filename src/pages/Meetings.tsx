@@ -7,22 +7,17 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, MapPin, Users, ArrowRight, Star, TrendingUp } from 'lucide-react';
 import { conferences, getConferencesByCategory, getUniqueCategories, getConferenceCountByCategory, Conference } from '@/lib/conferences';
 import Footer  from '@/components/Footer';
+import { getImagePath } from '@/lib/imageUtils';
 
 // Helper function to get conference image
 const getConferenceImage = (imagePath: string) => {
-  // Handle different image path formats
-  if (imagePath.startsWith('/src/assets/')) {
-    // Convert relative path to import path
-    const assetPath = imagePath.replace('/src/assets/', '');
-    try {
-      // Try to import the image dynamically
-      return new URL(`../assets/${assetPath}`, import.meta.url).href;
-    } catch {
-      // Fallback to a default image
-      return '/src/assets/conference-ai.jpg';
-    }
+  // Use getImagePath utility for proper image resolution
+  try {
+    return getImagePath(imagePath);
+  } catch {
+    // Fallback to a default image
+    return getImagePath('conference-ai.jpg');
   }
-  return imagePath;
 };
 
 const Meetings = () => {
