@@ -22,6 +22,8 @@ import speaker1 from '@/assets/biomaterials/speaker-1.jpg';
 import speaker2 from '@/assets/biomaterials/speaker-2.jpg';
 import speaker3 from '@/assets/biomaterials/speaker-3.jpg';
 import speaker4 from '@/assets/biomaterials/speaker-4.jpg';
+import { getImagePath } from '@/lib/imageUtils';
+import SEO from '@/components/SEO';
 
 const Biomaterials = () => {
   const navigate = useNavigate();
@@ -364,8 +366,55 @@ const Biomaterials = () => {
     });
   };
 
+    // Structured data for the conference page
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "Biomaterials and Regenerative Medicine 2025",
+      "description": "Join the most influential biomaterials conference of 2025, where cutting-edge research meets practical applications. Connect with biomaterials experts, explore breakthrough technologies, and discover solutions that will define the future of biomaterials.",
+      "startDate": "2025-11-15T09:00:00",
+      "endDate": "2025-11-17T18:00:00",
+      "location": {
+        "@type": "Place",
+        "name": "San Francisco",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "San Francisco",
+          "addressRegion": "CA",
+          "addressCountry": "US"
+        }
+      },
+      "organizer": {
+        "@type": "Organization",
+        "name": "Atom Conferences",
+        "url": "https://theatomconferences.com"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "899",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+    };
+
   return (
+
     <div className="min-h-screen bg-background">
+          <SEO 
+    title={`Biomaterials and Regenerative Medicine 2025`}
+    description="Join the most influential biomaterials conference of 2025, where cutting-edge research meets practical applications. Connect with biomaterials experts, explore breakthrough technologies, and discover solutions that will define the future of biomaterials."
+    keywords="Biomaterials conference, regenerative medicine, biomaterials conference, regenerative medicine conference, biomaterials research, regenerative medicine research, biomaterials conference 2025, regenerative medicine conference 2025"
+    image={getImagePath(heroBackground)}
+    url="/conference/biomaterials"
+    type="conference"
+    publishedTime="2025-08-30T00:00:00Z"
+    author="Atom Conferences"
+    section="Health"
+    tags={["Biomaterials", "Regenerative Medicine", "Biomaterials Conference", "Regenerative Medicine Conference", "Biomaterials Research", "Regenerative Medicine Research", "Biomaterials Conference 2025", "Regenerative Medicine Conference 2025"]}
+    structuredData={structuredData}
+  />
       <Navigation />
       {/* Professional Hero Section with Sophisticated Animations */}
       <section className="relative min-h-screen flex items-center overflow-hidden">

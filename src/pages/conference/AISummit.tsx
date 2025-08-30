@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
+import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
@@ -208,8 +209,54 @@ const AISummit = () => {
     });
   };
 
+  // Structured data for the conference page
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": title,
+    "description": description,
+    "startDate": "2025-11-15T09:00:00",
+    "endDate": "2025-11-17T18:00:00",
+    "location": {
+      "@type": "Place",
+      "name": venue,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "San Francisco",
+        "addressRegion": "CA",
+        "addressCountry": "US"
+      }
+    },
+    "organizer": {
+      "@type": "Organization",
+      "name": "Atom Conferences",
+      "url": "https://theatomconferences.com"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "899",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    },
+    "eventStatus": "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title={`${title} - AI Innovation Summit 2025`}
+        description={description}
+        keywords="AI conference, artificial intelligence, machine learning, AI research, AI innovation, tech conference, San Francisco, 2025"
+        image={getImagePath(image)}
+        url="/conference/aisummit"
+        type="conference"
+        publishedTime="2025-01-27T00:00:00Z"
+        author="Atom Conferences"
+        section="Technology"
+        tags={["AI", "Artificial Intelligence", "Machine Learning", "Technology", "Research", "Innovation"]}
+        structuredData={structuredData}
+      />
       <Navigation />
       {/* Professional Hero Section with Sophisticated Animations */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
