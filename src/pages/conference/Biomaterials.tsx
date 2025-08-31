@@ -387,7 +387,7 @@ const Biomaterials = () => {
       "organizer": {
         "@type": "Organization",
         "name": "Atom Conferences",
-        "url": "https://theatomconferences.com"
+        "url": "https://www.theatomconferences.com"
       },
       "offers": {
         "@type": "Offer",

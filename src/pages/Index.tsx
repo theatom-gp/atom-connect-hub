@@ -13,8 +13,8 @@ const Index = () => {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Atom Conferences",
-    "url": "https://theatomconferences.com",
-    "logo": "https://theatomconferences.com/src/assets/atom-logo-1.png",
+    "url": "https://www.theatomconferences.com",
+    "logo": "https://www.theatomconferences.com/assets/images/hero-conference-BJPAZ91T.jpg",
     "description": "Leading international conference platform connecting professionals across disciplines including AI, Healthcare, Finance, Technology, and more.",
     "sameAs": [
       "https://twitter.com/atomconferences",
@@ -34,7 +34,7 @@ const Index = () => {
         title="Leading International Conferences - AI, Healthcare, Finance & Technology"
         description="Join Atom Conferences for world-class international conferences in AI, Healthcare, Finance, Technology, and more. Connect with industry leaders, submit abstracts, and advance your career."
         keywords="international conferences, AI conferences, healthcare conferences, finance conferences, technology conferences, research conferences, academic conferences, professional development"
-        image="/src/assets/hero-conference.jpg"
+        image="/assets/images/hero-conference-BJPAZ91T.jpg"
         url="/"
         type="website"
         structuredData={structuredData}

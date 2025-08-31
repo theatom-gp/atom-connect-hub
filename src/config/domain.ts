@@ -4,7 +4,7 @@ export const DOMAIN_CONFIG = {
   DOMAIN: 'theatomconferences.com',
   
   // Full URLs
-  BASE_URL: 'https://theatomconferences.com',
+  BASE_URL: 'https://www.theatomconferences.com',
   WWW_URL: 'https://www.theatomconferences.com',
   
   // Social Media

@@ -25,7 +25,7 @@ export const getImagePath = (imagePath: string, cacheBust: boolean = true): stri
     // Development: Use Vite's asset handling
     return `/src/assets/${cleanPath}`;
   } else {
-    // Production: Use public assets with cache-busting
+    // Production: Use build output paths - Vite puts images in /assets/images/
     if (cacheBust) {
       return `/assets/${cleanPath}?v=${CACHE_BUST_VERSION}`;
     }

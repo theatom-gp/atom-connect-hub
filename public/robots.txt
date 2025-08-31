@@ -2,7 +2,6 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://theatomconferences.com/sitemap.xml
 Sitemap: https://www.theatomconferences.com/sitemap.xml
 
 # Disallow admin and private areas

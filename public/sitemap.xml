@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage -->
+    <!-- Homepage -->
   <url>
-    <loc>https://theatomconferences.com/</loc>
+    <loc>https://www.theatomconferences.com/</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -10,35 +10,35 @@
 
   <!-- Main Pages -->
   <url>
-    <loc>https://theatomconferences.com/meetings</loc>
+    <loc>https://www.theatomconferences.com/meetings</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/submit-abstract</loc>
+    <loc>https://www.theatomconferences.com/submit-abstract</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/registration</loc>    
+    <loc>https://www.theatomconferences.com/registration</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/contact</loc>
+    <loc>https://www.theatomconferences.com/contact</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/faq</loc>
+    <loc>https://www.theatomconferences.com/faq</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -46,70 +46,70 @@
 
   <!-- Conference Pages -->
   <url>
-    <loc>https://theatomconferences.com/conference/aisummit</loc>
+    <loc>https://www.theatomconferences.com/conference/aisummit</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/conference/techinnovationexpo</loc>
+    <loc>https://www.theatomconferences.com/conference/techinnovationexpo</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/conference/globalhealthcarerevolution</loc>
+    <loc>https://www.theatomconferences.com/conference/globalhealthcarerevolution</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/conference/globalfinancesummit</loc>
+    <loc>https://www.theatomconferences.com/conference/globalfinancesummit</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/conference/forensicscience</loc>
+    <loc>https://www.theatomconferences.com/conference/forensicscience</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/conference/powerandenergy</loc>
+    <loc>https://www.theatomconferences.com/conference/powerandenergy</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/conference/quantumcomputing</loc>
+    <loc>https://www.theatomconferences.com/conference/quantumcomputing</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/conference/biomaterials</loc>
+    <loc>https://www.theatomconferences.com/conference/biomaterials</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/conference/surgeryandanesthesia</loc>
+    <loc>https://www.theatomconferences.com/conference/surgeryandanesthesia</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/conference/neurology</loc>
+    <loc>https://www.theatomconferences.com/conference/neurology</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -117,35 +117,35 @@
 
   <!-- Legal Pages -->
   <url>
-    <loc>https://theatomconferences.com/privacy-policy</loc>
+    <loc>https://www.theatomconferences.com/privacy-policy</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/terms-and-conditions</loc>
+    <loc>https://www.theatomconferences.com/terms-and-conditions</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/cancellation-policy</loc>
+    <loc>https://www.theatomconferences.com/cancellation-policy</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/presentation-guidelines</loc>
+    <loc>https://www.theatomconferences.com/presentation-guidelines</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://theatomconferences.com/visa-invitation</loc>
+    <loc>https://www.theatomconferences.com/visa-invitation</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
