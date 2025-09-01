@@ -49,7 +49,7 @@ const Navigation = () => {
               {/* Logo Icon */}
               <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0">
                 <img 
-                  src={getImagePath("atom-logo-1.png")} 
+                  src="/atom-logo-1.png" 
                   alt="The Atom Conferences Logo"
                   className="w-full h-full object-contain filter drop-shadow-sm hover:drop-shadow-md transition-all duration-300"
                   style={{

@@ -1,74 +1,32 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
-import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Check as CheckIcon, Mail, Bell, Calendar, Globe, ChevronDown, ChevronUp, Eye, EyeOff, X, MapPin, Users, ArrowRight, Star, TrendingUp } from 'lucide-react';
+import { Check as CheckIcon, Mail, Bell, Calendar, Globe, ChevronDown, ChevronUp, Eye, EyeOff, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { getConferenceWithDetails } from '@/lib/conferences';
-import type { Conference, Speaker, VenueImage, PricingTier, ScheduleSession, ScheduleDay, PublishingPartner, MediaPartner } from '@/lib/conferences';
+// import heroBackground from '@/assets/tech-innovation/bg.jpg';
+import heroBackground from '@/assets/aisummit/bg.avif';
+import venueInterior from '@/assets/aisummit/aisummit-venue.jpg';
+import venueConference from '@/assets/aisummit/city.jpg';
+import venueNetworking from '@/assets/aisummit/conference.png';
+import venueExhibition from '@/assets/aisummit/lobby.jpg';
+import chairpersonImage from '@/assets/aisummit/chairperson-tech.jpg';
+import speaker1 from '@/assets/aisummit/speaker-1.jpg';
+import speaker2 from '@/assets/aisummit/speaker-2.jpg';
+import speaker3 from '@/assets/aisummit/speaker-3.jpg';
+import speaker4 from '@/assets/aisummit/speaker-4.jpg';
 import { getImagePath } from '@/lib/imageUtils';
+import SEO from '@/components/SEO';
 
 const AISummit = () => {
   const navigate = useNavigate();
-  
-  // Get conference data dynamically
-  const conference = getConferenceWithDetails('aisummit');
-  
-  // Fallback if conference not found
-  if (!conference) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Conference Not Found</h1>
-          <p className="text-muted-foreground">The requested conference could not be found.</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Extract conference data
-  const {
-    id,
-    title,
-    date,
-    venue,
-    location,
-    image,
-    description,
-    heroSubtitle,
-    heroBadgeText,
-    expertSpeakers,
-    sessions,
-    chairperson,
-    chairpersonDescription,
-    conferenceOverview,
-    conferencepara1,
-    conferencepara2,
-    speakerheader,
-    abstractkeytopics,
-    charipersonheader,
-    chairpersonpara1,
-    chairpersonpara2,
-    speakers,
-    venueImages,
-    pricingTiers,
-    schedule,
-    publishingPartners,
-    mediaPartners,
-    abstractDeadline,
-    registrationDeadline,
-    notificationDeadline
-  } = conference;
-
-  // State management
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -84,24 +42,10 @@ const AISummit = () => {
     'Day 2': false,
     'Day 3': false
   });
-  const [selectedSpeaker, setSelectedSpeaker] = useState<Speaker | null>(null);
+  const [selectedSpeaker, setSelectedSpeaker] = useState(null);
   const [isSpeakerModalOpen, setIsSpeakerModalOpen] = useState(false);
 
-  // Parse conference date for countdown
-  const parseConferenceDate = (dateString: string) => {
-    // Handle format like "November 15-17, 2025"
-    const match = dateString.match(/(\w+)\s+(\d+)-(\d+),\s+(\d+)/);
-    if (match) {
-      const [, month, startDay, endDay, year] = match;
-      const monthIndex = new Date(`${month} 1, ${year}`).getMonth();
-      // Use the start date for countdown
-      return new Date(parseInt(year), monthIndex, parseInt(startDay));
-    }
-    // Fallback to direct parsing
-    return new Date(dateString);
-  };
-  
-  const targetDate = parseConferenceDate(date);
+  const targetDate = new Date('2025-11-15T09:00:00');
   const earlyBirdDate = new Date(targetDate.getTime() - (100 * 24 * 60 * 60 * 1000));
   const now = new Date();
   const daysToEvent = Math.floor((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
@@ -126,7 +70,220 @@ const AISummit = () => {
     updateCountdown();
 
     return () => clearInterval(timer);
-  }, [targetDate]);
+  }, []);
+
+  const venueImages = [
+    {
+      src: venueInterior,
+      alt: "Main Hall",
+      title: "Main Convention Hall"
+    },
+    {
+      src: venueConference,
+      alt: "Professional Conference Room Setup",
+      title: "Conference Rooms"
+    },
+    {
+      src: venueNetworking,
+      alt: "Networking Area",
+      title: "Networking Spaces"
+    },
+    {
+      src: venueExhibition,
+      alt: "Exhibition Hall",
+      title: "Exhibition Area"
+    }
+  ];
+
+  const speakers = [
+    {
+      name: "Dr. Maria Santos",
+      title: "Chief AI Engineer, San Francisco AI Lab",
+      country: "Spain",
+      image: speaker1,
+      expertise: "AI Algorithms and Applications",
+      biography: "Dr. Maria Santos is recognized as 'The AI Innovation Pioneer'. With over 15 years of experience in AI engineering, she has developed breakthrough materials for medical implants and tissue engineering applications. Dr. Santos has published over 80 peer-reviewed papers and holds 12 patents in AI technology. She has led research teams that have successfully developed biodegradable scaffolds for bone regeneration and drug-eluting stents for cardiovascular applications. Dr. Santos serves on the editorial board of the Journal of AI Science and has received the prestigious AI Innovation Award from the International Society for AI."
+    },
+    {
+      name: "Prof. James Wilson",
+      title: "Director of AI Research, University of California, San Francisco",
+      country: "United Kingdom",
+      image: speaker2,
+      expertise: "AI Algorithms and Applications",
+      biography: "Professor James Wilson is acclaimed as 'The AI Research Leader'. He has conducted groundbreaking research on smart AI and has pioneered the development of responsive materials that adapt to physiological conditions. Professor Wilson has authored three comprehensive textbooks on AI science and has trained over 300 graduate students in the field. His research on bio-inspired materials has led to the development of novel coatings for medical devices and has been instrumental in advancing the field of regenerative medicine. Professor Wilson serves on the advisory board of the National Institute of Biomedical Imaging and Bioengineering."
+    },
+    {
+      name: "Dr. Elena Rodriguez",
+      title: "Senior AI Engineer, San Francisco AI Lab",
+      country: "Spain",
+      image: speaker3,
+      expertise: "AI Algorithms and Applications",
+      biography: "Dr. Elena Rodriguez is distinguished as 'The AI Applications Specialist'. She has specialized in translating laboratory research into clinical applications and has successfully brought five AI products to market. Dr. Rodriguez has extensive experience in regulatory affairs and has guided numerous AI through FDA approval processes. She has published extensively on clinical outcomes of AI applications and has been a key figure in establishing international standards for AI testing. Dr. Rodriguez serves as a consultant for major medical device companies and has received the Excellence in AI Engineering award."
+    },
+    {
+      name: "Prof. Hans Mueller",
+      title: "Head of AI Policy and Regulation, University of California, San Francisco",
+      country: "Germany",
+      image: speaker4,
+      expertise: "AI Algorithms and Applications",
+      biography: "Professor Hans Mueller is celebrated as 'The AI Policy Expert'. He has been instrumental in shaping regulatory frameworks for AI worldwide and has advised government agencies in over 20 countries. Professor Mueller has developed comprehensive guidelines for AI safety assessment and has been a driving force behind international harmonization of AI standards. He has authored numerous policy papers and has served on expert panels for the World Health Organization and the European Medicines Agency. Professor Mueller's work has been crucial in ensuring the safe and effective use of AI in clinical applications."
+    }
+  ];
+
+  const pricingTiers = [
+    {
+      title: "Delegate/Listener",
+      subtitle: "(In-Person)",
+      price: 899,
+      features: [
+        "Entry to all session and workshops",
+        "Lunch & Coffee breaks",
+        "Conference schedule handout",
+        "Certificate of Attendance",
+        "E-Abstract Book"
+      ]
+    },
+    {
+      title: "Speaker",
+      subtitle: "(In-person)",
+      price: 799,
+      features: [
+        "Entry to all session and workshops",
+        "Lunch & Coffee breaks",
+        "Conference schedule handout",
+        "Certificate of Attendance",
+        "E-Abstract Book"
+      ]
+    },
+    {
+      title: "Student",
+      subtitle: "",
+      price: 549,
+      features: [
+        "Entry to all session and workshops",
+        "Lunch & Coffee breaks",
+        "Conference schedule handout",
+        "Certificate of Attendance",
+        "E-Abstract Book"
+      ]
+    },
+    {
+      title: "Virtual",
+      subtitle: "(Speaker/Delegate)",
+      price: 399,
+      features: [
+        "Conference recorded video access",
+        "Conference schedule handout",
+        "Certificate of Attendance",
+        "E-Abstract Book"
+      ]
+    }
+  ];
+
+  const scheduleData = [
+    {
+      day: "Day 1",
+      date: "November 13, 2025",
+      sessions: [
+        { time: "08:00-09:30", activity: "Registrations & Introduction" },
+        { time: "09:30-11:30", activity: "Plenary Session" },
+        { time: "11:30-11:45", activity: "Networking Break" },
+        { time: "11:45-13:15", activity: "Keynote Session" },
+        { time: "13:15-14:00", activity: "Group Photo & Network Lunch" },
+        { time: "14:00-16:00", activity: "Keynote Session" },
+        { time: "16:00-16:15", activity: "Networking Break" },
+        { time: "16:15-18:00", activity: "AI Sessions" }
+      ]
+    },
+    {
+      day: "Day 2", 
+      date: "November 14, 2025",
+      sessions: [
+        { time: "09:00-11:30", activity: "Plenary Session" },
+        { time: "11:30-11:45", activity: "Networking Break" },
+        { time: "11:45-13:45", activity: "AI Sessions" },
+        { time: "13:45-14:30", activity: "Networking Lunch Break" },
+        { time: "14:30-16:30", activity: "AI Sessions" },
+        { time: "16:30-16:45", activity: "Networking Break" },
+        { time: "16:45-18:30", activity: "AI Sessions" },
+        { time: "18:45-19:00", activity: "Certification" }
+      ]
+    },
+    {
+      day: "Day 3",
+      date: "November 15, 2025", 
+      sessions: [
+        { time: "09:00-11:30", activity: "AI Sessions" },
+        { time: "11:30-11:45", activity: "Networking Break" },
+        { time: "11:45-13:45", activity: "AI Sessions" },
+        { time: "13:45-14:30", activity: "Networking Lunch Break" },
+        { time: "14:30-16:30", activity: "AI Sessions" },
+        { time: "16:30-16:45", activity: "Networking Break" },
+        { time: "16:45-18:30", activity: "AI Sessions" },
+        { time: "18:30-19:00", activity: "Closing Ceremony" }
+      ]
+    }
+  ];
+
+  const publishingPartners = [
+    { 
+      name: "AI International", 
+      description: "Leading AI Journal", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MDPI_logo.svg/320px-MDPI_logo.svg.png",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY0ZjQiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzMzMzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Rm9yZW5zaWMgU2NpZW5jZTwvdGV4dD48L3N2Zz4="
+    },
+    { 
+      name: "Journal of AI", 
+      description: "Academic AI Research", 
+      logo: "https://www.cambridgescholars.com/assets/img/logo.png",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY0ZjQiLz48dGV4dCB4PSI1MCIgeT0iMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI4IiBmaWxsPSIjMzMzMzMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Kb3VybmFsPC90ZXh0Pjx0ZXh0IHg9IjUwIiB5PSIzMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjgiIGZpbGw9IiMzMzMzMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljczwvdGV4dD48L3N2Zz4="
+    },
+    { 
+      name: "AI Review", 
+      description: "AI Research Database", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Scopus_logo.svg/320px-Scopus_logo.svg.png",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGRjZGMDAiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljIFJldmlldzwvdGV4dD48L3N2Zz4="
+    },
+    { 
+      name: "International Journal of AI", 
+      description: "AI Research", 
+      logo: "https://www.bonviewglobal.com/assets/images/logo.png",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY0ZjQiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzMzMzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TGVnYWwgTWVkaWNpbmU8L3RleHQ+PC9zdmc+"
+    }
+  ];
+
+  const mediaPartners = [
+    { 
+      name: "AI Today", 
+      description: "AI Research Publication", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/b/b9/TechCrunch_logo.svg",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiMwMENGNjQiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljIE1hZzwvdGV4dD48L3N2Zz4="
+    },
+    { 
+      name: "AI Today", 
+      description: "AI Research Publication", 
+      logo: "https://www.technologyreview.com/wp-content/uploads/2020/02/mit-logo-2020-web.png",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNBMzE2MjEiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNTSTwvdGV4dD48L3N2Zz4="
+    },
+    { 
+      name: "AI Today", 
+      description: "AI Research Publication", 
+      logo: "https://spectrum.ieee.org/media/logo/IEEE-spectrum-logo.svg",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiMwMDU1RkYiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljIFRvZGF5PC90ZXh0Pjwvc3ZnPg=="
+    },
+    { 
+      name: "AI Today", 
+      description: "AI Research Publication", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/5/50/Wired_logo.svg",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNTAiIHk9IjI1IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiMwMDAwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkxlZ2FsIE1lZGljaW5lPC90ZXh0Pjwvc3ZnPg=="
+    },
+    { 
+      name: "AI Research Network", 
+      description: "AI Research News", 
+      logo: "https://venturebeat.com/wp-content/uploads/2020/06/VB_logo_2020.png",
+      fallbackLogo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiNGRjI0MDAiLz48dGV4dCB4PSI1MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZvcmVuc2ljIFJlc2VhcmNoPC90ZXh0Pjwvc3ZnPg=="
+    }
+  ];
 
   // Email validation function
   const validateEmail = (email: string) => {
@@ -155,10 +312,10 @@ const AISummit = () => {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Store in localStorage for demo purposes
-      const subscribers = JSON.parse(localStorage.getItem('aiSummitSubscribers') || '[]');
+      const subscribers = JSON.parse(localStorage.getItem('forensicScienceSubscribers') || '[]');
       if (!subscribers.includes(email)) {
         subscribers.push(email);
-        localStorage.setItem('aiSummitSubscribers', JSON.stringify(subscribers));
+        localStorage.setItem('forensicScienceSubscribers', JSON.stringify(subscribers));
       }
       
       setIsSubscribed(true);
@@ -170,7 +327,7 @@ const AISummit = () => {
       }, 5000);
       
     } catch (error) {
-      setEmailError('Failed to subscribe. Please try again.');
+      setEmailError('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -184,7 +341,7 @@ const AISummit = () => {
   };
 
   // Toggle day expansion
-  const toggleDay = (day: string) => {
+  const toggleDayExpansion = (day: string) => {
     setExpandedDays(prev => ({
       ...prev,
       [day]: !prev[day]
@@ -209,54 +366,55 @@ const AISummit = () => {
     });
   };
 
-  // Structured data for the conference page
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    "name": title,
-    "description": description,
-    "startDate": "2025-11-15T09:00:00",
-    "endDate": "2025-11-17T18:00:00",
-    "location": {
-      "@type": "Place",
-      "name": venue,
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "San Francisco",
-        "addressRegion": "CA",
-        "addressCountry": "US"
-      }
-    },
-    "organizer": {
-      "@type": "Organization",
-      "name": "Atom Conferences",
-      "url": "https://www.theatomconferences.com"
-    },
-    "offers": {
-      "@type": "Offer",
-      "price": "899",
-      "priceCurrency": "USD",
-      "availability": "https://schema.org/InStock"
-    },
-    "eventStatus": "https://schema.org/EventScheduled",
-    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
-  };
+    // Structured data for the conference page
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "AI and Regenerative Medicine 2025",
+      "description": "Join the most influential AI conference of 2025, where cutting-edge research meets practical applications. Connect with ai experts, explore breakthrough technologies, and discover solutions that will define the future of ai.",
+      "startDate": "2025-11-15T09:00:00",
+      "endDate": "2025-11-17T18:00:00",
+      "location": {
+        "@type": "Place",
+        "name": "San Francisco",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "San Francisco",
+          "addressRegion": "CA",
+          "addressCountry": "US"
+        }
+      },
+      "organizer": {
+        "@type": "Organization",
+        "name": "Atom Conferences",
+        "url": "https://www.theatomconferences.com"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "899",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+    };
 
   return (
+
     <div className="min-h-screen bg-background">
-      <SEO 
-        title={`${title} - AI Innovation Summit 2025`}
-        description={description}
-        keywords="AI conference, artificial intelligence, machine learning, AI research, AI innovation, tech conference, San Francisco, 2025"
-        image={getImagePath(image)}
-        url="/conference/aisummit"
-        type="conference"
-        publishedTime="2025-01-27T00:00:00Z"
-        author="Atom Conferences"
-        section="Technology"
-        tags={["AI", "Artificial Intelligence", "Machine Learning", "Technology", "Research", "Innovation"]}
-        structuredData={structuredData}
-      />
+          <SEO 
+    title={`Biomaterials and Regenerative Medicine 2025`}
+    description="Join the most influential biomaterials conference of 2025, where cutting-edge research meets practical applications. Connect with biomaterials experts, explore breakthrough technologies, and discover solutions that will define the future of biomaterials."
+    keywords="Biomaterials conference, regenerative medicine, biomaterials conference, regenerative medicine conference, biomaterials research, regenerative medicine research, biomaterials conference 2025, regenerative medicine conference 2025"
+    image={getImagePath(heroBackground)}
+    url="/conference/biomaterials"
+    type="conference"
+    publishedTime="2025-08-30T00:00:00Z"
+    author="Atom Conferences"
+    section="Health"
+    tags={["Biomaterials", "Regenerative Medicine", "Biomaterials Conference", "Regenerative Medicine Conference", "Biomaterials Research", "Regenerative Medicine Research", "Biomaterials Conference 2025", "Regenerative Medicine Conference 2025"]}
+    structuredData={structuredData}
+  />
       <Navigation />
       {/* Professional Hero Section with Sophisticated Animations */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -266,7 +424,7 @@ const AISummit = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 transition-transform duration-[20s] ease-out"
             style={{
-              backgroundImage: `url(${getImagePath(image)})`,
+              backgroundImage: `url(${heroBackground})`,
               transform: 'scale(1.05)',
               filter: 'brightness(0.4) contrast(1.1) saturate(1.2)'
             }}
@@ -372,7 +530,7 @@ const AISummit = () => {
                     <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.3s]" />
                     <div className="w-1.5 h-1.5 bg-accent rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.6s]" />
                   </div>
-                                     <span className="tracking-wider uppercase">{heroBadgeText}</span>
+                  <span className="tracking-wider uppercase">AI • Research • Innovation</span>
                   <div className="flex items-center gap-1">
                     <div className="w-1.5 h-1.5 bg-accent rounded-full animate-[techPulse_2s_ease-in-out_infinite_0.9s]" />
                     <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-[techPulse_2s_ease-in-out_infinite_1.2s]" />
@@ -386,11 +544,11 @@ const AISummit = () => {
             <div className="overflow-hidden mb-16">
               <h1 className="text-6xl lg:text-7xl xl:text-8xl font-extralight text-white leading-[0.9] tracking-tight">
                 <div className="animate-[staggerUp_1s_ease-out_0.4s_both]">
-                  <span className="inline-block font-light"> AI Innovation </span>
+                  <span className="inline-block font-light">AI Innovation</span>
                 </div>
                 <div className="animate-[staggerUp_1s_ease-out_0.6s_both] mt-4">
                   <span className="inline-block font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-primary to-secondary bg-size-200 animate-[gradientShift_4s_ease-in-out_infinite]">
-                    Summit 
+                  Summit
                   </span>
                 </div>
                 <div className="animate-[staggerUp_1s_ease-out_0.8s_both] mt-4">
@@ -403,8 +561,8 @@ const AISummit = () => {
               {/* Professional Subtitle */}
               <div className="animate-[staggerUp_1s_ease-out_1s_both] mt-8">
                 <p className="text-xl lg:text-xl text-white/80 font-light max-w-3xl mx-auto leading-relaxed">
-                  {heroSubtitle.split(',')[0]} , 
-                  <span className="text-white font-medium"> {heroSubtitle.split(',')[1]}</span>
+                  Advancing AI Through Innovation, 
+                  <span className="text-white font-medium"> Research and International Collaboration</span>
                 </p>
               </div>
             </div>
@@ -425,7 +583,7 @@ const AISummit = () => {
                     </div>
                     <div className="text-left">
                       <div className="text-sm text-white/60 font-medium uppercase tracking-wider mb-1">Event Dates</div>
-                      <div className="text-xl font-semibold text-white">{date}</div>
+                      <div className="text-xl font-semibold text-white">Nov 15-17, 2025</div>
                     </div>
                   </div>
                 </div>
@@ -445,7 +603,7 @@ const AISummit = () => {
                     </div>
                     <div className="text-left">
                       <div className="text-sm text-white/60 font-medium uppercase tracking-wider mb-1">Location</div>
-                      <div className="text-xl font-semibold text-white">{location}</div>
+                      <div className="text-xl font-semibold text-white">San Francisco, CA</div>
                     </div>
                   </div>
                 </div>
@@ -469,13 +627,13 @@ const AISummit = () => {
                       
                       {/* Content */}
                       <div className="relative text-center">
-                        <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-1 sm:mb-1 sm:mb-2 transition-all duration-500 group-hover:scale-110 tabular-nums">
+                        <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-1 sm:mb-2 transition-all duration-500 group-hover:scale-110 tabular-nums">
                           {value.toString().padStart(2, '0')}
                         </div>
-                        <div className="text-xs sm:text-xs sm:text-xs uppercase tracking-widest text-white/60 font-medium leading-tight leading-tight">{unit}</div>
+                        <div className="text-xs sm:text-xs uppercase tracking-widest text-white/60 font-medium leading-tight">{unit}</div>
                         
                         {/* Micro Animation Dot */}
-                        <div className="absolute -top-1 sm:-top-2 -right-1 sm:-right-2 w-1.5 sm:w-2 h-1.5 sm:h-2 bg-primary rounded-full animate-[techPulse_2s_ease-out_infinite] opacity-60" 
+                        <div className="absolute -top-1 sm:-top-2 -right-1 sm:-right-2 w-1.5 sm:w-2 h-1.5 sm:h-2 bg-primary rounded-full animate-[techPulse_2s_ease-in-out_infinite] opacity-60" 
                              style={{ animationDelay: `${index * 0.2}s` }} />
                       </div>
                     </div>
@@ -489,7 +647,7 @@ const AISummit = () => {
               <Button 
                 size="lg" 
                 className="group relative overflow-hidden bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-10 py-4 text-lg font-semibold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/25"
-                onClick={() => navigate('/registration?conference=aisummit')}
+                onClick={() => navigate('/registration?conference=biomaterials')}
               >
                 <span className="relative z-10 flex items-center gap-2">
                   Register Now
@@ -508,7 +666,7 @@ const AISummit = () => {
                     : "opacity-50 cursor-not-allowed border-muted text-muted-foreground bg-muted"
                 }`}
                 disabled={!isEarlyBird}
-                onClick={() => isEarlyBird && navigate('/registration?conference=aisummit')}
+                onClick={() => isEarlyBird && navigate('/registration?conference=biomaterials')}
               >
                 <span className="relative z-10 flex items-center gap-3">
                   {isEarlyBird ? (
@@ -606,7 +764,7 @@ const AISummit = () => {
                     <CarouselItem key={index}>
                       <div className="relative">
                         <img 
-                          src={getImagePath(image.src)} 
+                          src={image.src} 
                           alt={image.alt}
                           className="w-full h-[400px] object-cover rounded-lg shadow-lg"
                         />
@@ -632,20 +790,20 @@ const AISummit = () => {
               </h2>
               
               <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                {conferencepara1}
+              Join the most influential AI conference of 2025, where cutting-edge research meets practical applications. Connect with AI experts, explore breakthrough technologies, and discover solutions that will define the future of AI and innovation.
               </p>
               
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                {conferencepara2}
+              From AI research and development to AI ethics and policy, this three-day immersive experience brings together leading AI experts, researchers, and professionals from across the globe to share insights, forge partnerships, and accelerate AI innovation.
               </p>
               
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-primary">{expertSpeakers}</div>
+                  <div className="text-3xl font-bold text-primary">75+</div>
                   <div className="text-muted-foreground">Expert Speakers</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-primary">{sessions}</div>
+                  <div className="text-3xl font-bold text-primary">10+</div>
                   <div className="text-muted-foreground">Sessions</div>
                 </div>
               </div>
@@ -660,7 +818,7 @@ const AISummit = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <img 
-                src={getImagePath("aisummit/chairperson-tech.jpg")} 
+                src={chairpersonImage} 
                 alt="Conference Chairperson"
                 className="w-full max-w-md mx-auto h-[500px] object-cover rounded-lg shadow-lg"
               />
@@ -676,17 +834,18 @@ const AISummit = () => {
               </h2>
               
               <blockquote className="text-muted-foreground text-lg leading-relaxed mb-6 italic">
-                "{chairpersonpara1}"
+                "AI is the bridge between innovation and progress. The AI Innovation Summit 2025 represents a unique opportunity to witness the convergence of brilliant minds and revolutionary techniques in AI research and development."
               </blockquote>
-              
+
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                {chairpersonpara2}
+              As we stand at the forefront of AI innovation, this conference serves as a catalyst for meaningful collaboration and groundbreaking discoveries. Join us in San Francisco as we explore the technologies and methodologies that will shape the future of AI and create lasting impact across the world.
               </p>
               
               <div className="mb-8">
-                <p className="font-semibold text-foreground">{chairperson}</p>
-                <p className="text-muted-foreground">{chairpersonDescription}</p>
+                <p className="font-semibold text-foreground">Dr. Carlos Mendes</p>
+                <p className="text-muted-foreground">Conference Chair & Director of AI, University of California, San Francisco</p>
               </div>
+
             </div>
           </div>
         </div>
@@ -712,23 +871,23 @@ const AISummit = () => {
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    {abstractkeytopics[0]}
+                    AI Algorithms and Applications
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    {abstractkeytopics[1]}
+                    AI Applications
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    {abstractkeytopics[2]}
+                    AI Hardware and Software
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    {abstractkeytopics[3]}
+                    AI Security and Privacy
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    {abstractkeytopics[4]}
+                    AI Policy and Regulation
                   </li>
                 </ul>
               </div>
@@ -738,7 +897,7 @@ const AISummit = () => {
                 <ul className="space-y-3 text-muted-foreground">
                   <li className="flex items-start gap-2">
                     <span className="font-semibold min-w-[120px]">Deadline:</span>
-                    <span>{abstractDeadline}</span>
+                    <span>October 30, 2025</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="font-semibold min-w-[120px]">Format:</span>
@@ -750,7 +909,7 @@ const AISummit = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="font-semibold min-w-[120px]">Notification:</span>
-                    <span>{notificationDeadline}</span>
+                    <span>November 1, 2025</span>
                   </li>
                 </ul>
               </div>
@@ -787,6 +946,20 @@ const AISummit = () => {
 
       {/* Speakers Section */}
       <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+        {/* Enhanced Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <svg className="w-full h-full" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Curly lines pattern */}
+            <path d="M50 100 Q150 50 250 100 T450 100" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M600 150 Q700 100 800 150 T1000 150" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M100 300 Q200 250 300 300 T500 300" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M700 350 Q800 300 900 350 T1100 350" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M200 500 Q300 450 400 500 T600 500" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M800 550 Q900 500 1000 550 T1200 550" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M150 650 Q250 600 350 650 T550 650" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            <path d="M750 700 Q850 650 950 700 T1150 700" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+          </svg>
+        </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
@@ -799,7 +972,7 @@ const AISummit = () => {
             </h2>
             
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
-              {speakerheader}
+              Learn from AI pioneers and thought leaders representing AI institutions across the globe.
             </p>
           </div>
 
@@ -818,14 +991,10 @@ const AISummit = () => {
                   <div className="flex-shrink-0">
                     <div className="relative w-20 h-20 sm:w-24 sm:h-24">
                       <img 
-                        src={getImagePath(speaker.image)} 
+                        src={speaker.image} 
                         alt={speaker.name}
                         className="w-full h-full object-cover rounded-full border-3 border-white/30 shadow-lg"
                       />
-                      {/* Country badge */}
-                      {/* <div className="absolute -bottom-2 -right-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
-                        {speaker.country}
-                      </div> */}
                     </div>
                   </div>
                   
@@ -861,13 +1030,10 @@ const AISummit = () => {
                   <div className="flex-shrink-0">
                     <div className="relative w-48 h-64">
                       <img 
-                        src={getImagePath(selectedSpeaker.image)} 
+                        src={selectedSpeaker.image} 
                         alt={selectedSpeaker.name}
                         className="w-full h-full object-cover rounded-lg shadow-lg"
                       />
-                      {/* <div className="absolute top-4 left-4 bg-primary text-white text-sm font-bold px-3 py-1 rounded-full shadow-md">
-                        {selectedSpeaker.country}
-                      </div> */}
                     </div>
                   </div>
                   
@@ -969,7 +1135,7 @@ const AISummit = () => {
                   <Button 
                     className="w-full py-3 text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200" 
                     variant="default"
-                    onClick={() => navigate('/registration?conference=forensicscience')}
+                    onClick={() => navigate('/registration?conference=biomaterials')}
                   >
                     Register Now
                   </Button>
@@ -1056,7 +1222,7 @@ const AISummit = () => {
           </motion.div>
 
           <div className="space-y-6">
-                              {schedule.map((day, dayIndex) => (
+            {scheduleData.map((day, dayIndex) => (
               <motion.div
                 key={day.day}
                 className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
@@ -1075,13 +1241,13 @@ const AISummit = () => {
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 bg-primary rounded-full"></div>
-                        <span className="text-sm font-medium text-muted-foreground">Western European Time (WET)</span>
+                        <span className="text-sm font-medium text-muted-foreground">Pacific Standard Time (PST)</span>
                       </div>
                     </div>
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => toggleDay(day.day)}
+                      onClick={() => toggleDayExpansion(day.day)}
                       className="flex items-center gap-2 hover:bg-white/20 transition-colors duration-200"
                     >
                       <span className="text-sm font-medium text-foreground">
@@ -1301,7 +1467,7 @@ const AISummit = () => {
             </div>
           </div>
           
-          <div className="mt-12 text-center text-primary rounded-full text-sm font-semibold mb-6">
+          <div className="mt-12 text-center">
             <Button variant="outline" onClick={() => navigate('/contact')}>Become a Partner</Button>
           </div>
         </div>
@@ -1332,7 +1498,7 @@ const AISummit = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <div className="inline-block px-4 py-2 bg-white text-secondary rounded-full text-sm font-semibold mb-6">
+            <div className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-semibold mb-6">
               Stay Updated
             </div>
             
@@ -1381,7 +1547,7 @@ const AISummit = () => {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold">Global Opportunities</h4>
-                      <p className="text-white/70 text-sm">Discover AI events worldwide</p>
+                      <p className="text-white/70 text-sm">Discover Biomaterials and Regenerative Medicine events worldwide</p>
                     </div>
                   </div>
                 </div>
@@ -1450,7 +1616,7 @@ const AISummit = () => {
                     animate={{ opacity: 1, scale: 1 }}
                   >
                     <p className="text-green-300 font-medium">
-                      🎉 Welcome aboard! You'll receive updates about future AI Innovation Summit conferences.
+                      🎉 Welcome aboard! You'll receive updates about future Biomaterials and Regenerative Medicine conferences.
                     </p>
                   </motion.div>
                 )}

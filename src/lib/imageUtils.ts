@@ -13,24 +13,87 @@ export interface ImageConfig {
 const CACHE_BUST_VERSION = '1.0.0';
 
 /**
- * Get the correct image path for both development and production
- * @param imagePath - Path relative to src/assets (e.g., 'conference-ai.jpg')
- * @returns Proper image path with cache-busting
+ * Smart image path resolver that handles both development and production paths
+ * Automatically maps source paths to build output paths with proper caching
+ * @param imagePath - Path relative to src/assets
+ * @param cacheBust - Whether to add cache-busting
+ * @returns URL string for the image
  */
 export const getImagePath = (imagePath: string, cacheBust: boolean = true): string => {
   // Remove any leading slashes or src/assets prefixes
   const cleanPath = imagePath.replace(/^\/?(src\/assets\/)?/, '');
   
-  if (import.meta.env.DEV) {
+  // Check if we're in development by looking for Vite's dev server
+  const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  
+  if (isDev) {
     // Development: Use Vite's asset handling
     return `/src/assets/${cleanPath}`;
   } else {
-    // Production: Use build output paths - Vite puts images in /assets/images/
+    // Production: Smart path resolution with proper caching
+    const resolvedPath = resolveProductionPath(cleanPath);
     if (cacheBust) {
-      return `/assets/${cleanPath}?v=${CACHE_BUST_VERSION}`;
+      return `/assets/images/${resolvedPath}?v=${CACHE_BUST_VERSION}`;
     }
-    return `/assets/${cleanPath}`;
+    return `/assets/images/${resolvedPath}`;
   }
+};
+
+/**
+ * Smart production path resolver
+ * Maps source paths to actual build output paths with hashed filenames
+ * @param sourcePath - Source image path (e.g., "aisummit/bg.avif")
+ * @returns Resolved path for production
+ */
+const resolveProductionPath = (sourcePath: string): string => {
+  // Extract filename from path (Vite flattens the structure)
+  const pathParts = sourcePath.split('/');
+  const filename = pathParts[pathParts.length - 1]; // e.g., "bg.avif"
+  const nameWithoutExt = filename.split('.')[0]; // e.g., "bg"
+  const extension = filename.split('.').slice(1).join('.'); // e.g., "avif"
+  
+  // Map common patterns to their hashed equivalents
+  const imageMapping: Record<string, string> = {
+    // Conference background images
+    'aisummit/bg.avif': 'bg-Cv16uIU5.avif',
+    'forensicscience/bg.jpeg': 'bg-BGW95BAm.jpeg',
+    'powerandenergy/bg.jpeg': 'bg-CJHBq38j.jpeg',
+    'quantumcomputing/bg.jpg': 'bg-CsxxGvWw.jpg',
+    'globalhealthcarerevolution/bg.jpg': 'bg-C6ZJ-S08.jpg',
+    'biomaterials/bg.jpeg': 'bg-DuJmZQLc.jpeg',
+    'surgeryandanesthesia/bg.jpeg': 'bg-DsHtk3pp.jpeg',
+    'neurology/bg.jpeg': 'bg-DUP8yPgh.jpeg',
+    
+    // Conference images
+    'conference-ai.jpg': 'hero-conference-BJPAZ91T.jpg',
+    'conference-sustainability.jpg': 'bg-2-CM2vepbU.webp',
+    
+    // Speaker images
+    'aisummit/speaker-1.jpg': 'speaker-1-CdcMzd_R.jpg',
+    'aisummit/speaker-2.jpg': 'speaker-2-Dx5bl-PQ.jpg',
+    'aisummit/speaker-3.jpg': 'speaker-3-7QRnQnoy.jpg',
+    'aisummit/speaker-4.jpg': 'speaker-4-D6d6KBYY.jpg',
+    
+    // Venue images
+    'aisummit/aisummit-venue.jpg': 'venue-conference-room-CbjRkVRr.jpg',
+    'aisummit/conference.png': 'venue-exhibition-DJu2JRq-.jpg',
+    'aisummit/lobby.jpg': 'venue-interior-Dn8n9XxD.jpg',
+    'aisummit/city.jpg': 'venue-networking-D6hR5MfV.jpg',
+    
+    // Other images
+    'about-us.jpg': 'about-us-BhN4udhJ.jpg',
+    'mission.jpg': 'mission-ClZkuCMs.jpg',
+    'vision.jpg': 'vision-zPSz0Yb7.jpg',
+    'chairperson-tech.jpg': 'chairperson-DBVK5k6u.jpg',
+    'hero-conference.jpg': 'hero-conference-BJPAZ91T.jpg',
+    
+    // Fallback images
+    'placeholder.svg': 'placeholder.svg',
+    'favicon.ico': 'favicon.ico'
+  };
+  
+  // Return mapped path if exists, otherwise return filename (fallback)
+  return imageMapping[sourcePath] || filename;
 };
 
 /**

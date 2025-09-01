@@ -1,4 +1,4 @@
-  import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
@@ -61,8 +61,7 @@ const Meetings = () => {
 
   // Dynamic stats based on actual conference data
   const stats = [
-    { icon: <Calendar className="h-5 w-5" />, value: "50+", label: "Events" },
-    // { icon: <Calendar className="h-5 w-5" />, value: `${conferences.length}`, label: "Events" },
+    { icon: <Calendar className="h-5 w-5" />, value: `${conferences.length}`, label: "Events" },
     { icon: <Users className="h-5 w-5" />, value: "10K+", label: "Attendees" },
     { icon: <MapPin className="h-5 w-5" />, value: `${new Set(conferences.map(c => c.location.split(', ')[1])).size}`, label: "Countries" },
     { icon: <Star className="h-5 w-5" />, value: `${getUniqueCategories().length - 1}`, label: "Categories" }
@@ -79,7 +78,7 @@ const Meetings = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
             style={{
-              backgroundImage: `url('/src/assets/background.jpg')`
+              backgroundImage: `url(${getImagePath('hero-conference.jpg')})`
             }}
           />
         </div>
