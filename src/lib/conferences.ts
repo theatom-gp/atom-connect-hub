@@ -94,7 +94,7 @@ export const conferences: Conference[] = [
     date: "November 15-17, 2025",
     venue: "Silicon Valley Convention Center",
     location: "San Francisco, CA",
-    image: "src/assets/aisummit/bg.avif",
+    image: "aisummit/bg.avif",
     description: "Join leading AI researchers, tech executives, and innovators as they unveil the future of artificial intelligence.",
     category: "Technology",
     abstractDeadline: "October 15, 2025",
@@ -129,7 +129,7 @@ export const conferences: Conference[] = [
         name: "Dr. Maria Santos",
         title: "Chief AI Scientist, San Francisco Institute of Technology",
         country: "Portugal",
-        image: "src/assets/aisummit/speaker-1.jpg",
+        image: "aisummit/speaker-1.jpg",
         expertise: "AI Innovation",
         biography: "Dr. Maria Santos is known as 'The AI Pioneer'. A title earned throughout her 15 years serving as the lead AI scientist for the Lisbon Crime Lab, where she has processed over 2,000 criminal cases and developed innovative AI extraction techniques. She has pioneered the use of next-generation sequencing in AI analysis and has been instrumental in solving numerous high-profile cases across Europe. Dr. Santos has published over 50 peer-reviewed papers on AI analysis and has trained over 200 AI scientists worldwide. She is a member of the European Network of AI Science Institutes and serves as a consultant for INTERPOL on AI analysis protocols."
         },
@@ -137,7 +137,7 @@ export const conferences: Conference[] = [
         name: "Prof. James Wilson",
         title: "Director of AI Research, San Francisco Institute of Technology",
         country: "United States",
-        image: "src/assets/aisummit/speaker-2.jpg",
+        image: "aisummit/speaker-2.jpg",
         expertise: "AI Ethics",
         biography: "Professor James Wilson is recognized as 'The AI Master'. With over 20 years of experience in cybersecurity and AI research, he has led investigations into major cybercrimes and has developed cutting-edge tools for AI evidence recovery. As Director of AI Research at San Francisco Institute of Technology, he has established one of the most advanced AI laboratories in the world. Professor Wilson has authored three textbooks on AI research and has trained law enforcement agencies in over 30 countries. He is a certified expert witness in AI research and has testified in numerous high-profile cybercrime cases."
       },
@@ -145,7 +145,7 @@ export const conferences: Conference[] = [
         name: "Dr. Elena Rodriguez",
         title: "Senior AI Scientist, San Francisco Institute of Technology",
         country: "United States",
-        image: "src/assets/aisummit/speaker-3.jpg",
+        image: "aisummit/speaker-3.jpg",
         expertise: "AI Ethics",
         biography: "Dr. Elena Rodriguez is acclaimed as 'The AI Research Expert'. She has conducted over 1,500 autopsies and has been instrumental in developing new protocols for AI research in the United States. Dr. Rodriguez specializes in trauma analysis and has worked on cases involving mass disasters, homicides, and suspicious deaths. She has published extensively on AI research techniques and has been a key figure in establishing international standards for AI research practice. Dr. Rodriguez serves on the editorial board of the Journal of AI Research and is a member of the International Association of AI Researchists."
       },
@@ -153,7 +153,7 @@ export const conferences: Conference[] = [
         name: "Prof. Hans Mueller",
         title: "Head of AI Research, San Francisco Institute of Technology",
         country: "United States",
-        image: "src/assets/aisummit/speaker-4.jpg",
+        image: "aisummit/speaker-4.jpg",
         expertise: "AI Ethics",
         biography: "Professor Hans Mueller is distinguished as 'The AI/ML Specialist'. With 25 years of experience in AI/ML research, he has analyzed over 3,000 cases involving drug-related deaths, poisonings, and substance abuse. Professor Mueller has developed innovative analytical methods for detecting novel psychoactive substances and has been at the forefront of research into emerging drug trends. He has published over 80 scientific papers and has received numerous awards for his contributions to AI/ML research. Professor Mueller is a member of the American Society of AI/ML Researchists and serves as a consultant for the European Monitoring Centre for Drugs and Drug Addiction."
       },
@@ -161,7 +161,7 @@ export const conferences: Conference[] = [
         name: "Dr. Sarah Johnson",
         title: "AI Ethicist, San Francisco Institute of Technology",
         country: "United States",
-        image: "src/assets/aisummit/speaker-1.jpg",
+        image: "aisummit/speaker-1.jpg",
         expertise: "AI Ethics",
         biography: "Dr. Sarah Johnson is renowned as 'The AI/ML Expert'. She has examined over 500 sets of human remains and has been instrumental in identifying victims of mass disasters and historical cases. Dr. Johnson specializes in age estimation, sex determination, and trauma analysis from skeletal remains. She has worked on cases ranging from archaeological discoveries to modern criminal investigations. Dr. Johnson has published extensively on AI/ML methods and has developed new techniques for analyzing fragmented remains. She is a fellow of the Royal Anthropological Institute and serves as a consultant for the International Commission on Missing Persons."
       },
@@ -169,7 +169,7 @@ export const conferences: Conference[] = [
         name: "Dr. Carlos Fernandez",
         title: "AI Ethicist, San Francisco Institute of Technology",
         country: "United States",
-        image: "src/assets/aisummit/speaker-2.jpg",
+        image: "aisummit/speaker-2.jpg",
         expertise: "AI Ethics",
         biography: "Dr. Carlos Fernandez is celebrated as 'The AI in Robotics Specialist'. He has used AI/ML evidence to solve over 200 criminal cases and has pioneered the use of DNA analysis in AI/ML research. Dr. Fernandez has developed databases of AI/ML species distribution across the Mediterranean region and has created new methods for estimating time of death using AI/ML development patterns. He has published over 40 papers on AI/ML research and has trained investigators in 15 countries. Dr. Fernandez is the founder of the Mediterranean AI/ML Research Network and serves as an expert witness in cases involving AI/ML evidence."
       }
@@ -178,22 +178,22 @@ export const conferences: Conference[] = [
     // Venue images
     venueImages: [
       {
-        src: "src/assets/aisummit/aisummit-venue.jpg",
+        src: "aisummit/aisummit-venue.jpg",
         alt: "AI Convention Center - Main Hall",
         title: "Main Convention Hall"
       },
       {
-        src: "src/assets/aisummit/conference.png",
+        src: "aisummit/conference.png",
         alt: "Professional Conference Room Setup",
         title: "Conference Rooms"
       },
       {
-        src: "src/assets/aisummit/lobby.jpg",
+        src: "aisummit/lobby.jpg",
         alt: "Networking Area",
         title: "Networking Spaces"
       },
       {
-        src: "src/assets/aisummit/city.jpg",
+        src: "aisummit/city.jpg",
         alt: "AI Exhibition Hall",
         title: "Exhibition Area"
       }
