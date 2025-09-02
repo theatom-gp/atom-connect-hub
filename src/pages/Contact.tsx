@@ -148,7 +148,7 @@ This message was sent from the Atom Conferences contact form.
       {/* Hero Section - Mobile optimized */}
       <section className="relative bg-cover bg-center bg-no-repeat text-primary-foreground py-20 px-4 text-center overflow-hidden" style={{backgroundImage: "url('/src/assets/hero-conference.jpg')"}}>
         <div className="absolute inset-0 bg-black/50"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10"></div>
         <div className="relative max-w-7xl mx-auto text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4 sm:mb-6">
             Get in Touch with Our Team

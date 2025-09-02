@@ -48,23 +48,23 @@ const Navigation = () => {
             <a href="/" className="flex items-center gap-3 group">
               {/* Logo Icon */}
               <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0">
-                <img 
-                  src="/atom-logo-1.png" 
-                  alt="The Atom Conferences Logo"
-                  className="w-full h-full object-contain filter drop-shadow-sm hover:drop-shadow-md transition-all duration-300"
-                  style={{
-                    imageRendering: 'crisp-edges'
-                  }}
-                  onError={(e) => {
-                    // Fallback to a simple SVG if image fails to load
-                    const target = e.currentTarget as HTMLImageElement;
-                    const nextElement = target.nextElementSibling as HTMLElement;
-                    if (target && nextElement) {
-                      target.style.display = 'none';
-                      nextElement.style.display = 'block';
-                    }
-                  }}
-                />
+                              <img 
+                src="/atom-logo.png" 
+                alt="The Atom Conferences Logo"
+                className="w-full h-full object-contain filter drop-shadow-sm hover:drop-shadow-md transition-all duration-300"
+                style={{
+                  imageRendering: 'crisp-edges'
+                }}
+                onError={(e) => {
+                  // Fallback to a simple SVG if image fails to load
+                  const target = e.currentTarget as HTMLImageElement;
+                  const nextElement = target.nextElementSibling as HTMLElement;
+                  if (target && nextElement) {
+                    target.style.display = 'none';
+                    nextElement.style.display = 'block';
+                  }
+                }}
+              />
                 {/* Fallback SVG */}
                 <svg 
                   viewBox="0 0 40 40" 
