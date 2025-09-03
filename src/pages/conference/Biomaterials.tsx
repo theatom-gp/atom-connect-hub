@@ -18,10 +18,14 @@ import venueConference from '@/assets/biomaterials/venue-conference-room.jpg';
 import venueNetworking from '@/assets/biomaterials/venue-networking.jpg';
 import venueExhibition from '@/assets/biomaterials/venue-exhibition.jpg';
 import chairpersonImage from '@/assets/biomaterials/chairperson-tech.jpg';
-import speaker1 from '@/assets/biomaterials/speaker-1.jpg';
-import speaker2 from '@/assets/biomaterials/speaker-2.jpg';
-import speaker3 from '@/assets/biomaterials/speaker-3.jpg';
-import speaker4 from '@/assets/biomaterials/speaker-4.jpg';
+// import speaker1 from '@/assets/biomaterials/speaker-1.jpg';
+// import speaker2 from '@/assets/biomaterials/speaker-2.jpg';
+// import speaker3 from '@/assets/biomaterials/speaker-3.jpg';
+// import speaker4 from '@/assets/biomaterials/speaker-4.jpg';
+import speaker1 from '@/assets/null.jpg';
+import speaker2 from '@/assets/null.jpg';
+import speaker3 from '@/assets/null.jpg';
+import speaker4 from '@/assets/null.jpg';
 import { getImagePath } from '@/lib/imageUtils';
 import SEO from '@/components/SEO';
 

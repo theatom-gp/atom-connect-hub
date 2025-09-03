@@ -18,10 +18,14 @@ import venueConference from '@/assets/techinnovationexpo/venue-conference-room.j
 import venueNetworking from '@/assets/techinnovationexpo/venue-networking.jpg';
 import venueExhibition from '@/assets/techinnovationexpo/venue-exhibition.jpg';
 import chairpersonImage from '@/assets/techinnovationexpo/chairperson-tech.jpg';
-import speaker1 from '@/assets/techinnovationexpo/speaker-1.jpg';
-import speaker2 from '@/assets/techinnovationexpo/speaker-2.jpg';
-import speaker3 from '@/assets/techinnovationexpo/speaker-3.jpg';
-import speaker4 from '@/assets/techinnovationexpo/speaker-4.jpg';
+// import speaker1 from '@/assets/techinnovationexpo/speaker-1.jpg';
+// import speaker2 from '@/assets/techinnovationexpo/speaker-2.jpg';
+// import speaker3 from '@/assets/techinnovationexpo/speaker-3.jpg';
+// import speaker4 from '@/assets/techinnovationexpo/speaker-4.jpg';
+import speaker1 from '@/assets/null.jpg';
+import speaker2 from '@/assets/null.jpg';
+import speaker3 from '@/assets/null.jpg';
+import speaker4 from '@/assets/null.jpg';
 
 const TechInnovationExpo = () => {
   const navigate = useNavigate();

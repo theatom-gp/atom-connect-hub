@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.healthCheck = exports.submitAbstract = exports.paypalWebhook = exports.stripeWebhook = exports.createPayPalOrder = exports.createStripeCheckoutSession = exports.updateConferenceAnalytics = exports.getConferences = exports.getUserData = exports.createOrUpdateUser = void 0;
+exports.healthCheck = exports.submitAbstract = exports.uploadDocument = exports.paypalWebhook = exports.stripeWebhook = exports.createPayPalOrder = exports.createStripeCheckoutSession = exports.updateConferenceAnalytics = exports.getConferences = exports.getUserData = exports.createOrUpdateUser = void 0;
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const stripe_1 = require("stripe");
@@ -63,8 +63,19 @@ exports.createOrUpdateUser = functions.https.onRequest((request, response) => {
     return corsHandler(request, response, async () => {
         try {
             const { email, personalInfo, registrationData, abstractData } = request.body;
+            // Input validation
             if (!email || !personalInfo) {
                 response.status(400).json({ error: 'Email and personal info are required' });
+                return;
+            }
+            if (!personalInfo.firstName || !personalInfo.lastName || !personalInfo.email) {
+                response.status(400).json({ error: 'First name, last name, and email are required' });
+                return;
+            }
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                response.status(400).json({ error: 'Invalid email format' });
                 return;
             }
             // Use email as document ID for consistency
@@ -88,14 +99,14 @@ exports.createOrUpdateUser = functions.https.onRequest((request, response) => {
             // Add new registration if provided
             if (registrationData) {
                 const registrationId = `reg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                const newRegistration = Object.assign(Object.assign({ id: registrationId }, registrationData), { createdAt: admin.firestore.FieldValue.serverTimestamp(), status: 'pending' });
+                const newRegistration = Object.assign(Object.assign({ id: registrationId }, registrationData), { createdAt: new Date(), status: 'pending' });
                 userData.registrations.push(newRegistration);
                 userData.totalRegistrations = userData.registrations.length;
             }
             // Add new abstract if provided
             if (abstractData) {
                 const abstractId = `abs_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                const newAbstract = Object.assign(Object.assign({ id: abstractId }, abstractData), { submittedAt: admin.firestore.FieldValue.serverTimestamp(), status: 'submitted' });
+                const newAbstract = Object.assign(Object.assign({ id: abstractId }, abstractData), { submittedAt: new Date(), status: 'submitted' });
                 userData.abstracts.push(newAbstract);
                 userData.totalAbstracts = userData.abstracts.length;
             }
@@ -880,17 +891,69 @@ async function handleOptimizedPayPalPaymentRefund(capture) {
         console.error('Error handling PayPal payment refund:', error);
     }
 }
+// ===== FILE UPLOAD HANDLING =====
+// Upload document file to Firebase Storage
+exports.uploadDocument = functions.https.onRequest((request, response) => {
+    return corsHandler(request, response, async () => {
+        try {
+            const { file, fileName, userId } = request.body;
+            if (!file || !fileName || !userId) {
+                response.status(400).json({
+                    success: false,
+                    error: 'Missing required fields: file, fileName, userId'
+                });
+                return;
+            }
+            // Create a reference to the file in Firebase Storage
+            const bucket = admin.storage().bucket();
+            const fileRef = bucket.file(`abstracts/${userId}/${Date.now()}_${fileName}`);
+            // Upload the file
+            await fileRef.save(Buffer.from(file, 'base64'), {
+                metadata: {
+                    contentType: 'application/pdf',
+                    metadata: {
+                        userId: userId,
+                        uploadedAt: new Date().toISOString()
+                    }
+                }
+            });
+            // Make the file publicly accessible
+            await fileRef.makePublic();
+            // Get the public URL
+            const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileRef.name}`;
+            response.status(200).json({
+                success: true,
+                fileUrl: publicUrl,
+                fileName: fileName,
+                message: 'File uploaded successfully'
+            });
+        }
+        catch (error) {
+            console.error('Error uploading file:', error);
+            response.status(500).json({
+                success: false,
+                error: 'File upload failed: ' + (error instanceof Error ? error.message : 'Unknown error')
+            });
+        }
+    });
+});
 // ===== OPTIMIZED ABSTRACT SUBMISSION =====
 // Submit abstract with optimized user management
 exports.submitAbstract = functions.https.onRequest((request, response) => {
     return corsHandler(request, response, async () => {
         try {
-            const { email, conferenceId, authorInfo, abstractTitle, abstractText, keywords, documentFile } = request.body;
-            if (!email || !conferenceId || !authorInfo || !abstractTitle || !abstractText) {
+            const { email, conferenceId, title, authors, keywords, abstractText, documentUrl } = request.body;
+            // Input validation
+            if (!email || !conferenceId || !title || !abstractText) {
                 response.status(400).json({
-                    success: false,
-                    error: 'Missing required fields: email, conferenceId, authorInfo, abstractTitle, abstractText'
+                    error: 'Email, conference ID, title, and abstract text are required'
                 });
+                return;
+            }
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                response.status(400).json({ error: 'Invalid email format' });
                 return;
             }
             // Use email as document ID for consistency
@@ -900,22 +963,34 @@ exports.submitAbstract = functions.https.onRequest((request, response) => {
             const existingUser = userDoc.exists ? userDoc.data() : null;
             // Create abstract data
             const abstractId = `abs_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            const currentTime = new Date();
             const abstractData = {
                 id: abstractId,
                 conferenceId,
-                authorInfo,
-                abstractTitle,
+                title,
+                authors: authors || [],
                 abstractText,
                 keywords: keywords || [],
-                documentFile: documentFile || null,
+                documentUrl: documentUrl || null,
                 status: 'submitted',
-                submittedAt: admin.firestore.FieldValue.serverTimestamp(),
-                updatedAt: admin.firestore.FieldValue.serverTimestamp()
+                submittedAt: currentTime,
+                updatedAt: currentTime
             };
             // Prepare user data with embedded arrays
             const userData = {
                 email,
-                personalInfo: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.personalInfo) || authorInfo,
+                personalInfo: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.personalInfo) || {
+                    firstName: '',
+                    lastName: '',
+                    email: email,
+                    phone: '',
+                    organization: '',
+                    designation: '',
+                    country: '',
+                    city: '',
+                    address: '',
+                    postalCode: ''
+                },
                 registrations: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.registrations) || [],
                 abstracts: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.abstracts) || [],
                 payments: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.payments) || [],

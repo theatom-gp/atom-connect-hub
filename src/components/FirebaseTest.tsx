@@ -28,6 +28,7 @@ const FirebaseTest: React.FC = () => {
     setIsLoading(true);
     try {
       const testData = {
+        userId: 'test-user',
         conferenceId: 'test-conference',
         registrationType: 'SPEAKER (IN PERSON)',
         personalInfo: {
@@ -36,13 +37,14 @@ const FirebaseTest: React.FC = () => {
           email: 'test@example.com',
           phone: '+1234567890',
           organization: 'Test University',
+          designation: 'Test Designation',
           country: 'Test Country',
           city: 'Test City',
           address: '123 Test St',
           postalCode: '12345'
         },
         status: 'test'
-      } as any; // Type assertion for testing
+      };
 
       const result = await createRegistration(testData);
       setTestResult(`✅ Registration created: ${result.registrationId}`);

@@ -18,10 +18,14 @@ import venueConference from '@/assets/powerandenergy/venue-conference-room.jpg';
 import venueNetworking from '@/assets/powerandenergy/venue-networking.jpg';
 import venueExhibition from '@/assets/powerandenergy/venue-exhibition.jpg';
 import chairpersonImage from '@/assets/powerandenergy/chairperson-tech.jpg';
-import speaker1 from '@/assets/powerandenergy/speaker-1.jpg';
-import speaker2 from '@/assets/powerandenergy/speaker-2.jpg';
-import speaker3 from '@/assets/powerandenergy/speaker-3.jpg';
-import speaker4 from '@/assets/powerandenergy/speaker-4.jpg';
+// import speaker1 from '@/assets/powerandenergy/speaker-1.jpg';
+// import speaker2 from '@/assets/powerandenergy/speaker-2.jpg';
+// import speaker3 from '@/assets/powerandenergy/speaker-3.jpg';
+// import speaker4 from '@/assets/powerandenergy/speaker-4.jpg';
+import speaker1 from '@/assets/null.jpg';
+import speaker2 from '@/assets/null.jpg';
+import speaker3 from '@/assets/null.jpg';
+import speaker4 from '@/assets/null.jpg';
 
 const PowerandEnergy = () => {
   const navigate = useNavigate();

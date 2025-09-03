@@ -1,7 +1,7 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
-import { getStorage, connectStorageEmulator } from 'firebase/storage';
-import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
+import { initializeApp, FirebaseApp } from 'firebase/app';
+import { getFirestore, Firestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getStorage, FirebaseStorage, connectStorageEmulator } from 'firebase/storage';
+import { getFunctions, Functions, connectFunctionsEmulator } from 'firebase/functions';
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -13,8 +13,8 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || 'local-app-id'
 };
 
-// Initialize Firebase
-let app;
+// Initialize Firebase with proper typing
+let app: FirebaseApp;
 try {
   app = initializeApp(firebaseConfig);
   console.log('✅ Firebase initialized successfully');
@@ -33,10 +33,10 @@ try {
   console.log('🔄 Using fallback Firebase config for local development');
 }
 
-// Initialize Firebase services
-export const db = getFirestore(app);
-export const storage = getStorage(app);
-export const functions = getFunctions(app, 'us-central1');
+// Initialize Firebase services with proper typing
+export const db: Firestore = getFirestore(app);
+export const storage: FirebaseStorage = getStorage(app);
+export const functions: Functions = getFunctions(app, 'us-central1');
 
 // Connect to emulators in development
 if (import.meta.env.DEV) {

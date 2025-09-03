@@ -17,10 +17,15 @@ import venueConference from '@/assets/surgeryandanesthesia/venue-conference-room
 import venueNetworking from '@/assets/surgeryandanesthesia/venue-networking.jpg';
 import venueExhibition from '@/assets/surgeryandanesthesia/venue-exhibition.jpg';
 import chairpersonImage from '@/assets/surgeryandanesthesia/chairperson-tech.jpg';
-import speaker1 from '@/assets/surgeryandanesthesia/speaker-1.jpg';
-import speaker2 from '@/assets/surgeryandanesthesia/speaker-2.jpg';
-import speaker3 from '@/assets/surgeryandanesthesia/speaker-3.jpg';
-import speaker4 from '@/assets/surgeryandanesthesia/speaker-4.jpg';
+// import speaker1 from '@/assets/surgeryandanesthesia/speaker-1.jpg';
+// import speaker2 from '@/assets/surgeryandanesthesia/speaker-2.jpg';
+// import speaker3 from '@/assets/surgeryandanesthesia/speaker-3.jpg';
+// import speaker4 from '@/assets/surgeryandanesthesia/speaker-4.jpg';
+import speaker1 from '@/assets/null.jpg';
+import speaker2 from '@/assets/null.jpg';
+import speaker3 from '@/assets/null.jpg';
+import speaker4 from '@/assets/null.jpg';
+
 
 const SurgeryandAnesthesia = () => {
   const navigate = useNavigate();

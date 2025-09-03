@@ -45,7 +45,7 @@ try {
 const db = admin.firestore();
 
 // CORS middleware
-const corsHandler = (req: any, res: any, next: any) => {
+const corsHandler = (req: functions.Request, res: functions.Response, next: () => void) => {
   res.set('Access-Control-Allow-Origin', '*');
   res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -65,8 +65,21 @@ export const createOrUpdateUser = functions.https.onRequest((request, response) 
     try {
       const { email, personalInfo, registrationData, abstractData } = request.body;
 
+      // Input validation
       if (!email || !personalInfo) {
         response.status(400).json({ error: 'Email and personal info are required' });
+        return;
+      }
+
+      if (!personalInfo.firstName || !personalInfo.lastName || !personalInfo.email) {
+        response.status(400).json({ error: 'First name, last name, and email are required' });
+        return;
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        response.status(400).json({ error: 'Invalid email format' });
         return;
       }
 
@@ -97,7 +110,7 @@ export const createOrUpdateUser = functions.https.onRequest((request, response) 
         const newRegistration = {
           id: registrationId,
           ...registrationData,
-          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          createdAt: new Date(), // Use Date instead of serverTimestamp for embedded arrays
           status: 'pending'
         };
         userData.registrations.push(newRegistration);
@@ -110,7 +123,7 @@ export const createOrUpdateUser = functions.https.onRequest((request, response) 
         const newAbstract = {
           id: abstractId,
           ...abstractData,
-          submittedAt: admin.firestore.FieldValue.serverTimestamp(),
+          submittedAt: new Date(), // Use Date instead of serverTimestamp for embedded arrays
           status: 'submitted'
         };
         userData.abstracts.push(newAbstract);
@@ -1115,6 +1128,59 @@ async function handleOptimizedPayPalPaymentRefund(capture: any) {
   }
 }
 
+// ===== FILE UPLOAD HANDLING =====
+
+// Upload document file to Firebase Storage
+export const uploadDocument = functions.https.onRequest((request, response) => {
+  return corsHandler(request, response, async () => {
+    try {
+      const { file, fileName, userId } = request.body;
+
+      if (!file || !fileName || !userId) {
+        response.status(400).json({ 
+          success: false, 
+          error: 'Missing required fields: file, fileName, userId' 
+        });
+        return;
+      }
+
+      // Create a reference to the file in Firebase Storage
+      const bucket = admin.storage().bucket();
+      const fileRef = bucket.file(`abstracts/${userId}/${Date.now()}_${fileName}`);
+      
+      // Upload the file
+      await fileRef.save(Buffer.from(file, 'base64'), {
+        metadata: {
+          contentType: 'application/pdf', // or detect from fileName
+          metadata: {
+            userId: userId,
+            uploadedAt: new Date().toISOString()
+          }
+        }
+      });
+
+      // Make the file publicly accessible
+      await fileRef.makePublic();
+
+      // Get the public URL
+      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileRef.name}`;
+
+      response.status(200).json({
+        success: true,
+        fileUrl: publicUrl,
+        fileName: fileName,
+        message: 'File uploaded successfully'
+      });
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      response.status(500).json({ 
+        success: false, 
+        error: 'File upload failed: ' + (error instanceof Error ? error.message : 'Unknown error')
+      });
+    }
+  });
+});
+
 // ===== OPTIMIZED ABSTRACT SUBMISSION =====
 
 // Submit abstract with optimized user management
@@ -1124,20 +1190,29 @@ export const submitAbstract = functions.https.onRequest((request, response) => {
       const { 
         email, 
         conferenceId, 
-        authorInfo, 
-        abstractTitle, 
-        abstractText, 
+        title,
+        authors,
         keywords,
-        documentFile 
+        abstractText,
+        documentUrl
       } = request.body;
 
-      if (!email || !conferenceId || !authorInfo || !abstractTitle || !abstractText) {
+      // Input validation
+      if (!email || !conferenceId || !title || !abstractText) {
         response.status(400).json({ 
-          success: false, 
-          error: 'Missing required fields: email, conferenceId, authorInfo, abstractTitle, abstractText' 
+          error: 'Email, conference ID, title, and abstract text are required' 
         });
         return;
       }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        response.status(400).json({ error: 'Invalid email format' });
+        return;
+      }
+
+
 
       // Use email as document ID for consistency
       const userRef = db.collection('users').doc(email);
@@ -1148,23 +1223,35 @@ export const submitAbstract = functions.https.onRequest((request, response) => {
 
       // Create abstract data
       const abstractId = `abs_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const currentTime = new Date();
       const abstractData = {
         id: abstractId,
         conferenceId,
-        authorInfo,
-        abstractTitle,
+        title,
+        authors: authors || [],
         abstractText,
         keywords: keywords || [],
-        documentFile: documentFile || null,
+        documentUrl: documentUrl || null,
         status: 'submitted',
-        submittedAt: admin.firestore.FieldValue.serverTimestamp(),
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        submittedAt: currentTime,
+        updatedAt: currentTime
       };
 
       // Prepare user data with embedded arrays
       const userData = {
         email,
-        personalInfo: existingUser?.personalInfo || authorInfo, // Use authorInfo as fallback
+        personalInfo: existingUser?.personalInfo || {
+          firstName: '',
+          lastName: '',
+          email: email,
+          phone: '',
+          organization: '',
+          designation: '',
+          country: '',
+          city: '',
+          address: '',
+          postalCode: ''
+        },
         registrations: existingUser?.registrations || [],
         abstracts: existingUser?.abstracts || [],
         payments: existingUser?.payments || [],

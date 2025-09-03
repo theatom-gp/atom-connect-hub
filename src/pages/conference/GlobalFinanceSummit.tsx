@@ -16,10 +16,14 @@ import venueConference from '@/assets/globalfinancesummit/venue-conference-room.
 import venueNetworking from '@/assets/globalfinancesummit/venue-networking.jpg';
 import venueExhibition from '@/assets/globalfinancesummit/venue-exhibition.jpg';
 import chairpersonImage from '@/assets/globalfinancesummit/chairperson.jpg';
-import speaker1 from '@/assets/globalfinancesummit/speaker-1.jpg';
-import speaker2 from '@/assets/globalfinancesummit/speaker-2.jpg';
-import speaker3 from '@/assets/globalfinancesummit/speaker-3.jpg';
-import speaker4 from '@/assets/globalfinancesummit/speaker-4.jpg';
+// import speaker1 from '@/assets/globalfinancesummit/speaker-1.jpg';
+// import speaker2 from '@/assets/globalfinancesummit/speaker-2.jpg';
+// import speaker3 from '@/assets/globalfinancesummit/speaker-3.jpg';
+// import speaker4 from '@/assets/globalfinancesummit/speaker-4.jpg';
+import speaker1 from '@/assets/null.jpg';
+import speaker2 from '@/assets/null.jpg';
+import speaker3 from '@/assets/null.jpg';
+import speaker4 from '@/assets/null.jpg';
 import partner1 from '@/assets/globalfinancesummit/partner-1.jpg';
 import partner2 from '@/assets/globalfinancesummit/partner-2.jpg';
 import partner3 from '@/assets/globalfinancesummit/partner-3.jpg';

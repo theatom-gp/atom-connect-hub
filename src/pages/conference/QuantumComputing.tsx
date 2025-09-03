@@ -18,10 +18,14 @@ import venueConference from '@/assets/quantumcomputing/venue-conference-room.jpg
 import venueNetworking from '@/assets/quantumcomputing/venue-networking.jpg';
 import venueExhibition from '@/assets/quantumcomputing/venue-exhibition.jpg';
 import chairpersonImage from '@/assets/quantumcomputing/chairperson-tech.jpg';
-import speaker1 from '@/assets/quantumcomputing/speaker-1.jpg';
-import speaker2 from '@/assets/quantumcomputing/speaker-2.jpg';
-import speaker3 from '@/assets/quantumcomputing/speaker-3.jpg';
-import speaker4 from '@/assets/quantumcomputing/speaker-4.jpg';
+// import speaker1 from '@/assets/quantumcomputing/speaker-1.jpg';
+// import speaker2 from '@/assets/quantumcomputing/speaker-2.jpg';
+// import speaker3 from '@/assets/quantumcomputing/speaker-3.jpg';
+// import speaker4 from '@/assets/quantumcomputing/speaker-4.jpg';
+import speaker1 from '@/assets/null.jpg';
+import speaker2 from '@/assets/null.jpg';
+import speaker3 from '@/assets/null.jpg';
+import speaker4 from '@/assets/null.jpg';
 
 const QuantumComputing = () => {
   const navigate = useNavigate();

@@ -18,10 +18,14 @@ import venueConference from '@/assets/globalhealthcarerevolution/venue-conferenc
 import venueNetworking from '@/assets/globalhealthcarerevolution/venue-networking.jpg';
 import venueExhibition from '@/assets/globalhealthcarerevolution/venue-exhibition.jpg';
 import chairpersonImage from '@/assets/globalhealthcarerevolution/chairperson-tech.jpg';
-import speaker1 from '@/assets/globalhealthcarerevolution/speaker-1.jpg';
-import speaker2 from '@/assets/globalhealthcarerevolution/speaker-2.jpg';
-import speaker3 from '@/assets/globalhealthcarerevolution/speaker-3.jpg';
-import speaker4 from '@/assets/globalhealthcarerevolution/speaker-4.jpg';
+// import speaker1 from '@/assets/globalhealthcarerevolution/speaker-1.jpg';
+// import speaker2 from '@/assets/globalhealthcarerevolution/speaker-2.jpg';
+// import speaker3 from '@/assets/globalhealthcarerevolution/speaker-3.jpg';
+// import speaker4 from '@/assets/globalhealthcarerevolution/speaker-4.jpg';
+import speaker1 from '@/assets/null.jpg';
+import speaker2 from '@/assets/null.jpg';
+import speaker3 from '@/assets/null.jpg';
+import speaker4 from '@/assets/null.jpg';
 
 const GlobalHealthcareRevolution = () => {
   const navigate = useNavigate();

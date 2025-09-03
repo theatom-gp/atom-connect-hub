@@ -18,10 +18,14 @@ import venueConference from '@/assets/aisummit/city.jpg';
 import venueNetworking from '@/assets/aisummit/conference.png';
 import venueExhibition from '@/assets/aisummit/lobby.jpg';
 import chairpersonImage from '@/assets/aisummit/chairperson-tech.jpg';
-import speaker1 from '@/assets/aisummit/speaker-1.jpg';
-import speaker2 from '@/assets/aisummit/speaker-2.jpg';
-import speaker3 from '@/assets/aisummit/speaker-3.jpg';
-import speaker4 from '@/assets/aisummit/speaker-4.jpg';
+// import speaker1 from '@/assets/aisummit/speaker-1.jpg';
+// import speaker2 from '@/assets/aisummit/speaker-2.jpg';
+// import speaker3 from '@/assets/aisummit/speaker-3.jpg';
+// import speaker4 from '@/assets/aisummit/speaker-4.jpg';
+import speaker1 from '@/assets/null.jpg';
+import speaker2 from '@/assets/null.jpg';
+import speaker3 from '@/assets/null.jpg';
+import speaker4 from '@/assets/null.jpg';
 import { getImagePath } from '@/lib/imageUtils';
 import SEO from '@/components/SEO';
 

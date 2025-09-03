@@ -27,6 +27,9 @@ interface RegistrationData {
   phone: string;
   organization: string;
   designation: string;
+  city: string;
+  postalAddress: string;
+  postalCode: string;
   country: string;
   dietaryRestrictions: string;
   specialRequirements: string;
@@ -35,8 +38,6 @@ interface RegistrationData {
   accommodationType: string;
   occupancyType: string;
   nights: string;
-  abstractSubmission: boolean;
-  posterSubmission: boolean;
   accompanyingPerson: boolean;
 }
 
@@ -68,6 +69,9 @@ const Registration = () => {
     organization: '',
     designation: '',
     country: '',
+    city: '',
+    postalAddress: '',
+    postalCode: '',
     dietaryRestrictions: '',
     specialRequirements: '',
     registrationType: '',
@@ -75,8 +79,6 @@ const Registration = () => {
     accommodationType: '',
     occupancyType: '',
     nights: '',
-    abstractSubmission: false,
-    posterSubmission: false,
     accompanyingPerson: false,
   });
 
@@ -317,6 +319,16 @@ const Registration = () => {
       return;
     }
 
+    // Validate required fields
+    if (!formData.designation.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Please enter your designation/title.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     console.log('🚀 Starting registration submission...');
     console.log('Selected conference:', selectedConference);
     console.log('Selected registration:', selectedRegistration);
@@ -332,10 +344,11 @@ const Registration = () => {
         email: formData.email,
         phone: formData.phone,
         organization: formData.organization,
+        designation: formData.designation,
         country: formData.country,
-        city: '', // Default empty city
-        address: formData.dietaryRestrictions || '',
-        postalCode: formData.specialRequirements || ''
+        city: formData.city,
+        address: formData.postalAddress,
+        postalCode: formData.postalCode
       };
 
       // Prepare registration data for Firebase
@@ -379,22 +392,14 @@ const Registration = () => {
           if (paymentResult.success) {
             console.log('✅ Checkout session created:', paymentResult);
             
-            if (paymentResult.isExisting) {
-              toast({
-                title: "Payment Already in Progress",
-                description: "Redirecting to existing payment session...",
-                variant: "default",
-              });
-            } else {
-              toast({
-                title: "Registration & Payment Ready!",
-                description: `Registration ID: ${result.registrationId}. Redirecting to payment...`,
-              });
-            }
+            toast({
+              title: "Registration & Payment Ready!",
+              description: `Registration ID: ${result.registrationId}. Redirecting to payment...`,
+            });
             
             // Redirect to Stripe Checkout (secure, no card data on our server)
-            if (paymentResult.checkoutSession?.url) {
-              window.location.href = paymentResult.checkoutSession.url;
+            if (paymentResult.url) {
+              window.location.href = paymentResult.url;
             }
           } else {
             console.log('⚠️ Checkout session creation failed:', paymentResult);
@@ -537,25 +542,59 @@ const Registration = () => {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="designation">Designation/Title</Label>
+                      <Label htmlFor="designation">Designation/Title *</Label>
                       <Input
                         id="designation"
                         value={formData.designation}
                         onChange={(e) => handleInputChange('designation', e.target.value)}
                         placeholder="Enter your designation"
+                        required
                       />
                     </div>
                   </div>
 
-                  <div>
-                    <Label htmlFor="country">Country *</Label>
-                    <Input
-                      id="country"
-                      value={formData.country}
-                      onChange={(e) => handleInputChange('country', e.target.value)}
-                      placeholder="Enter your country"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="postalAddress">Postal Address *</Label>
+                      <Input
+                        id="postalAddress"
+                        value={formData.postalAddress}
+                        onChange={(e) => handleInputChange('postalAddress', e.target.value)}
+                        placeholder="Enter your postal address"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="city">City *</Label>
+                      <Input
+                        id="city"
+                        value={formData.city}
+                        onChange={(e) => handleInputChange('city', e.target.value)}
+                        placeholder="Enter your city"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="postalCode">Postal Code *</Label>
+                      <Input
+                        id="postalCode"
+                        value={formData.postalCode}
+                        onChange={(e) => handleInputChange('postalCode', e.target.value)}
+                        placeholder="Enter postal code"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="country">Country *</Label>
+                      <Input
+                        id="country"
+                        value={formData.country}
+                        onChange={(e) => handleInputChange('country', e.target.value)}
+                        placeholder="Enter your country"
+                      />
+                    </div>
                   </div>
+
 
                   <div>
                     <Label htmlFor="dietaryRestrictions">Dietary Restrictions</Label>

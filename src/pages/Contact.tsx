@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { MapPin, Phone, Mail, Clock, Send, Users, Calendar, Award } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { getImagePath } from '@/lib/imageUtils';
 
 const contactFormSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
@@ -146,7 +147,7 @@ This message was sent from the Atom Conferences contact form.
       <Navigation />
       
       {/* Hero Section - Mobile optimized */}
-      <section className="relative bg-cover bg-center bg-no-repeat text-primary-foreground py-20 px-4 text-center overflow-hidden" style={{backgroundImage: "url('/src/assets/hero-conference.jpg')"}}>
+      <section className="relative bg-cover bg-center bg-no-repeat text-primary-foreground py-20 px-4 text-center overflow-hidden" style={{backgroundImage: "url('" + getImagePath("hero-conference.jpg") + "')"}}>
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10"></div>
         <div className="relative max-w-7xl mx-auto text-center">

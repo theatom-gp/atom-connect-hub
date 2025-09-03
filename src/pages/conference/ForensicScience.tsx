@@ -18,10 +18,14 @@ import venueConference from '@/assets/forensicscience/venue-conference-room.jpg'
 import venueNetworking from '@/assets/forensicscience/venue-networking.jpg';
 import venueExhibition from '@/assets/forensicscience/venue-exhibition.jpg';
 import chairpersonImage from '@/assets/forensicscience/chairperson-tech.jpg';
-import speaker1 from '@/assets/forensicscience/speaker-1.jpg';
-import speaker2 from '@/assets/forensicscience/speaker-2.jpg';
-import speaker3 from '@/assets/forensicscience/speaker-3.jpg';
-import speaker4 from '@/assets/forensicscience/speaker-4.jpg';
+// import speaker1 from '@/assets/forensicscience/speaker-1.jpg';
+// import speaker2 from '@/assets/forensicscience/speaker-2.jpg';
+// import speaker3 from '@/assets/forensicscience/speaker-3.jpg';
+// import speaker4 from '@/assets/forensicscience/speaker-4.jpg';
+import speaker1 from '@/assets/null.jpg';
+import speaker2 from '@/assets/null.jpg';
+import speaker3 from '@/assets/null.jpg';
+import speaker4 from '@/assets/null.jpg';
 
 const ForensicScience = () => {
   const navigate = useNavigate();

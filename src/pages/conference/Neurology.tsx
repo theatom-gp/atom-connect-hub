@@ -17,10 +17,14 @@ import venueConference from '@/assets/neurology/venue-conference-room.jpg';
 import venueNetworking from '@/assets/neurology/venue-networking.jpg';
 import venueExhibition from '@/assets/neurology/venue-exhibition.jpg';
 import chairpersonImage from '@/assets/neurology/chairperson-tech.jpg';
-import speaker1 from '@/assets/neurology/speaker-1.jpg';
-import speaker2 from '@/assets/neurology/speaker-2.jpg';
-import speaker3 from '@/assets/neurology/speaker-3.jpg';
-import speaker4 from '@/assets/neurology/speaker-4.jpg';
+// import speaker1 from '@/assets/neurology/speaker-1.jpg';
+// import speaker2 from '@/assets/neurology/speaker-2.jpg';
+// import speaker3 from '@/assets/neurology/speaker-3.jpg';
+// import speaker4 from '@/assets/neurology/speaker-4.jpg';
+import speaker1 from '@/assets/null.jpg';
+import speaker2 from '@/assets/null.jpg';
+import speaker3 from '@/assets/null.jpg';
+import speaker4 from '@/assets/null.jpg';
 
 const Neurology = () => {
   const navigate = useNavigate();

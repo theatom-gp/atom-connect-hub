@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { HelpCircle, Users, Clock, Globe, Coffee, Bed, MessageCircle, Award, Mail } from "lucide-react";
+import { getImagePath } from "@/lib/imageUtils";
 
 const FAQ = () => {
   const faqCategories = [
@@ -70,7 +71,7 @@ const FAQ = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative bg-cover bg-center bg-no-repeat text-primary-foreground py-20 px-4 text-center overflow-hidden" style={{backgroundImage: "url('/src/assets/hero-conference.jpg')"}}>
+      <section className="relative bg-cover bg-center bg-no-repeat text-primary-foreground py-20 px-4 text-center overflow-hidden" style={{backgroundImage: "url('" + getImagePath("hero-conference.jpg") + "')"}}>
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10"></div>
         <div className="relative container mx-auto max-w-4xl">
