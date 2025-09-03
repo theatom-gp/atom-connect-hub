@@ -16,7 +16,8 @@ import {
   uploadDocument, 
   createStripeCheckoutSession, 
   createPayPalCheckoutSession,
-  PersonalInfo
+  PersonalInfo,
+  FirebaseRegistrationData
 } from '@/lib/firebaseService';
 import { getImagePath } from '@/lib/imageUtils';
 
@@ -320,10 +321,57 @@ const Registration = () => {
     }
 
     // Validate required fields
+    if (!formData.email.trim()) {
+      toast({
+        title: "Email Required",
+        description: "Please enter your email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast({
+        title: "Invalid Email Format",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.firstName.trim() || !formData.lastName.trim()) {
+      toast({
+        title: "Name Required",
+        description: "Please enter your first and last name.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!formData.designation.trim()) {
       toast({
         title: "Validation Error",
         description: "Please enter your designation/title.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.organization.trim()) {
+      toast({
+        title: "Organization Required",
+        description: "Please enter your organization name.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.country.trim()) {
+      toast({
+        title: "Country Required",
+        description: "Please select your country.",
         variant: "destructive",
       });
       return;
@@ -352,7 +400,7 @@ const Registration = () => {
       };
 
       // Prepare registration data for Firebase
-      const firebaseRegistrationData = {
+      const firebaseRegistrationData: FirebaseRegistrationData = {
         conferenceId: selectedConference,
         registrationType: selectedRegistration.type,
         personalInfo,
@@ -367,9 +415,9 @@ const Registration = () => {
             occupancy: selectedAccommodation.occupancy,
             nights: selectedAccommodation.nights,
             price: selectedAccommodation.price
-          } : null
+          } : undefined
         }
-      } as any; // Type assertion since userId is handled by the service
+      };
 
       // Submit registration to Firebase
       console.log('📤 Submitting to Firebase:', firebaseRegistrationData);

@@ -115,6 +115,45 @@ const AbstractSubmission = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate required fields
+    if (!formData.email.trim()) {
+      toast({
+        title: "Email Required",
+        description: "Please enter your email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast({
+        title: "Invalid Email Format",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.firstName.trim() || !formData.lastName.trim()) {
+      toast({
+        title: "Name Required",
+        description: "Please enter your first and last name.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.title.trim()) {
+      toast({
+        title: "Abstract Title Required",
+        description: "Please enter the title of your abstract.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!formData.conference) {
       toast({
         title: "Conference Selection Required",
@@ -152,6 +191,7 @@ const AbstractSubmission = () => {
         email: formData.email,
         phone: formData.phone,
         organization: formData.affiliation,
+        designation: formData.position,
         country: formData.country,
         city: '',
         address: formData.position,
@@ -176,7 +216,8 @@ const AbstractSubmission = () => {
       const documentURL = await uploadDocument(file, userId, 'abstract');
       
       // Prepare abstract data for Firebase
-      const abstractData = {
+      const abstractData: AbstractData = {
+        userId: userId,
         conferenceId: formData.conference, // Use selected conference ID
         authorInfo: personalInfo,
         abstractTitle: formData.title,
@@ -184,13 +225,10 @@ const AbstractSubmission = () => {
         keywords: formData.keywords.split(',').map(k => k.trim()),
         documentFile: documentURL,
         status: 'pending'
-      } as any; // Type assertion since userId is handled by the service
+      };
 
       // Submit abstract to Firebase (user already created above)
-      const result = await submitAbstract({
-        ...abstractData,
-        userId // Pass the userId we already have
-      });
+      const result = await submitAbstract(abstractData);
       
       if (result.success) {
         toast({

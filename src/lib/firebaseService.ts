@@ -80,8 +80,7 @@ export interface PaymentInfo {
   };
 }
 
-export interface RegistrationData {
-  userId: string;
+export interface FirebaseRegistrationData {
   conferenceId: string;
   registrationType: string;
   personalInfo: PersonalInfo;
@@ -221,7 +220,7 @@ export const getUserByEmail = async (email: string): Promise<{
 /**
  * Creates a new registration
  */
-export const createRegistration = async (registrationData: RegistrationData): Promise<{
+export const createRegistration = async (registrationData: FirebaseRegistrationData): Promise<{
   success: boolean;
   registrationId: string;
   userId: string;
