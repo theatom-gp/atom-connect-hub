@@ -121,11 +121,14 @@ const validateEmail = (email: string): boolean => {
 /**
  * Makes HTTP request to Firebase Functions with proper error handling
  */
-const makeFirebaseRequest = async <T>(
+export const makeFirebaseRequest = async <T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> => {
   const url = `${FIREBASE_FUNCTIONS_BASE_URL}/${endpoint}`;
+  
+  console.log('🌐 Making request to:', url);
+  console.log('🌐 Request options:', options);
   
   const defaultOptions: RequestInit = {
     headers: {
@@ -135,12 +138,18 @@ const makeFirebaseRequest = async <T>(
 
   const response = await fetch(url, { ...defaultOptions, ...options });
 
+  console.log('🌐 Response status:', response.status);
+  console.log('🌐 Response ok:', response.ok);
+
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+    console.error('🌐 Error response:', error);
     throw new Error(error.error || `HTTP error! status: ${response.status}`);
   }
 
-  return response.json();
+  const result = await response.json();
+  console.log('🌐 Success response:', result);
+  return result;
 };
 
 // ===== USER SERVICES =====
@@ -157,7 +166,6 @@ export const createUser = async (personalInfo: PersonalInfo): Promise<{
     if (!validateEmail(personalInfo.email)) {
       throw new Error('Invalid email format');
     }
-
     const result = await makeFirebaseRequest<{
       userId: string;
       user: User;
@@ -196,9 +204,9 @@ export const getUserByEmail = async (email: string): Promise<{
       return { success: false, error: 'Invalid email format' };
     }
 
-    const result = await makeFirebaseRequest<{ user: User }>('getUserData', {
-      method: 'POST',
-      body: JSON.stringify({ email })
+    const endpoint = `getUserData/${email}`;
+    const result = await makeFirebaseRequest<{ user: User }>(endpoint, {
+      method: 'GET'
     });
 
     return { 
@@ -207,7 +215,7 @@ export const getUserByEmail = async (email: string): Promise<{
       user: result.user
     };
   } catch (error) {
-    if (error instanceof Error && error.message.includes('404')) {
+    if (error instanceof Error && (error.message.includes('404') || error.message.includes('User not found'))) {
       return { success: false, error: 'User not found' };
     }
     console.error('Error fetching user:', error);
@@ -286,12 +294,16 @@ export const submitAbstract = async (abstractData: AbstractData): Promise<{
   userId: string;
 }> => {
   try {
+
+
     // Validate required fields
     if (!abstractData.authorInfo.email || !abstractData.conferenceId || !abstractData.abstractTitle || !abstractData.abstractText) {
+      console.error('❌ Validation failed - missing required fields');
       throw new Error('Email, conference ID, title, and abstract text are required');
     }
 
     if (!validateEmail(abstractData.authorInfo.email)) {
+      console.error('❌ Validation failed - invalid email format');
       throw new Error('Invalid email format');
     }
 
@@ -304,23 +316,29 @@ export const submitAbstract = async (abstractData: AbstractData): Promise<{
     }
     
     if (!userResult.success) {
+      console.error('❌ Failed to create or find user');
       throw new Error('Failed to create or find user');
     }
     
     const userId = userResult.userId!;
     
+    // Prepare request data
+    const requestData = {
+      email: abstractData.authorInfo.email,
+      conferenceId: abstractData.conferenceId,
+      title: abstractData.abstractTitle,
+      authors: [abstractData.authorInfo.firstName + ' ' + abstractData.authorInfo.lastName],
+      keywords: abstractData.keywords,
+      abstractText: abstractData.abstractText,
+      documentUrl: abstractData.documentFile || ''
+    };
+
+
+
     // Submit abstract using optimized Firebase Function
     const result = await makeFirebaseRequest<{ abstractId: string }>('submitAbstract', {
       method: 'POST',
-      body: JSON.stringify({
-        email: abstractData.authorInfo.email,
-        conferenceId: abstractData.conferenceId,
-        title: abstractData.abstractTitle,
-        authors: [abstractData.authorInfo.firstName + ' ' + abstractData.authorInfo.lastName],
-        keywords: abstractData.keywords,
-        abstractText: abstractData.abstractText,
-        documentUrl: abstractData.documentFile || ''
-      })
+      body: JSON.stringify(requestData)
     });
 
     return { success: true, abstractId: result.abstractId, userId };
@@ -357,7 +375,7 @@ export const uploadDocument = async (
     });
 
     // Call the optimized Firebase Function
-    const result = await makeFirebaseRequest<{ downloadURL: string }>('uploadDocument', {
+    const result = await makeFirebaseRequest<{ fileUrl: string }>('uploadDocument', {
       method: 'POST',
       body: JSON.stringify({
         file: base64,
@@ -366,7 +384,7 @@ export const uploadDocument = async (
       })
     });
 
-    return result.downloadURL;
+    return result.fileUrl;
   } catch (error) {
     console.error('Error uploading document:', error);
     throw error;
@@ -461,15 +479,30 @@ export const createPayPalCheckoutSession = async (
 
 // ===== CONFERENCE SERVICES =====
 
+// Conference interface
+interface Conference {
+  id: string;
+  title: string;
+  date: string;
+  location: string;
+  description: string;
+  isActive: boolean;
+  registrationFee: number;
+  currency: string;
+  maxAttendees?: number;
+  currentAttendees?: number;
+  [key: string]: unknown; // Allow additional properties
+}
+
 /**
  * Retrieves all active conferences
  */
 export const getConferences = async (): Promise<{
   success: boolean;
-  conferences: any[];
+  conferences: Conference[];
 }> => {
   try {
-    const result = await makeFirebaseRequest<{ conferences: any[] }>('getConferences', {
+    const result = await makeFirebaseRequest<{ conferences: Conference[] }>('getConferences', {
       method: 'GET'
     });
 
@@ -482,6 +515,18 @@ export const getConferences = async (): Promise<{
 
 // ===== UTILITY SERVICES =====
 
+// Payment systems interface
+interface PaymentSystems {
+  stripe?: {
+    configured: boolean;
+    testMode: boolean;
+  };
+  paypal?: {
+    configured: boolean;
+    environment: string;
+  };
+}
+
 /**
  * Health check for Firebase Functions
  */
@@ -490,7 +535,7 @@ export const healthCheck = async (): Promise<{
   status?: string;
   timestamp?: string;
   collections?: string[];
-  paymentSystems?: any;
+  paymentSystems?: PaymentSystems;
   error?: string;
 }> => {
   try {
@@ -498,7 +543,7 @@ export const healthCheck = async (): Promise<{
       status: string;
       timestamp: string;
       collections: string[];
-      paymentSystems: any;
+      paymentSystems: PaymentSystems;
     }>('healthCheck', {
       method: 'GET'
     });

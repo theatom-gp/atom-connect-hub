@@ -154,6 +154,15 @@ const AbstractSubmission = () => {
       return;
     }
 
+    if (!formData.summary.trim()) {
+      toast({
+        title: "Abstract Text Required",
+        description: "Please enter the abstract text/summary.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!formData.conference) {
       toast({
         title: "Conference Selection Required",
@@ -207,6 +216,7 @@ const AbstractSubmission = () => {
       }
       
       if (!userResult.success) {
+        console.error('❌ Real form - Failed to create or find user');
         throw new Error('Failed to create or find user');
       }
       
@@ -221,11 +231,13 @@ const AbstractSubmission = () => {
         conferenceId: formData.conference, // Use selected conference ID
         authorInfo: personalInfo,
         abstractTitle: formData.title,
-        abstractText: formData.summary || '',
+        abstractText: formData.summary,
         keywords: formData.keywords.split(',').map(k => k.trim()),
         documentFile: documentURL,
         status: 'pending'
       };
+
+
 
       // Submit abstract to Firebase (user already created above)
       const result = await submitAbstract(abstractData);
@@ -233,7 +245,7 @@ const AbstractSubmission = () => {
       if (result.success) {
         toast({
           title: "Abstract submitted successfully!",
-          description: `Your abstract ID is: ${result.abstractId}. You will receive a confirmation email within 24 hours.`,
+          description: "You will receive a confirmation email within 24 hours.",
         });
         
         // Reset form
@@ -522,14 +534,15 @@ const AbstractSubmission = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="summary">Brief Summary (Optional)</Label>
+                  <Label htmlFor="summary">Abstract Text *</Label>
                   <Textarea 
                     id="summary" 
-                    placeholder="Provide a brief summary of your research (max 500 characters)" 
+                    placeholder="Provide the full abstract text of your research (max 500 characters)" 
                     value={formData.summary}
                     onChange={(e) => handleInputChange('summary', e.target.value)}
                     maxLength={500}
                     rows={4}
+                    required
                   />
                 </div>
 

@@ -130,8 +130,20 @@ exports.createOrUpdateUser = functions.https.onRequest((request, response) => {
 exports.getUserData = functions.https.onRequest((request, response) => {
     return corsHandler(request, response, async () => {
         try {
-            const { email } = request.params;
+            console.log('📥 getUserData received request:', {
+                method: request.method,
+                url: request.url,
+                path: request.path,
+                params: request.params,
+                query: request.query,
+                body: request.body
+            });
+            // Extract email from URL path (e.g., /getUserData/user@example.com)
+            const pathParts = request.path.split('/');
+            const email = pathParts[pathParts.length - 1];
+            console.log('🔍 Extracted email from path:', email);
             if (!email) {
+                console.error('❌ No email found in path');
                 response.status(400).json({ error: 'Email is required' });
                 return;
             }
@@ -942,11 +954,28 @@ exports.uploadDocument = functions.https.onRequest((request, response) => {
 exports.submitAbstract = functions.https.onRequest((request, response) => {
     return corsHandler(request, response, async () => {
         try {
+            console.log('📥 submitAbstract received request body:', request.body);
             const { email, conferenceId, title, authors, keywords, abstractText, documentUrl } = request.body;
+            console.log('🔍 Extracted values:', {
+                email: email,
+                conferenceId: conferenceId,
+                title: title,
+                abstractText: abstractText,
+                hasEmail: !!email,
+                hasConferenceId: !!conferenceId,
+                hasTitle: !!title,
+                hasAbstractText: !!abstractText
+            });
             // Input validation
             if (!email || !conferenceId || !title || !abstractText) {
+                console.error('❌ Validation failed:', {
+                    email: email,
+                    conferenceId: conferenceId,
+                    title: title,
+                    abstractText: abstractText
+                });
                 response.status(400).json({
-                    error: 'Email, conference ID, title, and abstract text are required'
+                    error: 'Email is required. Try again or contact support'
                 });
                 return;
             }

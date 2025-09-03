@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
-import { healthCheck, createRegistration, submitAbstract } from '../lib/firebaseService';
+import { healthCheck, createRegistration, submitAbstract, AbstractData, FirebaseRegistrationData } from '../lib/firebaseService';
 
 const FirebaseTest: React.FC = () => {
   const [healthStatus, setHealthStatus] = useState<string>('Not tested');
@@ -15,7 +15,7 @@ const FirebaseTest: React.FC = () => {
       console.log('Testing Firebase health check...');
       const result = await healthCheck();
       console.log('Health check result:', result);
-      setHealthStatus(`✅ Success: ${(result as any).message}`);
+      setHealthStatus(`✅ Success: ${result.status || 'Healthy'}`);
     } catch (error) {
       console.error('Health check error details:', error);
       setHealthStatus(`❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -141,7 +141,7 @@ const FirebaseTest: React.FC = () => {
                       abstractText: 'This is a test abstract for testing user relationships.',
                       keywords: ['test', 'abstract', 'relationship'],
                       status: 'pending'
-                    } as any; // Type assertion for testing
+                    } as AbstractData; // Type assertion for testing
 
                     const abstractResult = await submitAbstract(abstractData);
                     setTestResult(`✅ Abstract submitted: ${abstractResult.abstractId}`);
@@ -162,7 +162,7 @@ const FirebaseTest: React.FC = () => {
                         postalCode: '12345'
                       },
                       status: 'pending'
-                    } as any; // Type assertion for testing
+                    } as FirebaseRegistrationData; // Type assertion for testing
 
                     const regResult = await createRegistration(registrationData);
                     setTestResult(`✅ Both submitted! Abstract: ${abstractResult.abstractId}, Registration: ${regResult.registrationId}`);

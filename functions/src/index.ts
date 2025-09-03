@@ -3,6 +3,95 @@ import * as admin from 'firebase-admin';
 import Stripe from 'stripe';
 // import { Client } from '@paypal/paypal-server-sdk'; // Will be used when PayPal is properly configured
 
+// Type definitions for better type safety
+interface PersonalInfo {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  organization: string;
+  designation: string;
+  country: string;
+  city: string;
+  address: string;
+  postalCode: string;
+}
+
+interface RegistrationData {
+  id: string;
+  conferenceId: string;
+  personalInfo: PersonalInfo;
+  status: string;
+  paymentStatus?: string;
+  refundedAt?: admin.firestore.FieldValue | Date;
+  paymentInfo?: {
+    status: string;
+    paypalRefundId?: string;
+    refundAmount?: number;
+    [key: string]: unknown;
+  };
+}
+
+interface AbstractData {
+  conferenceId: string;
+  title: string;
+  authors: string[];
+  abstractText: string;
+  keywords: string[];
+  documentUrl: string;
+  status: string;
+}
+
+interface PaymentData {
+  id: string;
+  idempotencyKey: string;
+  registrationId: string;
+  conferenceId: string;
+  amount: number;
+  currency: string;
+  status: string;
+  checkoutUrl?: string;
+  paymentMethod: string;
+  createdAt: admin.firestore.FieldValue | Date;
+  paypalRefundId?: string;
+  refundedAt?: admin.firestore.FieldValue | Date;
+  refundAmount?: number;
+  paymentDetails?: {
+    status: string;
+    paypalRefundId?: string;
+    refundAmount?: number;
+    [key: string]: unknown;
+  };
+}
+
+interface UserDocument {
+  email: string;
+  personalInfo: PersonalInfo;
+  registrations: RegistrationData[];
+  abstracts: AbstractData[];
+  payments: PaymentData[];
+  totalSpent: number;
+  totalRegistrations: number;
+  totalAbstracts: number;
+  createdAt: admin.firestore.FieldValue | Date;
+  updatedAt: admin.firestore.FieldValue | Date;
+}
+
+interface PayPalCapture {
+  id: string;
+  status: string;
+  amount: {
+    currency_code: string;
+    value: string;
+  };
+  custom_id?: string;
+  custom_id_metadata?: {
+    userEmail: string;
+    conferenceId?: string;
+  };
+  [key: string]: unknown;
+}
+
 // Initialize Firebase Admin
 admin.initializeApp();
 
@@ -23,7 +112,7 @@ try {
 }
 
 // Initialize PayPal - Placeholder for now
-let paypalClient: any = null;
+const paypalClient: unknown = null;
 try {
   const paypalConfig = functions.config().paypal;
   if (paypalConfig && paypalConfig.client_id && paypalConfig.client_secret) {
@@ -151,9 +240,12 @@ export const createOrUpdateUser = functions.https.onRequest((request, response) 
 export const getUserData = functions.https.onRequest((request, response) => {
   return corsHandler(request, response, async () => {
     try {
-      const { email } = request.params;
+      // Extract email from URL path (e.g., /getUserData/user@example.com)
+      const pathParts = request.path.split('/');
+      const email = pathParts[pathParts.length - 1];
 
       if (!email) {
+        console.error('❌ No email found in path');
         response.status(400).json({ error: 'Email is required' });
         return;
       }
@@ -165,7 +257,7 @@ export const getUserData = functions.https.onRequest((request, response) => {
         return;
       }
 
-      const userData = userDoc.data();
+      const userData = userDoc.data() as UserDocument;
 
       response.status(200).json({
         success: true,
@@ -220,7 +312,7 @@ export const updateConferenceAnalytics = functions.https.onRequest((request, res
       }
 
       const conferenceRef = db.collection('conferences').doc(conferenceId);
-      const updateData: any = {
+      const updateData: Record<string, unknown> = {
         updatedAt: admin.firestore.FieldValue.serverTimestamp()
       };
 
@@ -293,8 +385,8 @@ export const createStripeCheckoutSession = functions.https.onRequest(async (req,
     const userDoc = await userRef.get();
     
     if (userDoc.exists) {
-      const userData = userDoc.data();
-      const existingPayment = userData?.payments?.find((p: any) => p.idempotencyKey === finalIdempotencyKey);
+      const userData = userDoc.data() as UserDocument;
+      const existingPayment = userData?.payments?.find((p: PaymentData) => p.idempotencyKey === finalIdempotencyKey);
       
       if (existingPayment) {
         res.json({
@@ -372,7 +464,7 @@ export const createStripeCheckoutSession = functions.https.onRequest(async (req,
       });
 
     res.json({
-      success: true,
+        success: true,
       checkoutSession: {
         id: session.id,
         url: session.url,
@@ -382,8 +474,8 @@ export const createStripeCheckoutSession = functions.https.onRequest(async (req,
       },
       idempotencyKey: finalIdempotencyKey,
       isExisting: false
-    });
-  } catch (error) {
+      });
+    } catch (error) {
     console.error('Error creating Stripe checkout session:', error);
     
     // Handle Stripe-specific errors
@@ -433,12 +525,12 @@ export const createPayPalOrder = functions.https.onRequest(async (req, res) => {
 
   if (req.method === 'OPTIONS') {
     res.status(204).send('');
-    return;
-  }
+        return;
+      }
 
   try {
     const { 
-      amount, 
+        amount,
       userEmail, 
       conferenceId, 
       registrationId,
@@ -467,7 +559,8 @@ export const createPayPalOrder = functions.https.onRequest(async (req, res) => {
     
     if (userDoc.exists) {
       const userData = userDoc.data();
-      const existingPayment = userData?.payments?.find((p: any) => p.idempotencyKey === finalIdempotencyKey);
+      // const userData = userDoc.data() as UserDocument;
+      const existingPayment = userData?.payments?.find((p: PaymentData) => p.idempotencyKey === finalIdempotencyKey);
       
       if (existingPayment) {
         res.json({
@@ -723,7 +816,7 @@ async function handleOptimizedPaymentSuccess(paymentIntent: Stripe.PaymentIntent
       return;
     }
 
-    const userData = userDoc.data();
+    const userData = userDoc.data() as UserDocument;
     
     if (!userData) {
       console.error(`User data not found for ${userEmail}`);
@@ -731,7 +824,7 @@ async function handleOptimizedPaymentSuccess(paymentIntent: Stripe.PaymentIntent
     }
     
     // Update payment status in user document
-    const updatedPayments = userData.payments.map((payment: any) => {
+    const updatedPayments = userData.payments.map((payment: PaymentData) => {
       if (payment.id === paymentIntent.id) {
         return {
           ...payment,
@@ -749,7 +842,7 @@ async function handleOptimizedPaymentSuccess(paymentIntent: Stripe.PaymentIntent
     });
 
     // Update registration status
-    const updatedRegistrations = userData.registrations.map((registration: any) => {
+    const updatedRegistrations = userData.registrations.map((registration: RegistrationData) => {
       if (registration.id === registrationId) {
         return {
           ...registration,
@@ -757,7 +850,7 @@ async function handleOptimizedPaymentSuccess(paymentIntent: Stripe.PaymentIntent
           paymentStatus: 'completed',
           paidAt: admin.firestore.FieldValue.serverTimestamp(),
         paymentInfo: {
-            stripePaymentIntentId: paymentIntent.id,
+          stripePaymentIntentId: paymentIntent.id,
             amount: paymentIntent.amount / 100,
             currency: paymentIntent.currency,
             status: 'succeeded',
@@ -770,16 +863,16 @@ async function handleOptimizedPaymentSuccess(paymentIntent: Stripe.PaymentIntent
 
     // Calculate total spent
     const totalSpent = updatedPayments
-      .filter((p: any) => p.status === 'succeeded')
-      .reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
+      .filter((p: PaymentData) => p.status === 'succeeded')
+      .reduce((sum: number, p: PaymentData) => sum + (p.amount || 0), 0);
 
     // Update user document with all changes
     await userRef.update({
       payments: updatedPayments,
       registrations: updatedRegistrations,
       totalSpent: totalSpent,
-      updatedAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
 
     // Update conference analytics
     if (conferenceId) {
@@ -790,7 +883,7 @@ async function handleOptimizedPaymentSuccess(paymentIntent: Stripe.PaymentIntent
     }
 
     console.log(`Payment succeeded for user: ${userEmail}, registration: ${registrationId}`);
-  } catch (error) {
+    } catch (error) {
     console.error('Error handling payment success:', error);
   }
 }
@@ -812,7 +905,7 @@ async function handleOptimizedPaymentFailure(paymentIntent: Stripe.PaymentIntent
       return;
     }
 
-    const userData = userDoc.data();
+    const userData = userDoc.data() as UserDocument;
     
     if (!userData) {
       console.error(`User data not found for ${userEmail}`);
@@ -820,7 +913,7 @@ async function handleOptimizedPaymentFailure(paymentIntent: Stripe.PaymentIntent
     }
     
     // Update payment status in user document
-    const updatedPayments = userData.payments.map((payment: any) => {
+    const updatedPayments = userData.payments.map((payment: PaymentData) => {
       if (payment.id === paymentIntent.id) {
         return {
           ...payment,
@@ -839,7 +932,7 @@ async function handleOptimizedPaymentFailure(paymentIntent: Stripe.PaymentIntent
     });
 
     // Update registration status
-    const updatedRegistrations = userData.registrations.map((registration: any) => {
+    const updatedRegistrations = userData.registrations.map((registration: RegistrationData) => {
       if (registration.id === registrationId) {
         return {
           ...registration,
@@ -874,15 +967,15 @@ async function handleOptimizedPaymentFailure(paymentIntent: Stripe.PaymentIntent
 
 // ===== OPTIMIZED PAYPAL WEBHOOK HANDLERS =====
 
-async function handleOptimizedPayPalPaymentSuccess(capture: any) {
+async function handleOptimizedPayPalPaymentSuccess(capture: PayPalCapture) {
   try {
     const registrationId = capture.custom_id;
     const { userEmail, conferenceId } = capture.custom_id_metadata || {};
     
     if (!userEmail || !registrationId) {
       console.error('Missing required metadata in PayPal capture');
-      return;
-    }
+        return;
+      }
 
     const userRef = db.collection('users').doc(userEmail);
     const userDoc = await userRef.get();
@@ -892,7 +985,7 @@ async function handleOptimizedPayPalPaymentSuccess(capture: any) {
       return;
     }
 
-    const userData = userDoc.data();
+    const userData = userDoc.data() as UserDocument;
     
     if (!userData) {
       console.error(`User data not found for ${userEmail}`);
@@ -900,7 +993,7 @@ async function handleOptimizedPayPalPaymentSuccess(capture: any) {
     }
     
     // Update payment status in user document
-    const updatedPayments = userData.payments.map((payment: any) => {
+    const updatedPayments = userData.payments.map((payment: PaymentData) => {
       if (payment.registrationId === registrationId && payment.paymentMethod === 'paypal') {
         return {
           ...payment,
@@ -919,14 +1012,14 @@ async function handleOptimizedPayPalPaymentSuccess(capture: any) {
     });
 
     // Update registration status
-    const updatedRegistrations = userData.registrations.map((registration: any) => {
+    const updatedRegistrations = userData.registrations.map((registration: RegistrationData) => {
       if (registration.id === registrationId) {
         return {
           ...registration,
           status: 'paid',
           paymentStatus: 'completed',
           paidAt: admin.firestore.FieldValue.serverTimestamp(),
-          paymentInfo: {
+        paymentInfo: {
             paypalCaptureId: capture.id,
             amount: parseFloat(capture.amount.value),
             currency: capture.amount.currency_code,
@@ -940,16 +1033,16 @@ async function handleOptimizedPayPalPaymentSuccess(capture: any) {
 
     // Calculate total spent
     const totalSpent = updatedPayments
-      .filter((p: any) => p.status === 'succeeded')
-      .reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
+      .filter((p: PaymentData) => p.status === 'succeeded')
+      .reduce((sum: number, p: PaymentData) => sum + (p.amount || 0), 0);
 
     // Update user document with all changes
     await userRef.update({
       payments: updatedPayments,
       registrations: updatedRegistrations,
       totalSpent: totalSpent,
-      updatedAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
 
     // Update conference analytics
     if (conferenceId) {
@@ -965,7 +1058,7 @@ async function handleOptimizedPayPalPaymentSuccess(capture: any) {
   }
 }
 
-async function handleOptimizedPayPalPaymentFailure(capture: any) {
+async function handleOptimizedPayPalPaymentFailure(capture: PayPalCapture) {
   try {
     const registrationId = capture.custom_id;
     const { userEmail } = capture.custom_id_metadata || {};
@@ -983,7 +1076,7 @@ async function handleOptimizedPayPalPaymentFailure(capture: any) {
       return;
     }
 
-    const userData = userDoc.data();
+    const userData = userDoc.data() as UserDocument;
     
     if (!userData) {
       console.error(`User data not found for ${userEmail}`);
@@ -991,7 +1084,7 @@ async function handleOptimizedPayPalPaymentFailure(capture: any) {
     }
     
     // Update payment status in user document
-    const updatedPayments = userData.payments.map((payment: any) => {
+    const updatedPayments = userData.payments.map((payment: PaymentData) => {
       if (payment.registrationId === registrationId && payment.paymentMethod === 'paypal') {
         return {
           ...payment,
@@ -1012,7 +1105,7 @@ async function handleOptimizedPayPalPaymentFailure(capture: any) {
     });
 
     // Update registration status
-    const updatedRegistrations = userData.registrations.map((registration: any) => {
+    const updatedRegistrations = userData.registrations.map((registration: RegistrationData) => {
       if (registration.id === registrationId) {
         return {
           ...registration,
@@ -1045,7 +1138,7 @@ async function handleOptimizedPayPalPaymentFailure(capture: any) {
   }
 }
 
-async function handleOptimizedPayPalPaymentRefund(capture: any) {
+async function handleOptimizedPayPalPaymentRefund(capture: PayPalCapture) {
   try {
     const registrationId = capture.custom_id;
     const { userEmail } = capture.custom_id_metadata || {};
@@ -1063,7 +1156,7 @@ async function handleOptimizedPayPalPaymentRefund(capture: any) {
       return;
     }
 
-    const userData = userDoc.data();
+    const userData = userDoc.data() as UserDocument;
     
     if (!userData) {
       console.error(`User data not found for ${userEmail}`);
@@ -1071,7 +1164,7 @@ async function handleOptimizedPayPalPaymentRefund(capture: any) {
     }
     
     // Update payment status in user document
-    const updatedPayments = userData.payments.map((payment: any) => {
+    const updatedPayments = userData.payments.map((payment: PaymentData) => {
       if (payment.registrationId === registrationId && payment.paymentMethod === 'paypal') {
         return {
           ...payment,
@@ -1091,7 +1184,7 @@ async function handleOptimizedPayPalPaymentRefund(capture: any) {
     });
 
     // Update registration status
-    const updatedRegistrations = userData.registrations.map((registration: any) => {
+    const updatedRegistrations = userData.registrations.map((registration: RegistrationData) => {
       if (registration.id === registrationId) {
         return {
           ...registration,
@@ -1111,8 +1204,8 @@ async function handleOptimizedPayPalPaymentRefund(capture: any) {
 
     // Recalculate total spent (subtract refund amount)
     const totalSpent = updatedPayments
-      .filter((p: any) => p.status === 'succeeded')
-      .reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
+      .filter((p: PaymentData) => p.status === 'succeeded')
+      .reduce((sum: number, p: PaymentData) => sum + (p.amount || 0), 0);
 
     // Update user document with all changes
     await userRef.update({
@@ -1199,8 +1292,14 @@ export const submitAbstract = functions.https.onRequest((request, response) => {
 
       // Input validation
       if (!email || !conferenceId || !title || !abstractText) {
+        console.error('❌ Validation failed:', {
+          email: email,
+          conferenceId: conferenceId,
+          title: title,
+          abstractText: abstractText
+        });
         response.status(400).json({ 
-          error: 'Email, conference ID, title, and abstract text are required' 
+          error: 'Email is required. Try again or contact support' 
         });
         return;
       }

@@ -29,6 +29,10 @@ import speaker4 from '@/assets/null.jpg';
 import { getImagePath } from '@/lib/imageUtils';
 import SEO from '@/components/SEO';
 
+// Constants outside component to avoid dependency issues
+const TARGET_DATE = new Date('2025-11-15T09:00:00');
+const EARLY_BIRD_DATE = new Date(TARGET_DATE.getTime() - (100 * 24 * 60 * 60 * 1000));
+
 const AISummit = () => {
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState({
@@ -49,16 +53,14 @@ const AISummit = () => {
   const [selectedSpeaker, setSelectedSpeaker] = useState(null);
   const [isSpeakerModalOpen, setIsSpeakerModalOpen] = useState(false);
 
-  const targetDate = new Date('2025-11-15T09:00:00');
-  const earlyBirdDate = new Date(targetDate.getTime() - (100 * 24 * 60 * 60 * 1000));
   const now = new Date();
-  const daysToEvent = Math.floor((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  const daysToEvent = Math.floor((TARGET_DATE.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
   const isEarlyBird = daysToEvent > 100;
 
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date().getTime();
-      const distance = targetDate.getTime() - now;
+      const distance = TARGET_DATE.getTime() - now;
 
       if (distance > 0) {
         setTimeLeft({
@@ -1090,7 +1092,7 @@ const AISummit = () => {
                     <div className="text-2xl">⏰</div>
                     <div className="text-center">
                       <p className="font-bold text-orange-800 text-lg">🔥 EARLY BIRD SPECIAL ACTIVE!</p>
-                      <p className="text-orange-700 text-sm">Save up to 30% - Ends {earlyBirdDate.toLocaleDateString()}</p>
+                      <p className="text-orange-700 text-sm">Save up to 30% - Ends {EARLY_BIRD_DATE.toLocaleDateString()}</p>
                     </div>
                     <div className="text-2xl">🔥</div>
                   </div>
