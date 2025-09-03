@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.healthCheck = exports.submitAbstract = exports.paypalWebhook = exports.createPayPalOrder = exports.stripeWebhook = exports.createStripeCheckoutSession = exports.uploadDocument = exports.getConferences = exports.updateRegistration = exports.getRegistration = exports.createRegistration = void 0;
+exports.healthCheck = exports.submitAbstract = exports.paypalWebhook = exports.stripeWebhook = exports.createPayPalOrder = exports.createStripeCheckoutSession = exports.updateConferenceAnalytics = exports.getConferences = exports.getUserData = exports.createOrUpdateUser = void 0;
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const stripe_1 = require("stripe");
 // import { Client } from '@paypal/paypal-server-sdk'; // Will be used when PayPal is properly configured
 // Initialize Firebase Admin
 admin.initializeApp();
-// Initialize Stripe - Handle missing configuration gracefully
+// Initialize Stripe
 let stripe = null;
 try {
     const stripeConfig = functions.config().stripe;
@@ -24,12 +24,13 @@ try {
 catch (error) {
     console.log('⚠️ Failed to initialize Stripe:', error);
 }
-// Initialize PayPal - Simplified for now, update when deploying
+// Initialize PayPal - Placeholder for now
 let paypalClient = null;
 try {
     const paypalConfig = functions.config().paypal;
     if (paypalConfig && paypalConfig.client_id && paypalConfig.client_secret) {
-        // const paypalClient = new Client({
+        // TODO: Uncomment when PayPal SDK is properly configured
+        // paypalClient = new Client({
         //   clientId: paypalConfig.client_id,
         //   clientSecret: paypalConfig.client_secret,
         //   environment: paypalConfig.environment || 'sandbox'
@@ -37,7 +38,7 @@ try {
         console.log('✅ PayPal configuration found - will be enabled in production');
     }
     else {
-        console.log('⚠️ PayPal configuration not found - payment functions will be disabled');
+        console.log('⚠️ PayPal configuration not found - PayPal functions will be disabled');
     }
 }
 catch (error) {
@@ -45,9 +46,7 @@ catch (error) {
 }
 // Initialize Firestore
 const db = admin.firestore();
-// Initialize Storage
-const storage = admin.storage();
-// CORS middleware - allow specific origins
+// CORS middleware
 const corsHandler = (req, res, next) => {
     res.set('Access-Control-Allow-Origin', '*');
     res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -58,94 +57,98 @@ const corsHandler = (req, res, next) => {
     }
     next();
 };
-// ===== USER REGISTRATION FUNCTIONS =====
-exports.createRegistration = functions.https.onRequest((request, response) => {
+// ===== OPTIMIZED USER MANAGEMENT =====
+// Create or update user with all data in one document
+exports.createOrUpdateUser = functions.https.onRequest((request, response) => {
     return corsHandler(request, response, async () => {
         try {
-            const { conferenceId, registrationType, personalInfo, paymentInfo, documents } = request.body;
-            // Validate required fields
-            if (!conferenceId || !registrationType || !personalInfo) {
-                response.status(400).json({ error: 'Missing required fields' });
+            const { email, personalInfo, registrationData, abstractData } = request.body;
+            if (!email || !personalInfo) {
+                response.status(400).json({ error: 'Email and personal info are required' });
                 return;
             }
-            // Create registration document
-            const registrationData = {
-                conferenceId,
-                registrationType,
+            // Use email as document ID for consistency
+            const userRef = db.collection('users').doc(email);
+            // Get existing user data
+            const userDoc = await userRef.get();
+            const existingUser = userDoc.exists ? userDoc.data() : null;
+            // Prepare user data with embedded arrays
+            const userData = {
+                email,
                 personalInfo,
-                paymentInfo: paymentInfo || null,
-                documents: documents || [],
-                status: 'pending',
-                createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                registrations: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.registrations) || [],
+                abstracts: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.abstracts) || [],
+                payments: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.payments) || [],
+                totalSpent: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.totalSpent) || 0,
+                totalRegistrations: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.totalRegistrations) || 0,
+                totalAbstracts: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.totalAbstracts) || 0,
+                createdAt: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.createdAt) || admin.firestore.FieldValue.serverTimestamp(),
                 updatedAt: admin.firestore.FieldValue.serverTimestamp()
             };
-            const docRef = await db.collection('registrations').add(registrationData);
-            response.status(201).json({
-                success: true,
-                registrationId: docRef.id,
-                message: 'Registration created successfully'
-            });
-        }
-        catch (error) {
-            console.error('Error creating registration:', error);
-            response.status(500).json({ error: 'Internal server error' });
-        }
-    });
-});
-exports.getRegistration = functions.https.onRequest((request, response) => {
-    return corsHandler(request, response, async () => {
-        try {
-            const { registrationId } = request.params;
-            if (!registrationId) {
-                response.status(400).json({ error: 'Registration ID is required' });
-                return;
+            // Add new registration if provided
+            if (registrationData) {
+                const registrationId = `reg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                const newRegistration = Object.assign(Object.assign({ id: registrationId }, registrationData), { createdAt: admin.firestore.FieldValue.serverTimestamp(), status: 'pending' });
+                userData.registrations.push(newRegistration);
+                userData.totalRegistrations = userData.registrations.length;
             }
-            const doc = await db.collection('registrations').doc(registrationId).get();
-            if (!doc.exists) {
-                response.status(404).json({ error: 'Registration not found' });
-                return;
+            // Add new abstract if provided
+            if (abstractData) {
+                const abstractId = `abs_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                const newAbstract = Object.assign(Object.assign({ id: abstractId }, abstractData), { submittedAt: admin.firestore.FieldValue.serverTimestamp(), status: 'submitted' });
+                userData.abstracts.push(newAbstract);
+                userData.totalAbstracts = userData.abstracts.length;
             }
+            // Save user document
+            await userRef.set(userData);
             response.status(200).json({
                 success: true,
-                registration: Object.assign({ id: doc.id }, doc.data())
+                userId: email,
+                message: 'User data saved successfully',
+                registrationId: registrationData ? userData.registrations[userData.registrations.length - 1].id : null,
+                abstractId: abstractData ? userData.abstracts[userData.abstracts.length - 1].id : null
             });
         }
         catch (error) {
-            console.error('Error fetching registration:', error);
+            console.error('Error creating/updating user:', error);
             response.status(500).json({ error: 'Internal server error' });
         }
     });
 });
-exports.updateRegistration = functions.https.onRequest((request, response) => {
+// Get complete user data in single query
+exports.getUserData = functions.https.onRequest((request, response) => {
     return corsHandler(request, response, async () => {
         try {
-            const { registrationId } = request.params;
-            const updateData = request.body;
-            if (!registrationId) {
-                response.status(400).json({ error: 'Registration ID is required' });
+            const { email } = request.params;
+            if (!email) {
+                response.status(400).json({ error: 'Email is required' });
                 return;
             }
-            // Add updated timestamp
-            updateData.updatedAt = admin.firestore.FieldValue.serverTimestamp();
-            await db.collection('registrations').doc(registrationId).update(updateData);
+            const userDoc = await db.collection('users').doc(email).get();
+            if (!userDoc.exists) {
+                response.status(404).json({ error: 'User not found' });
+                return;
+            }
+            const userData = userDoc.data();
             response.status(200).json({
                 success: true,
-                message: 'Registration updated successfully'
+                user: Object.assign({ id: userDoc.id }, userData)
             });
         }
         catch (error) {
-            console.error('Error updating registration:', error);
+            console.error('Error fetching user data:', error);
             response.status(500).json({ error: 'Internal server error' });
         }
     });
 });
-// ===== CONFERENCE FUNCTIONS =====
+// ===== OPTIMIZED CONFERENCE MANAGEMENT =====
+// Get conferences with analytics
 exports.getConferences = functions.https.onRequest((request, response) => {
     return corsHandler(request, response, async () => {
         try {
             const snapshot = await db.collection('conferences')
                 .where('isActive', '==', true)
-                .orderBy('startDate', 'asc')
+                .orderBy('date', 'asc')
                 .get();
             const conferences = snapshot.docs.map(doc => (Object.assign({ id: doc.id }, doc.data())));
             response.status(200).json({
@@ -159,53 +162,46 @@ exports.getConferences = functions.https.onRequest((request, response) => {
         }
     });
 });
-// ===== DOCUMENT UPLOAD FUNCTIONS =====
-exports.uploadDocument = functions.https.onRequest((request, response) => {
+// Update conference analytics (called when registrations/abstracts are added)
+exports.updateConferenceAnalytics = functions.https.onRequest((request, response) => {
     return corsHandler(request, response, async () => {
         try {
-            const { userId, documentType, fileName, fileData } = request.body;
-            if (!userId || !documentType || !fileName || !fileData) {
-                response.status(400).json({ error: 'Missing required fields' });
+            const { conferenceId, type, amount } = request.body; // type: 'registration' | 'abstract' | 'payment'
+            if (!conferenceId || !type) {
+                response.status(400).json({ error: 'Conference ID and type are required' });
                 return;
             }
-            // Create document reference
-            const documentRef = storage.bucket().file(`userDocuments/${userId}/${fileName}`);
-            // Upload file (base64 encoded)
-            const buffer = Buffer.from(fileData, 'base64');
-            await documentRef.save(buffer, {
-                metadata: {
-                    contentType: 'application/octet-stream',
-                    metadata: {
-                        userId,
-                        documentType,
-                        uploadedAt: new Date().toISOString()
-                    }
-                }
-            });
-            // Save document metadata to Firestore
-            const documentData = {
-                userId,
-                documentType,
-                fileName,
-                filePath: `userDocuments/${userId}/${fileName}`,
-                uploadedAt: admin.firestore.FieldValue.serverTimestamp()
+            const conferenceRef = db.collection('conferences').doc(conferenceId);
+            const updateData = {
+                updatedAt: admin.firestore.FieldValue.serverTimestamp()
             };
-            const docRef = await db.collection('userDocuments').add(documentData);
-            response.status(201).json({
+            switch (type) {
+                case 'registration':
+                    updateData.totalRegistrations = admin.firestore.FieldValue.increment(1);
+                    break;
+                case 'abstract':
+                    updateData.totalAbstracts = admin.firestore.FieldValue.increment(1);
+                    break;
+                case 'payment':
+                    updateData.totalRevenue = admin.firestore.FieldValue.increment(amount || 0);
+                    break;
+            }
+            await conferenceRef.update(updateData);
+            response.status(200).json({
                 success: true,
-                documentId: docRef.id,
-                message: 'Document uploaded successfully'
+                message: 'Conference analytics updated successfully'
             });
         }
         catch (error) {
-            console.error('Error uploading document:', error);
+            console.error('Error updating conference analytics:', error);
             response.status(500).json({ error: 'Internal server error' });
         }
     });
 });
-// ===== SECURE STRIPE PAYMENT FUNCTIONS (NO CARD DATA STORAGE) =====
+// ===== OPTIMIZED PAYMENT PROCESSING =====
+// Create Stripe checkout session with optimized data handling
 exports.createStripeCheckoutSession = functions.https.onRequest(async (req, res) => {
-    // Enable CORS
+    var _a;
     res.set('Access-Control-Allow-Origin', '*');
     res.set('Access-Control-Allow-Methods', 'GET, POST');
     res.set('Access-Control-Allow-Headers', 'Content-Type, Idempotency-Key');
@@ -214,104 +210,88 @@ exports.createStripeCheckoutSession = functions.https.onRequest(async (req, res)
         return;
     }
     try {
-        const { amount, registrationId, userId, conferenceId, currency = 'usd', metadata, idempotencyKey, successUrl, cancelUrl } = req.body;
-        if (!amount || !registrationId || !userId || !conferenceId || !successUrl || !cancelUrl) {
+        const { amount, userEmail, conferenceId, registrationId, currency = 'usd', metadata, idempotencyKey, successUrl, cancelUrl } = req.body;
+        if (!amount || !userEmail || !conferenceId || !registrationId || !successUrl || !cancelUrl) {
             res.status(400).json({ success: false, error: 'Missing required fields' });
             return;
         }
-        // Check for idempotency key in headers
         const headerIdempotencyKey = req.headers['idempotency-key'];
         const finalIdempotencyKey = idempotencyKey || headerIdempotencyKey;
         if (!finalIdempotencyKey) {
             res.status(400).json({ success: false, error: 'Idempotency key is required' });
             return;
         }
-        // Check if payment with this idempotency key already exists
-        const existingPaymentQuery = admin.firestore().collection('payments')
-            .where('idempotencyKey', '==', finalIdempotencyKey)
-            .limit(1);
-        const existingPaymentSnapshot = await existingPaymentQuery.get();
-        if (!existingPaymentSnapshot.empty) {
-            const existingPayment = existingPaymentSnapshot.docs[0];
-            const existingPaymentData = existingPayment.data();
-            // Return existing checkout session if it exists
-            res.json({
-                success: true,
-                checkoutSession: {
-                    id: existingPaymentData.id || existingPayment.id,
-                    url: existingPaymentData.checkoutUrl,
-                    status: existingPaymentData.status,
-                    amount: existingPaymentData.amount,
-                    currency: existingPaymentData.currency
-                },
-                isExisting: true,
-                message: 'Checkout session already exists with this idempotency key'
-            });
-            return;
-        }
-        // Check if registration already has a successful payment
-        const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
-        const registrationDoc = await registrationRef.get();
-        if (registrationDoc.exists) {
-            const registrationData = registrationDoc.data();
-            if (registrationData === null || registrationData === void 0 ? void 0 : registrationData.paymentId) {
-                const paymentDoc = await admin.firestore().collection('payments').doc(registrationData.paymentId).get();
-                if (paymentDoc.exists) {
-                    const paymentData = paymentDoc.data();
-                    if ((paymentData === null || paymentData === void 0 ? void 0 : paymentData.status) === 'succeeded') {
-                        res.status(400).json({
-                            success: false,
-                            error: 'Registration already has a successful payment'
-                        });
-                        return;
-                    }
-                }
+        // Check if payment already exists in user document
+        const userRef = db.collection('users').doc(userEmail);
+        const userDoc = await userRef.get();
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            const existingPayment = (_a = userData === null || userData === void 0 ? void 0 : userData.payments) === null || _a === void 0 ? void 0 : _a.find((p) => p.idempotencyKey === finalIdempotencyKey);
+            if (existingPayment) {
+                res.json({
+                    success: true,
+                    checkoutSession: {
+                        id: existingPayment.id,
+                        url: existingPayment.checkoutUrl,
+                        status: existingPayment.status,
+                        amount: existingPayment.amount,
+                        currency: existingPayment.currency
+                    },
+                    isExisting: true,
+                    message: 'Checkout session already exists'
+                });
+                return;
             }
         }
-        // Check if Stripe is initialized
         if (!stripe) {
             res.status(503).json({
                 success: false,
-                error: 'Payment processing is not configured. Please contact support.'
+                error: 'Payment processing is not configured'
             });
             return;
         }
-        // Create checkout session on Stripe (NO card data, only session)
+        // Create Stripe checkout session
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [{
                     price_data: {
                         currency: currency,
                         product_data: {
-                            name: `Conference Registration - ${(metadata === null || metadata === void 0 ? void 0 : metadata.conferenceId) || 'Conference'}`,
-                            description: `Registration for ${(metadata === null || metadata === void 0 ? void 0 : metadata.registrationId) || 'conference'}`,
+                            name: `Conference Registration`,
+                            description: `Registration for conference`,
                         },
-                        unit_amount: Math.round(amount * 100), // Convert to cents
+                        unit_amount: Math.round(amount * 100),
                     },
                     quantity: 1,
                 }],
             mode: 'payment',
             success_url: successUrl,
             cancel_url: cancelUrl,
-            metadata: Object.assign(Object.assign({}, metadata), { idempotencyKey: finalIdempotencyKey, registrationId,
-                userId,
-                conferenceId }),
-            customer_email: metadata === null || metadata === void 0 ? void 0 : metadata.customerEmail,
+            metadata: Object.assign(Object.assign({}, metadata), { idempotencyKey: finalIdempotencyKey, userEmail,
+                conferenceId,
+                registrationId }),
+            customer_email: userEmail,
             allow_promotion_codes: true,
             billing_address_collection: 'required',
-            shipping_address_collection: {
-                allowed_countries: ['US', 'CA', 'GB', 'DE', 'FR', 'AU', 'IN'], // Customize as needed
-            },
-            payment_intent_data: {
-                metadata: {
-                    idempotencyKey: finalIdempotencyKey,
-                    registrationId,
-                    userId,
-                    conferenceId
-                }
-            }
         }, {
-            idempotencyKey: finalIdempotencyKey // Stripe's idempotency key in options
+            idempotencyKey: finalIdempotencyKey
+        });
+        // Store payment info in user document
+        const paymentData = {
+            id: session.id,
+            idempotencyKey: finalIdempotencyKey,
+            registrationId,
+            conferenceId,
+            amount: amount,
+            currency: currency,
+            status: 'pending',
+            checkoutUrl: session.url,
+            paymentMethod: 'stripe',
+            createdAt: admin.firestore.FieldValue.serverTimestamp()
+        };
+        await userRef.update({
+            payments: admin.firestore.FieldValue.arrayUnion(paymentData),
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
         });
         res.json({
             success: true,
@@ -328,14 +308,32 @@ exports.createStripeCheckoutSession = functions.https.onRequest(async (req, res)
     }
     catch (error) {
         console.error('Error creating Stripe checkout session:', error);
-        // Handle Stripe idempotency errors
-        if (error instanceof Error && error.message.includes('idempotency')) {
-            res.status(409).json({
-                success: false,
-                error: 'Checkout session with this idempotency key already exists',
-                code: 'IDEMPOTENCY_CONFLICT'
-            });
-            return;
+        // Handle Stripe-specific errors
+        if (error instanceof Error) {
+            if (error.message.includes('idempotency')) {
+                res.status(409).json({
+                    success: false,
+                    error: 'Checkout session with this idempotency key already exists',
+                    code: 'IDEMPOTENCY_CONFLICT'
+                });
+                return;
+            }
+            if (error.message.includes('card_error')) {
+                res.status(400).json({
+                    success: false,
+                    error: 'Card payment failed',
+                    code: 'CARD_ERROR'
+                });
+                return;
+            }
+            if (error.message.includes('rate_limit')) {
+                res.status(429).json({
+                    success: false,
+                    error: 'Too many requests, please try again later',
+                    code: 'RATE_LIMIT'
+                });
+                return;
+            }
         }
         res.status(500).json({
             success: false,
@@ -343,10 +341,105 @@ exports.createStripeCheckoutSession = functions.https.onRequest(async (req, res)
         });
     }
 });
-// Stripe webhook handler with duplicate prevention
+// ===== OPTIMIZED PAYPAL PAYMENT PROCESSING =====
+// Create PayPal order with optimized data handling
+exports.createPayPalOrder = functions.https.onRequest(async (req, res) => {
+    var _a;
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST');
+    res.set('Access-Control-Allow-Headers', 'Content-Type, Idempotency-Key');
+    if (req.method === 'OPTIONS') {
+        res.status(204).send('');
+        return;
+    }
+    try {
+        const { amount, userEmail, conferenceId, registrationId, idempotencyKey, returnUrl, cancelUrl } = req.body;
+        if (!amount || !userEmail || !conferenceId || !registrationId || !returnUrl || !cancelUrl) {
+            res.status(400).json({ success: false, error: 'Missing required fields' });
+            return;
+        }
+        const headerIdempotencyKey = req.headers['idempotency-key'];
+        const finalIdempotencyKey = idempotencyKey || headerIdempotencyKey;
+        if (!finalIdempotencyKey) {
+            res.status(400).json({ success: false, error: 'Idempotency key is required' });
+            return;
+        }
+        // Check if payment already exists in user document
+        const userRef = db.collection('users').doc(userEmail);
+        const userDoc = await userRef.get();
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            const existingPayment = (_a = userData === null || userData === void 0 ? void 0 : userData.payments) === null || _a === void 0 ? void 0 : _a.find((p) => p.idempotencyKey === finalIdempotencyKey);
+            if (existingPayment) {
+                res.json({
+                    success: true,
+                    order: {
+                        id: existingPayment.id,
+                        status: existingPayment.status,
+                        intent: existingPayment.intent,
+                        approvalUrl: existingPayment.approvalUrl
+                    },
+                    isExisting: true,
+                    message: 'PayPal order already exists with this idempotency key'
+                });
+                return;
+            }
+        }
+        // Check if PayPal is initialized
+        if (!paypalClient) {
+            res.status(503).json({
+                success: false,
+                error: 'PayPal integration is not configured. Please contact support.'
+            });
+            return;
+        }
+        // TODO: Implement actual PayPal order creation when SDK is configured
+        // For now, return a placeholder response
+        res.status(500).json({
+            success: false,
+            error: 'PayPal integration needs to be updated for production deployment. Please use Stripe for now.'
+        });
+        return;
+    }
+    catch (error) {
+        console.error('Error creating PayPal order:', error);
+        // Handle PayPal-specific errors
+        if (error instanceof Error) {
+            if (error.message.includes('idempotency')) {
+                res.status(409).json({
+                    success: false,
+                    error: 'PayPal order with this idempotency key already exists',
+                    code: 'IDEMPOTENCY_CONFLICT'
+                });
+                return;
+            }
+            if (error.message.includes('INVALID_REQUEST')) {
+                res.status(400).json({
+                    success: false,
+                    error: 'Invalid PayPal request parameters',
+                    code: 'INVALID_REQUEST'
+                });
+                return;
+            }
+            if (error.message.includes('UNAUTHORIZED')) {
+                res.status(401).json({
+                    success: false,
+                    error: 'PayPal authentication failed',
+                    code: 'UNAUTHORIZED'
+                });
+                return;
+            }
+        }
+        res.status(500).json({
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown PayPal error'
+        });
+    }
+});
+// ===== OPTIMIZED WEBHOOK HANDLING =====
+// Stripe webhook with optimized user updates
 exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
     var _a;
-    // Check if Stripe is initialized
     if (!stripe) {
         res.status(503).json({ error: 'Payment processing is not configured' });
         return;
@@ -368,9 +461,9 @@ exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
         return;
     }
     try {
-        // Check if we've already processed this webhook event
+        // Check if event already processed
         const eventId = event.id;
-        const eventProcessedQuery = admin.firestore().collection('webhookEvents')
+        const eventProcessedQuery = db.collection('webhookEvents')
             .where('stripeEventId', '==', eventId)
             .limit(1);
         const eventProcessedSnapshot = await eventProcessedQuery.get();
@@ -379,8 +472,8 @@ exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
             res.json({ received: true, message: 'Event already processed' });
             return;
         }
-        // Mark this event as being processed
-        await admin.firestore().collection('webhookEvents').add({
+        // Mark event as being processed
+        await db.collection('webhookEvents').add({
             stripeEventId: eventId,
             eventType: event.type,
             processedAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -388,16 +481,16 @@ exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
         });
         switch (event.type) {
             case 'payment_intent.succeeded':
-                await handlePaymentSuccess(event.data.object);
+                await handleOptimizedPaymentSuccess(event.data.object);
                 break;
             case 'payment_intent.payment_failed':
-                await handlePaymentFailure(event.data.object);
+                await handleOptimizedPaymentFailure(event.data.object);
                 break;
             default:
                 console.log(`Unhandled event type: ${event.type}`);
         }
         // Mark event as completed
-        await admin.firestore().collection('webhookEvents').add({
+        await db.collection('webhookEvents').add({
             stripeEventId: eventId,
             eventType: event.type,
             processedAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -407,9 +500,8 @@ exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
     }
     catch (error) {
         console.error('Error processing webhook:', error);
-        // Mark event as failed
         if (event === null || event === void 0 ? void 0 : event.id) {
-            await admin.firestore().collection('webhookEvents').add({
+            await db.collection('webhookEvents').add({
                 stripeEventId: event.id,
                 eventType: event.type,
                 processedAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -420,131 +512,396 @@ exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
         res.status(500).json({ error: 'Webhook processing failed' });
     }
 });
-// ===== SECURE PAYPAL PAYMENT FUNCTIONS (NO CARD DATA STORAGE) =====
-exports.createPayPalOrder = functions.https.onRequest(async (req, res) => {
-    // Enable CORS
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'GET, POST');
-    res.set('Access-Control-Allow-Headers', 'Content-Type, Idempotency-Key');
-    if (req.method === 'OPTIONS') {
-        res.status(204).send('');
-        return;
-    }
-    try {
-        const { amount, registrationId, userId, conferenceId, 
-        // currency = 'USD', // Will be used when PayPal is properly configured
-        // intent = 'CAPTURE', // Will be used when PayPal is properly configured
-        // metadata, // Will be used when PayPal is properly configured
-        idempotencyKey, returnUrl, cancelUrl } = req.body;
-        if (!amount || !registrationId || !userId || !conferenceId || !returnUrl || !cancelUrl) {
-            res.status(400).json({ success: false, error: 'Missing required fields' });
-            return;
-        }
-        // Check for idempotency key
-        const headerIdempotencyKey = req.headers['idempotency-key'];
-        const finalIdempotencyKey = idempotencyKey || headerIdempotencyKey;
-        if (!finalIdempotencyKey) {
-            res.status(400).json({ success: false, error: 'Idempotency key is required' });
-            return;
-        }
-        // Check if payment with this idempotency key already exists
-        const existingPaymentQuery = admin.firestore().collection('payments')
-            .where('idempotencyKey', '==', finalIdempotencyKey)
-            .limit(1);
-        const existingPaymentSnapshot = await existingPaymentQuery.get();
-        if (!existingPaymentSnapshot.empty) {
-            const existingPayment = existingPaymentSnapshot.docs[0];
-            const existingPaymentData = existingPayment.data();
-            // Return existing PayPal order if it exists
-            res.json({
-                success: true,
-                order: {
-                    id: existingPaymentData.id || existingPayment.id,
-                    status: existingPaymentData.status,
-                    intent: existingPaymentData.intent,
-                    approvalUrl: existingPaymentData.approvalUrl
-                },
-                isExisting: true,
-                message: 'PayPal order already exists with this idempotency key'
-            });
-            return;
-        }
-        // Check if registration already has a successful payment
-        const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
-        const registrationDoc = await registrationRef.get();
-        if (registrationDoc.exists) {
-            const registrationData = registrationDoc.data();
-            if (registrationData === null || registrationData === void 0 ? void 0 : registrationData.paymentId) {
-                const paymentDoc = await admin.firestore().collection('payments').doc(registrationData.paymentId).get();
-                if (paymentDoc.exists) {
-                    const paymentData = paymentDoc.data();
-                    if ((paymentData === null || paymentData === void 0 ? void 0 : paymentData.status) === 'succeeded') {
-                        res.status(400).json({
-                            success: false,
-                            error: 'Registration already has a successful payment'
-                        });
-                        return;
-                    }
-                }
-            }
-        }
-        // Create PayPal order (NO card data, only order details)
-        if (!paypalClient) {
-            res.status(500).json({
-                success: false,
-                error: 'PayPal integration not configured yet'
-            });
-            return;
-        }
-        // TODO: Update this when deploying with proper PayPal SDK
-        res.status(500).json({
-            success: false,
-            error: 'PayPal integration needs to be updated for production deployment'
-        });
-        return;
-        // This will never be reached due to early return above
-        // res.json will be handled in the TODO section above
-    }
-    catch (error) {
-        console.error('Error creating PayPal order:', error);
-        res.status(500).json({
-            success: false,
-            error: error instanceof Error ? error.message : 'Unknown error'
-        });
-    }
-});
-// PayPal webhook handler
+// PayPal webhook handler with optimized user updates
 exports.paypalWebhook = functions.https.onRequest(async (req, res) => {
+    var _a, _b, _c;
     try {
         const event = req.body;
+        // Verify PayPal webhook signature (implement when PayPal SDK is configured)
+        // TODO: Add PayPal webhook signature verification
+        // Check if event already processed
+        const eventId = event.id || event.event_id;
+        if (eventId) {
+            const eventProcessedQuery = db.collection('webhookEvents')
+                .where('paypalEventId', '==', eventId)
+                .limit(1);
+            const eventProcessedSnapshot = await eventProcessedQuery.get();
+            if (!eventProcessedSnapshot.empty) {
+                console.log(`PayPal webhook event ${eventId} already processed, skipping`);
+                res.json({ received: true, message: 'Event already processed' });
+                return;
+            }
+            // Mark event as being processed
+            await db.collection('webhookEvents').add({
+                paypalEventId: eventId,
+                eventType: event.event_type,
+                processedAt: admin.firestore.FieldValue.serverTimestamp(),
+                status: 'processing'
+            });
+        }
         switch (event.event_type) {
             case 'PAYMENT.CAPTURE.COMPLETED':
-                await handlePayPalPaymentSuccess(event.resource);
+                await handleOptimizedPayPalPaymentSuccess(event.resource);
                 break;
             case 'PAYMENT.CAPTURE.DENIED':
-                await handlePayPalPaymentFailure(event.resource);
+                await handleOptimizedPayPalPaymentFailure(event.resource);
+                break;
+            case 'PAYMENT.CAPTURE.REFUNDED':
+                await handleOptimizedPayPalPaymentRefund(event.resource);
                 break;
             default:
                 console.log(`Unhandled PayPal event: ${event.event_type}`);
+        }
+        // Mark event as completed
+        if (eventId) {
+            await db.collection('webhookEvents').add({
+                paypalEventId: eventId,
+                eventType: event.event_type,
+                processedAt: admin.firestore.FieldValue.serverTimestamp(),
+                status: 'completed'
+            });
         }
         res.json({ received: true });
     }
     catch (error) {
         console.error('Error processing PayPal webhook:', error);
+        // Mark event as failed
+        const eventId = ((_a = req.body) === null || _a === void 0 ? void 0 : _a.id) || ((_b = req.body) === null || _b === void 0 ? void 0 : _b.event_id);
+        if (eventId) {
+            await db.collection('webhookEvents').add({
+                paypalEventId: eventId,
+                eventType: (_c = req.body) === null || _c === void 0 ? void 0 : _c.event_type,
+                processedAt: admin.firestore.FieldValue.serverTimestamp(),
+                status: 'failed',
+                error: error instanceof Error ? error.message : 'Unknown error'
+            });
+        }
         res.status(500).json({ error: 'PayPal webhook processing failed' });
     }
 });
-// ===== ABSTRACT SUBMISSION FUNCTIONS =====
+// ===== OPTIMIZED WEBHOOK HANDLERS =====
+async function handleOptimizedPaymentSuccess(paymentIntent) {
+    try {
+        const { userEmail, conferenceId, registrationId } = paymentIntent.metadata;
+        if (!userEmail || !registrationId) {
+            console.error('Missing required metadata in payment intent');
+            return;
+        }
+        const userRef = db.collection('users').doc(userEmail);
+        const userDoc = await userRef.get();
+        if (!userDoc.exists) {
+            console.error(`User ${userEmail} not found`);
+            return;
+        }
+        const userData = userDoc.data();
+        if (!userData) {
+            console.error(`User data not found for ${userEmail}`);
+            return;
+        }
+        // Update payment status in user document
+        const updatedPayments = userData.payments.map((payment) => {
+            if (payment.id === paymentIntent.id) {
+                return Object.assign(Object.assign({}, payment), { status: 'succeeded', stripePaymentIntentId: paymentIntent.id, paidAt: admin.firestore.FieldValue.serverTimestamp(), paymentDetails: {
+                        amount: paymentIntent.amount / 100,
+                        currency: paymentIntent.currency,
+                        status: 'succeeded'
+                    } });
+            }
+            return payment;
+        });
+        // Update registration status
+        const updatedRegistrations = userData.registrations.map((registration) => {
+            if (registration.id === registrationId) {
+                return Object.assign(Object.assign({}, registration), { status: 'paid', paymentStatus: 'completed', paidAt: admin.firestore.FieldValue.serverTimestamp(), paymentInfo: {
+                        stripePaymentIntentId: paymentIntent.id,
+                        amount: paymentIntent.amount / 100,
+                        currency: paymentIntent.currency,
+                        status: 'succeeded',
+                        paymentMethod: 'stripe'
+                    } });
+            }
+            return registration;
+        });
+        // Calculate total spent
+        const totalSpent = updatedPayments
+            .filter((p) => p.status === 'succeeded')
+            .reduce((sum, p) => sum + (p.amount || 0), 0);
+        // Update user document with all changes
+        await userRef.update({
+            payments: updatedPayments,
+            registrations: updatedRegistrations,
+            totalSpent: totalSpent,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+        // Update conference analytics
+        if (conferenceId) {
+            await db.collection('conferences').doc(conferenceId).update({
+                totalRevenue: admin.firestore.FieldValue.increment(paymentIntent.amount / 100),
+                updatedAt: admin.firestore.FieldValue.serverTimestamp()
+            });
+        }
+        console.log(`Payment succeeded for user: ${userEmail}, registration: ${registrationId}`);
+    }
+    catch (error) {
+        console.error('Error handling payment success:', error);
+    }
+}
+async function handleOptimizedPaymentFailure(paymentIntent) {
+    try {
+        const { userEmail, registrationId } = paymentIntent.metadata;
+        if (!userEmail || !registrationId) {
+            console.error('Missing required metadata in payment intent');
+            return;
+        }
+        const userRef = db.collection('users').doc(userEmail);
+        const userDoc = await userRef.get();
+        if (!userDoc.exists) {
+            console.error(`User ${userEmail} not found`);
+            return;
+        }
+        const userData = userDoc.data();
+        if (!userData) {
+            console.error(`User data not found for ${userEmail}`);
+            return;
+        }
+        // Update payment status in user document
+        const updatedPayments = userData.payments.map((payment) => {
+            var _a;
+            if (payment.id === paymentIntent.id) {
+                return Object.assign(Object.assign({}, payment), { status: 'failed', stripePaymentIntentId: paymentIntent.id, failedAt: admin.firestore.FieldValue.serverTimestamp(), failureReason: ((_a = paymentIntent.last_payment_error) === null || _a === void 0 ? void 0 : _a.message) || 'Unknown error', paymentDetails: {
+                        amount: paymentIntent.amount / 100,
+                        currency: paymentIntent.currency,
+                        status: 'failed'
+                    } });
+            }
+            return payment;
+        });
+        // Update registration status
+        const updatedRegistrations = userData.registrations.map((registration) => {
+            var _a;
+            if (registration.id === registrationId) {
+                return Object.assign(Object.assign({}, registration), { status: 'payment_failed', paymentStatus: 'failed', failedAt: admin.firestore.FieldValue.serverTimestamp(), paymentInfo: {
+                        stripePaymentIntentId: paymentIntent.id,
+                        amount: paymentIntent.amount / 100,
+                        currency: paymentIntent.currency,
+                        status: 'failed',
+                        paymentMethod: 'stripe',
+                        failureReason: ((_a = paymentIntent.last_payment_error) === null || _a === void 0 ? void 0 : _a.message) || 'Unknown error'
+                    } });
+            }
+            return registration;
+        });
+        // Update user document with all changes
+        await userRef.update({
+            payments: updatedPayments,
+            registrations: updatedRegistrations,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+        console.log(`Payment failed for user: ${userEmail}, registration: ${registrationId}`);
+    }
+    catch (error) {
+        console.error('Error handling payment failure:', error);
+    }
+}
+// ===== OPTIMIZED PAYPAL WEBHOOK HANDLERS =====
+async function handleOptimizedPayPalPaymentSuccess(capture) {
+    try {
+        const registrationId = capture.custom_id;
+        const { userEmail, conferenceId } = capture.custom_id_metadata || {};
+        if (!userEmail || !registrationId) {
+            console.error('Missing required metadata in PayPal capture');
+            return;
+        }
+        const userRef = db.collection('users').doc(userEmail);
+        const userDoc = await userRef.get();
+        if (!userDoc.exists) {
+            console.error(`User ${userEmail} not found`);
+            return;
+        }
+        const userData = userDoc.data();
+        if (!userData) {
+            console.error(`User data not found for ${userEmail}`);
+            return;
+        }
+        // Update payment status in user document
+        const updatedPayments = userData.payments.map((payment) => {
+            if (payment.registrationId === registrationId && payment.paymentMethod === 'paypal') {
+                return Object.assign(Object.assign({}, payment), { status: 'succeeded', paypalCaptureId: capture.id, paidAt: admin.firestore.FieldValue.serverTimestamp(), paymentDetails: {
+                        amount: parseFloat(capture.amount.value),
+                        currency: capture.amount.currency_code,
+                        status: 'succeeded',
+                        paypalCaptureId: capture.id
+                    } });
+            }
+            return payment;
+        });
+        // Update registration status
+        const updatedRegistrations = userData.registrations.map((registration) => {
+            if (registration.id === registrationId) {
+                return Object.assign(Object.assign({}, registration), { status: 'paid', paymentStatus: 'completed', paidAt: admin.firestore.FieldValue.serverTimestamp(), paymentInfo: {
+                        paypalCaptureId: capture.id,
+                        amount: parseFloat(capture.amount.value),
+                        currency: capture.amount.currency_code,
+                        status: 'succeeded',
+                        paymentMethod: 'paypal'
+                    } });
+            }
+            return registration;
+        });
+        // Calculate total spent
+        const totalSpent = updatedPayments
+            .filter((p) => p.status === 'succeeded')
+            .reduce((sum, p) => sum + (p.amount || 0), 0);
+        // Update user document with all changes
+        await userRef.update({
+            payments: updatedPayments,
+            registrations: updatedRegistrations,
+            totalSpent: totalSpent,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+        // Update conference analytics
+        if (conferenceId) {
+            await db.collection('conferences').doc(conferenceId).update({
+                totalRevenue: admin.firestore.FieldValue.increment(parseFloat(capture.amount.value)),
+                updatedAt: admin.firestore.FieldValue.serverTimestamp()
+            });
+        }
+        console.log(`PayPal payment succeeded for user: ${userEmail}, registration: ${registrationId}`);
+    }
+    catch (error) {
+        console.error('Error handling PayPal payment success:', error);
+    }
+}
+async function handleOptimizedPayPalPaymentFailure(capture) {
+    try {
+        const registrationId = capture.custom_id;
+        const { userEmail } = capture.custom_id_metadata || {};
+        if (!userEmail || !registrationId) {
+            console.error('Missing required metadata in PayPal capture');
+            return;
+        }
+        const userRef = db.collection('users').doc(userEmail);
+        const userDoc = await userRef.get();
+        if (!userDoc.exists) {
+            console.error(`User ${userEmail} not found`);
+            return;
+        }
+        const userData = userDoc.data();
+        if (!userData) {
+            console.error(`User data not found for ${userEmail}`);
+            return;
+        }
+        // Update payment status in user document
+        const updatedPayments = userData.payments.map((payment) => {
+            if (payment.registrationId === registrationId && payment.paymentMethod === 'paypal') {
+                return Object.assign(Object.assign({}, payment), { status: 'failed', paypalCaptureId: capture.id, failedAt: admin.firestore.FieldValue.serverTimestamp(), failureReason: capture.reason_code || 'Payment denied', paymentDetails: {
+                        amount: parseFloat(capture.amount.value),
+                        currency: capture.amount.currency_code,
+                        status: 'failed',
+                        paypalCaptureId: capture.id,
+                        failureReason: capture.reason_code || 'Payment denied'
+                    } });
+            }
+            return payment;
+        });
+        // Update registration status
+        const updatedRegistrations = userData.registrations.map((registration) => {
+            if (registration.id === registrationId) {
+                return Object.assign(Object.assign({}, registration), { status: 'payment_failed', paymentStatus: 'failed', failedAt: admin.firestore.FieldValue.serverTimestamp(), paymentInfo: {
+                        paypalCaptureId: capture.id,
+                        amount: parseFloat(capture.amount.value),
+                        currency: capture.amount.currency_code,
+                        status: 'failed',
+                        paymentMethod: 'paypal',
+                        failureReason: capture.reason_code || 'Payment denied'
+                    } });
+            }
+            return registration;
+        });
+        // Update user document with all changes
+        await userRef.update({
+            payments: updatedPayments,
+            registrations: updatedRegistrations,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+        console.log(`PayPal payment failed for user: ${userEmail}, registration: ${registrationId}`);
+    }
+    catch (error) {
+        console.error('Error handling PayPal payment failure:', error);
+    }
+}
+async function handleOptimizedPayPalPaymentRefund(capture) {
+    try {
+        const registrationId = capture.custom_id;
+        const { userEmail } = capture.custom_id_metadata || {};
+        if (!userEmail || !registrationId) {
+            console.error('Missing required metadata in PayPal refund');
+            return;
+        }
+        const userRef = db.collection('users').doc(userEmail);
+        const userDoc = await userRef.get();
+        if (!userDoc.exists) {
+            console.error(`User ${userEmail} not found`);
+            return;
+        }
+        const userData = userDoc.data();
+        if (!userData) {
+            console.error(`User data not found for ${userEmail}`);
+            return;
+        }
+        // Update payment status in user document
+        const updatedPayments = userData.payments.map((payment) => {
+            if (payment.registrationId === registrationId && payment.paymentMethod === 'paypal') {
+                return Object.assign(Object.assign({}, payment), { status: 'refunded', paypalRefundId: capture.id, refundedAt: admin.firestore.FieldValue.serverTimestamp(), refundAmount: parseFloat(capture.amount.value), paymentDetails: Object.assign(Object.assign({}, payment.paymentDetails), { status: 'refunded', paypalRefundId: capture.id, refundAmount: parseFloat(capture.amount.value) }) });
+            }
+            return payment;
+        });
+        // Update registration status
+        const updatedRegistrations = userData.registrations.map((registration) => {
+            if (registration.id === registrationId) {
+                return Object.assign(Object.assign({}, registration), { status: 'refunded', paymentStatus: 'refunded', refundedAt: admin.firestore.FieldValue.serverTimestamp(), paymentInfo: Object.assign(Object.assign({}, registration.paymentInfo), { status: 'refunded', paypalRefundId: capture.id, refundAmount: parseFloat(capture.amount.value) }) });
+            }
+            return registration;
+        });
+        // Recalculate total spent (subtract refund amount)
+        const totalSpent = updatedPayments
+            .filter((p) => p.status === 'succeeded')
+            .reduce((sum, p) => sum + (p.amount || 0), 0);
+        // Update user document with all changes
+        await userRef.update({
+            payments: updatedPayments,
+            registrations: updatedRegistrations,
+            totalSpent: totalSpent,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+        console.log(`PayPal payment refunded for user: ${userEmail}, registration: ${registrationId}`);
+    }
+    catch (error) {
+        console.error('Error handling PayPal payment refund:', error);
+    }
+}
+// ===== OPTIMIZED ABSTRACT SUBMISSION =====
+// Submit abstract with optimized user management
 exports.submitAbstract = functions.https.onRequest((request, response) => {
     return corsHandler(request, response, async () => {
         try {
-            const { conferenceId, authorInfo, abstractTitle, abstractText, keywords, documentFile } = request.body;
-            if (!conferenceId || !authorInfo || !abstractTitle || !abstractText) {
-                response.status(400).json({ error: 'Missing required fields' });
+            const { email, conferenceId, authorInfo, abstractTitle, abstractText, keywords, documentFile } = request.body;
+            if (!email || !conferenceId || !authorInfo || !abstractTitle || !abstractText) {
+                response.status(400).json({
+                    success: false,
+                    error: 'Missing required fields: email, conferenceId, authorInfo, abstractTitle, abstractText'
+                });
                 return;
             }
-            // Create abstract document
+            // Use email as document ID for consistency
+            const userRef = db.collection('users').doc(email);
+            // Get existing user data
+            const userDoc = await userRef.get();
+            const existingUser = userDoc.exists ? userDoc.data() : null;
+            // Create abstract data
+            const abstractId = `abs_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
             const abstractData = {
+                id: abstractId,
                 conferenceId,
                 authorInfo,
                 abstractTitle,
@@ -555,16 +912,51 @@ exports.submitAbstract = functions.https.onRequest((request, response) => {
                 submittedAt: admin.firestore.FieldValue.serverTimestamp(),
                 updatedAt: admin.firestore.FieldValue.serverTimestamp()
             };
-            const docRef = await db.collection('abstracts').add(abstractData);
-            response.status(201).json({
+            // Prepare user data with embedded arrays
+            const userData = {
+                email,
+                personalInfo: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.personalInfo) || authorInfo,
+                registrations: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.registrations) || [],
+                abstracts: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.abstracts) || [],
+                payments: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.payments) || [],
+                totalSpent: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.totalSpent) || 0,
+                totalRegistrations: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.totalRegistrations) || 0,
+                totalAbstracts: ((existingUser === null || existingUser === void 0 ? void 0 : existingUser.totalAbstracts) || 0) + 1,
+                createdAt: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.createdAt) || admin.firestore.FieldValue.serverTimestamp(),
+                updatedAt: admin.firestore.FieldValue.serverTimestamp()
+            };
+            // Add new abstract
+            userData.abstracts.push(abstractData);
+            // Save user document
+            await userRef.set(userData);
+            // Update conference analytics (skip if conference doesn't exist)
+            try {
+                const conferenceRef = db.collection('conferences').doc(conferenceId);
+                const conferenceDoc = await conferenceRef.get();
+                if (conferenceDoc.exists) {
+                    await conferenceRef.update({
+                        totalAbstracts: admin.firestore.FieldValue.increment(1),
+                        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            }
+            catch (conferenceError) {
+                console.log('Conference analytics update skipped:', conferenceError);
+            }
+            response.status(200).json({
                 success: true,
-                abstractId: docRef.id,
-                message: 'Abstract submitted successfully'
+                abstractId: abstractId,
+                message: 'Abstract submitted successfully',
+                userEmail: email,
+                conferenceId: conferenceId
             });
         }
         catch (error) {
             console.error('Error submitting abstract:', error);
-            response.status(500).json({ error: 'Internal server error' });
+            response.status(500).json({
+                success: false,
+                error: 'Internal server error'
+            });
         }
     });
 });
@@ -573,264 +965,22 @@ exports.healthCheck = functions.https.onRequest(async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     res.json({
         success: true,
-        message: 'Firebase Functions are running',
+        message: 'Optimized Firebase Functions are running',
         timestamp: new Date().toISOString(),
-        environment: functions.config().app.environment || 'development'
+        collections: ['users', 'conferences', 'webhookEvents'],
+        paymentSystems: {
+            stripe: stripe ? 'configured' : 'not configured',
+            paypal: paypalClient ? 'configured' : 'not configured (placeholder)'
+        },
+        features: [
+            'Optimized user management',
+            'Duplicate payment prevention',
+            'Atomic payment updates',
+            'Comprehensive error handling',
+            'Webhook event tracking',
+            'Conference analytics'
+        ],
+        environment: 'production'
     });
 });
-// ===== WEBHOOK HANDLERS =====
-async function handlePaymentSuccess(paymentIntent) {
-    try {
-        const { registrationId, conferenceId, userId } = paymentIntent.metadata;
-        // Update registration status
-        const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
-        await registrationRef.update({
-            status: 'paid',
-            paymentStatus: 'completed',
-            paymentInfo: {
-                stripePaymentIntentId: paymentIntent.id,
-                amount: paymentIntent.amount / 100,
-                currency: paymentIntent.currency,
-                status: 'succeeded',
-                paidAt: admin.firestore.FieldValue.serverTimestamp(),
-                paymentMethod: 'stripe'
-            },
-            updatedAt: admin.firestore.FieldValue.serverTimestamp()
-        });
-        // Update payment record
-        const paymentsQuery = admin.firestore().collection('payments')
-            .where('registrationId', '==', registrationId)
-            .where('paymentMethod', '==', 'stripe');
-        const paymentSnapshot = await paymentsQuery.get();
-        if (!paymentSnapshot.empty) {
-            const paymentDoc = paymentSnapshot.docs[0];
-            await paymentDoc.ref.update({
-                status: 'succeeded',
-                paymentDetails: {
-                    stripePaymentIntentId: paymentIntent.id,
-                    amount: paymentIntent.amount / 100,
-                    currency: paymentIntent.currency,
-                    status: 'succeeded',
-                    paidAt: admin.firestore.FieldValue.serverTimestamp()
-                },
-                updatedAt: admin.firestore.FieldValue.serverTimestamp()
-            });
-        }
-        // Update user's registration status
-        if (userId) {
-            const userRef = admin.firestore().collection('users').doc(userId);
-            await userRef.update({
-                [`registrations.${registrationId}.status`]: 'paid',
-                [`registrations.${registrationId}.paymentStatus`]: 'completed',
-                [`registrations.${registrationId}.paidAt`]: admin.firestore.FieldValue.serverTimestamp(),
-                updatedAt: admin.firestore.FieldValue.serverTimestamp()
-            });
-            // Update user's payment history
-            if (!paymentSnapshot.empty) {
-                const paymentDoc = paymentSnapshot.docs[0];
-                await userRef.update({
-                    [`payments.${paymentDoc.id}.status`]: 'succeeded',
-                    [`payments.${paymentDoc.id}.paidAt`]: admin.firestore.FieldValue.serverTimestamp(),
-                    updatedAt: admin.firestore.FieldValue.serverTimestamp()
-                });
-            }
-        }
-        // TODO: Send confirmation email
-        console.log(`Payment succeeded for registration: ${registrationId}, user: ${userId}, conference: ${conferenceId}`);
-    }
-    catch (error) {
-        console.error('Error handling payment success:', error);
-    }
-}
-async function handlePaymentFailure(paymentIntent) {
-    var _a, _b;
-    try {
-        const { registrationId, userId } = paymentIntent.metadata;
-        // Update registration status
-        const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
-        await registrationRef.update({
-            status: 'payment_failed',
-            paymentStatus: 'failed',
-            paymentInfo: {
-                stripePaymentIntentId: paymentIntent.id,
-                amount: paymentIntent.amount / 100,
-                currency: paymentIntent.currency,
-                status: 'failed',
-                failedAt: admin.firestore.FieldValue.serverTimestamp(),
-                failureReason: ((_a = paymentIntent.last_payment_error) === null || _a === void 0 ? void 0 : _a.message) || 'Unknown error',
-                paymentMethod: 'stripe'
-            },
-            updatedAt: admin.firestore.FieldValue.serverTimestamp()
-        });
-        // Update payment record
-        const paymentsQuery = admin.firestore().collection('payments')
-            .where('registrationId', '==', registrationId)
-            .where('paymentMethod', '==', 'stripe');
-        const paymentSnapshot = await paymentsQuery.get();
-        if (!paymentSnapshot.empty) {
-            const paymentDoc = paymentSnapshot.docs[0];
-            await paymentDoc.ref.update({
-                status: 'failed',
-                paymentDetails: {
-                    stripePaymentIntentId: paymentIntent.id,
-                    amount: paymentIntent.amount / 100,
-                    currency: paymentIntent.currency,
-                    status: 'failed',
-                    failedAt: admin.firestore.FieldValue.serverTimestamp(),
-                    failureReason: ((_b = paymentIntent.last_payment_error) === null || _b === void 0 ? void 0 : _b.message) || 'Unknown error'
-                },
-                updatedAt: admin.firestore.FieldValue.serverTimestamp()
-            });
-        }
-        // Update user's registration status
-        if (userId) {
-            const userRef = admin.firestore().collection('users').doc(userId);
-            await userRef.update({
-                [`registrations.${registrationId}.status`]: 'payment_failed',
-                [`registrations.${registrationId}.paymentStatus`]: 'failed',
-                [`registrations.${registrationId}.failedAt`]: admin.firestore.FieldValue.serverTimestamp(),
-                updatedAt: admin.firestore.FieldValue.serverTimestamp()
-            });
-            // Update user's payment history
-            if (!paymentSnapshot.empty) {
-                const paymentDoc = paymentSnapshot.docs[0];
-                await userRef.update({
-                    [`payments.${paymentDoc.id}.status`]: 'failed',
-                    [`payments.${paymentDoc.id}.failedAt`]: admin.firestore.FieldValue.serverTimestamp(),
-                    updatedAt: admin.firestore.FieldValue.serverTimestamp()
-                });
-            }
-        }
-        console.log(`Payment failed for registration: ${registrationId}, user: ${userId}`);
-    }
-    catch (error) {
-        console.error('Error handling payment failure:', error);
-    }
-}
-async function handlePayPalPaymentSuccess(capture) {
-    try {
-        const registrationId = capture.custom_id;
-        const { userId, conferenceId } = capture.custom_id_metadata || {};
-        // Update registration status
-        const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
-        await registrationRef.update({
-            status: 'paid',
-            paymentStatus: 'completed',
-            paymentInfo: {
-                paypalCaptureId: capture.id,
-                amount: parseFloat(capture.amount.value),
-                currency: capture.amount.currency_code,
-                status: 'succeeded',
-                paidAt: admin.firestore.FieldValue.serverTimestamp(),
-                paymentMethod: 'paypal'
-            },
-            updatedAt: admin.firestore.FieldValue.serverTimestamp()
-        });
-        // Update payment record
-        const paymentsQuery = admin.firestore().collection('payments')
-            .where('registrationId', '==', registrationId)
-            .where('paymentMethod', '==', 'paypal');
-        const paymentSnapshot = await paymentsQuery.get();
-        if (!paymentSnapshot.empty) {
-            const paymentDoc = paymentSnapshot.docs[0];
-            await paymentDoc.ref.update({
-                status: 'succeeded',
-                paymentDetails: {
-                    paypalCaptureId: capture.id,
-                    amount: parseFloat(capture.amount.value),
-                    currency: capture.amount.currency_code,
-                    status: 'succeeded',
-                    paidAt: admin.firestore.FieldValue.serverTimestamp()
-                },
-                updatedAt: admin.firestore.FieldValue.serverTimestamp()
-            });
-        }
-        // Update user's registration status
-        if (userId) {
-            const userRef = admin.firestore().collection('users').doc(userId);
-            await userRef.update({
-                [`registrations.${registrationId}.status`]: 'paid',
-                [`registrations.${registrationId}.paymentStatus`]: 'completed',
-                [`registrations.${registrationId}.paidAt`]: admin.firestore.FieldValue.serverTimestamp(),
-                updatedAt: admin.firestore.FieldValue.serverTimestamp()
-            });
-            // Update user's payment history
-            if (!paymentSnapshot.empty) {
-                const paymentDoc = paymentSnapshot.docs[0];
-                await userRef.update({
-                    [`payments.${paymentDoc.id}.status`]: 'succeeded',
-                    [`payments.${paymentDoc.id}.paidAt`]: admin.firestore.FieldValue.serverTimestamp(),
-                    updatedAt: admin.firestore.FieldValue.serverTimestamp()
-                });
-            }
-        }
-        console.log(`PayPal payment succeeded for registration: ${registrationId}, user: ${userId}, conference: ${conferenceId}`);
-    }
-    catch (error) {
-        console.error('Error handling PayPal payment success:', error);
-    }
-}
-async function handlePayPalPaymentFailure(capture) {
-    try {
-        const registrationId = capture.custom_id;
-        const { userId } = capture.custom_id_metadata || {};
-        // Update registration status
-        const registrationRef = admin.firestore().collection('registrations').doc(registrationId);
-        await registrationRef.update({
-            status: 'payment_failed',
-            paymentStatus: 'failed',
-            paymentInfo: {
-                paypalCaptureId: capture.id,
-                amount: parseFloat(capture.amount.value),
-                currency: capture.amount.currency_code,
-                status: 'failed',
-                failedAt: admin.firestore.FieldValue.serverTimestamp(),
-                paymentMethod: 'paypal'
-            },
-            updatedAt: admin.firestore.FieldValue.serverTimestamp()
-        });
-        // Update payment record
-        const paymentsQuery = admin.firestore().collection('payments')
-            .where('registrationId', '==', registrationId)
-            .where('paymentMethod', '==', 'paypal');
-        const paymentSnapshot = await paymentsQuery.get();
-        if (!paymentSnapshot.empty) {
-            const paymentDoc = paymentSnapshot.docs[0];
-            await paymentDoc.ref.update({
-                status: 'failed',
-                paymentDetails: {
-                    paypalCaptureId: capture.id,
-                    amount: parseFloat(capture.amount.value),
-                    currency: capture.amount.currency_code,
-                    status: 'failed',
-                    failedAt: admin.firestore.FieldValue.serverTimestamp()
-                },
-                updatedAt: admin.firestore.FieldValue.serverTimestamp()
-            });
-        }
-        // Update user's registration status
-        if (userId) {
-            const userRef = admin.firestore().collection('users').doc(userId);
-            await userRef.update({
-                [`registrations.${registrationId}.status`]: 'payment_failed',
-                [`registrations.${registrationId}.paymentStatus`]: 'failed',
-                [`registrations.${registrationId}.failedAt`]: admin.firestore.FieldValue.serverTimestamp(),
-                updatedAt: admin.firestore.FieldValue.serverTimestamp()
-            });
-            // Update user's payment history
-            if (!paymentSnapshot.empty) {
-                const paymentDoc = paymentSnapshot.docs[0];
-                await userRef.update({
-                    [`payments.${paymentDoc.id}.status`]: 'failed',
-                    [`payments.${paymentDoc.id}.failedAt`]: admin.firestore.FieldValue.serverTimestamp(),
-                    updatedAt: admin.firestore.FieldValue.serverTimestamp()
-                });
-            }
-        }
-        console.log(`PayPal payment failed for registration: ${registrationId}, user: ${userId}`);
-    }
-    catch (error) {
-        console.error('Error handling PayPal payment failure:', error);
-    }
-}
 //# sourceMappingURL=index.js.map
