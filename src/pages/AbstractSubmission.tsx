@@ -32,7 +32,6 @@ const AbstractSubmission = () => {
     experience: '',
     conference: '', // Conference selection
     title: '',
-    presentation: '',
     keywords: '',
     summary: '',
     agreement: false
@@ -202,9 +201,10 @@ const AbstractSubmission = () => {
         organization: formData.affiliation,
         designation: formData.position,
         country: formData.country,
-        city: '',
-        address: formData.position,
-        postalCode: formData.experience
+        address: '', // Will be filled from registration form
+        city: '', // Will be filled from registration form
+        postalCode: '' // Will be filled from registration form
+        // yearsOfExperience: formData.experience
       };
 
       // First, ensure user exists or create one to get proper userId
@@ -231,8 +231,6 @@ const AbstractSubmission = () => {
         conferenceId: formData.conference, // Use selected conference ID
         authorInfo: personalInfo,
         abstractTitle: formData.title,
-        abstractText: formData.summary,
-        keywords: formData.keywords.split(',').map(k => k.trim()),
         documentFile: documentURL,
         status: 'pending'
       };
@@ -260,7 +258,7 @@ const AbstractSubmission = () => {
           experience: '',
           conference: '', // Reset conference selection
           title: '',
-          presentation: '',
+          // presentation: '',
           keywords: '',
           summary: '',
           agreement: false
@@ -419,7 +417,7 @@ const AbstractSubmission = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="position">Position/Title *</Label>
+                    <Label htmlFor="position">Designation/Title *</Label>
                     <Input 
                       id="position" 
                       placeholder="Professor, Researcher, Engineer, etc." 
@@ -457,6 +455,7 @@ const AbstractSubmission = () => {
                     </Select>
                   </div>
                 </div>
+
 
                 {/* Conference Selection */}
                 <div className="space-y-2">
@@ -523,18 +522,18 @@ const AbstractSubmission = () => {
                 </div> */}
 
                 <div className="space-y-2">
-                  <Label htmlFor="keywords">Keywords *</Label>
+                  <Label htmlFor="keywords">Keywords</Label>
                   <Input 
                     id="keywords" 
                     placeholder="Enter 3-5 keywords separated by commas" 
                     value={formData.keywords}
                     onChange={(e) => handleInputChange('keywords', e.target.value)}
-                    required 
+                    // required 
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="summary">Abstract Text *</Label>
+                  <Label htmlFor="summary">Abstract Text</Label>
                   <Textarea 
                     id="summary" 
                     placeholder="Provide the full abstract text of your research (max 500 characters)" 
@@ -542,7 +541,7 @@ const AbstractSubmission = () => {
                     onChange={(e) => handleInputChange('summary', e.target.value)}
                     maxLength={500}
                     rows={4}
-                    required
+                    // required
                   />
                 </div>
 

@@ -11,10 +11,10 @@ interface PersonalInfo {
   phone: string;
   organization: string;
   designation: string;
-  country: string;
-  city: string;
   address: string;
+  city: string;
   postalCode: string;
+  country: string;
 }
 
 interface RegistrationData {
@@ -36,8 +36,6 @@ interface AbstractData {
   conferenceId: string;
   title: string;
   authors: string[];
-  abstractText: string;
-  keywords: string[];
   documentUrl: string;
   status: string;
 }
@@ -1285,21 +1283,18 @@ export const submitAbstract = functions.https.onRequest((request, response) => {
         conferenceId, 
         title,
         authors,
-        keywords,
-        abstractText,
         documentUrl
       } = request.body;
 
       // Input validation
-      if (!email || !conferenceId || !title || !abstractText) {
+      if (!email || !conferenceId || !title) {
         console.error('❌ Validation failed:', {
           email: email,
           conferenceId: conferenceId,
-          title: title,
-          abstractText: abstractText
+          title: title
         });
         response.status(400).json({ 
-          error: 'Email is required. Try again or contact support' 
+          error: 'Email, conference ID, and title are required. Try again or contact support' 
         });
         return;
       }
@@ -1328,8 +1323,6 @@ export const submitAbstract = functions.https.onRequest((request, response) => {
         conferenceId,
         title,
         authors: authors || [],
-        abstractText,
-        keywords: keywords || [],
         documentUrl: documentUrl || null,
         status: 'submitted',
         submittedAt: currentTime,
@@ -1346,10 +1339,10 @@ export const submitAbstract = functions.https.onRequest((request, response) => {
           phone: '',
           organization: '',
           designation: '',
-          country: '',
-          city: '',
           address: '',
-          postalCode: ''
+          city: '',
+          postalCode: '',
+          country: '',
         },
         registrations: existingUser?.registrations || [],
         abstracts: existingUser?.abstracts || [],

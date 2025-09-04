@@ -28,8 +28,8 @@ interface RegistrationData {
   phone: string;
   organization: string;
   designation: string;
-  city: string;
   postalAddress: string;
+  city: string;
   postalCode: string;
   country: string;
   dietaryRestrictions: string;
@@ -69,10 +69,10 @@ const Registration = () => {
     phone: '',
     organization: '',
     designation: '',
-    country: '',
-    city: '',
     postalAddress: '',
+    city: '',
     postalCode: '',
+    country: '',
     dietaryRestrictions: '',
     specialRequirements: '',
     registrationType: '',
@@ -393,10 +393,10 @@ const Registration = () => {
         phone: formData.phone,
         organization: formData.organization,
         designation: formData.designation,
-        country: formData.country,
-        city: formData.city,
         address: formData.postalAddress,
-        postalCode: formData.postalCode
+        city: formData.city,
+        postalCode: formData.postalCode,
+        country: formData.country
       };
 
       // Prepare registration data for Firebase
@@ -405,7 +405,7 @@ const Registration = () => {
         registrationType: selectedRegistration.type,
         personalInfo,
         status: 'pending',
-        documents: [],
+        // documents: [],
         paymentInfo: {
           amount: calculateTotal(),
           processingFee: calculateProcessingFee(),

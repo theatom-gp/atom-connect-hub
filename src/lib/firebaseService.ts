@@ -10,9 +10,10 @@ export interface PersonalInfo {
   organization: string;
   designation: string;
   country: string;
-  city: string;
   address: string;
+  city: string;
   postalCode: string;
+  // yearsOfExperience: string;
 }
 
 export interface User {
@@ -35,7 +36,7 @@ export interface Registration {
   registrationType: string;
   personalInfo: PersonalInfo;
   paymentInfo?: PaymentInfo;
-  documents?: string[];
+  // documents?: string[];
   status: 'pending' | 'confirmed' | 'cancelled';
   createdAt: Date;
   updatedAt: Date;
@@ -46,8 +47,6 @@ export interface Abstract {
   conferenceId: string;
   title: string;
   authors: string[];
-  abstractText: string;
-  keywords: string[];
   documentUrl?: string;
   status: 'submitted' | 'under_review' | 'accepted' | 'rejected';
   submittedAt: Date;
@@ -85,7 +84,7 @@ export interface FirebaseRegistrationData {
   registrationType: string;
   personalInfo: PersonalInfo;
   paymentInfo?: PaymentInfo;
-  documents?: string[];
+  // documents?: string[];
   status: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -96,8 +95,6 @@ export interface AbstractData {
   conferenceId: string;
   authorInfo: PersonalInfo;
   abstractTitle: string;
-  abstractText: string;
-  keywords: string[];
   documentFile?: string;
   status: string;
   submittedAt?: Date;
@@ -173,9 +170,7 @@ export const createUser = async (personalInfo: PersonalInfo): Promise<{
       method: 'POST',
       body: JSON.stringify({
         email: personalInfo.email,
-        personalInfo,
-        registrationData: null,
-        abstractData: null
+        personalInfo
       })
     });
 
@@ -268,9 +263,8 @@ export const createRegistration = async (registrationData: FirebaseRegistrationD
           registrationType: registrationData.registrationType,
           status: registrationData.status,
           paymentInfo: registrationData.paymentInfo,
-          documents: registrationData.documents || []
-        },
-        abstractData: null
+          // documents: registrationData.documents || []
+        }
       })
     });
 
@@ -297,9 +291,9 @@ export const submitAbstract = async (abstractData: AbstractData): Promise<{
 
 
     // Validate required fields
-    if (!abstractData.authorInfo.email || !abstractData.conferenceId || !abstractData.abstractTitle || !abstractData.abstractText) {
+    if (!abstractData.authorInfo.email || !abstractData.conferenceId) {
       console.error('❌ Validation failed - missing required fields');
-      throw new Error('Email, conference ID, title, and abstract text are required');
+      throw new Error('Email, conference ID are required');
     }
 
     if (!validateEmail(abstractData.authorInfo.email)) {
@@ -328,8 +322,6 @@ export const submitAbstract = async (abstractData: AbstractData): Promise<{
       conferenceId: abstractData.conferenceId,
       title: abstractData.abstractTitle,
       authors: [abstractData.authorInfo.firstName + ' ' + abstractData.authorInfo.lastName],
-      keywords: abstractData.keywords,
-      abstractText: abstractData.abstractText,
       documentUrl: abstractData.documentFile || ''
     };
 

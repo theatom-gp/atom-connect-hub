@@ -125,6 +125,7 @@ const FirebaseTest: React.FC = () => {
                     
                     // First, submit an abstract
                     const abstractData = {
+                      userId: 'test-user-id', // Required field
                       conferenceId: 'test-conference',
                       authorInfo: {
                         firstName: 'Test',
@@ -133,13 +134,11 @@ const FirebaseTest: React.FC = () => {
                         phone: '+1234567890',
                         organization: 'Test University',
                         country: 'Test Country',
-                        city: '',
-                        address: 'Researcher',
-                        postalCode: '5-10 years'
+                        city: 'Test City',
+                        address: 'Test Address',
+                        postalCode: '12345'
                       },
                       abstractTitle: 'Test Abstract Title',
-                      abstractText: 'This is a test abstract for testing user relationships.',
-                      keywords: ['test', 'abstract', 'relationship'],
                       status: 'pending'
                     } as AbstractData; // Type assertion for testing
 

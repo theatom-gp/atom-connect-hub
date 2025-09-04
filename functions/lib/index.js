@@ -4,7 +4,6 @@ exports.healthCheck = exports.submitAbstract = exports.uploadDocument = exports.
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const stripe_1 = require("stripe");
-// import { Client } from '@paypal/paypal-server-sdk'; // Will be used when PayPal is properly configured
 // Initialize Firebase Admin
 admin.initializeApp();
 // Initialize Stripe
@@ -25,7 +24,7 @@ catch (error) {
     console.log('⚠️ Failed to initialize Stripe:', error);
 }
 // Initialize PayPal - Placeholder for now
-let paypalClient = null;
+const paypalClient = null;
 try {
     const paypalConfig = functions.config().paypal;
     if (paypalConfig && paypalConfig.client_id && paypalConfig.client_secret) {
@@ -130,18 +129,9 @@ exports.createOrUpdateUser = functions.https.onRequest((request, response) => {
 exports.getUserData = functions.https.onRequest((request, response) => {
     return corsHandler(request, response, async () => {
         try {
-            console.log('📥 getUserData received request:', {
-                method: request.method,
-                url: request.url,
-                path: request.path,
-                params: request.params,
-                query: request.query,
-                body: request.body
-            });
             // Extract email from URL path (e.g., /getUserData/user@example.com)
             const pathParts = request.path.split('/');
             const email = pathParts[pathParts.length - 1];
-            console.log('🔍 Extracted email from path:', email);
             if (!email) {
                 console.error('❌ No email found in path');
                 response.status(400).json({ error: 'Email is required' });
@@ -392,6 +382,7 @@ exports.createPayPalOrder = functions.https.onRequest(async (req, res) => {
         const userDoc = await userRef.get();
         if (userDoc.exists) {
             const userData = userDoc.data();
+            // const userData = userDoc.data() as UserDocument;
             const existingPayment = (_a = userData === null || userData === void 0 ? void 0 : userData.payments) === null || _a === void 0 ? void 0 : _a.find((p) => p.idempotencyKey === finalIdempotencyKey);
             if (existingPayment) {
                 res.json({
@@ -954,25 +945,14 @@ exports.uploadDocument = functions.https.onRequest((request, response) => {
 exports.submitAbstract = functions.https.onRequest((request, response) => {
     return corsHandler(request, response, async () => {
         try {
-            console.log('📥 submitAbstract received request body:', request.body);
-            const { email, conferenceId, title, authors, keywords, abstractText, documentUrl } = request.body;
-            console.log('🔍 Extracted values:', {
-                email: email,
-                conferenceId: conferenceId,
-                title: title,
-                abstractText: abstractText,
-                hasEmail: !!email,
-                hasConferenceId: !!conferenceId,
-                hasTitle: !!title,
-                hasAbstractText: !!abstractText
-            });
+            const { email, conferenceId, title, authors, keywords, 
+            // abstractText,
+            documentUrl } = request.body;
             // Input validation
-            if (!email || !conferenceId || !title || !abstractText) {
+            if (!email || !conferenceId) {
                 console.error('❌ Validation failed:', {
                     email: email,
-                    conferenceId: conferenceId,
-                    title: title,
-                    abstractText: abstractText
+                    conferenceId: conferenceId
                 });
                 response.status(400).json({
                     error: 'Email is required. Try again or contact support'
@@ -998,7 +978,7 @@ exports.submitAbstract = functions.https.onRequest((request, response) => {
                 conferenceId,
                 title,
                 authors: authors || [],
-                abstractText,
+                // abstractText,
                 keywords: keywords || [],
                 documentUrl: documentUrl || null,
                 status: 'submitted',
@@ -1015,10 +995,10 @@ exports.submitAbstract = functions.https.onRequest((request, response) => {
                     phone: '',
                     organization: '',
                     designation: '',
-                    country: '',
-                    city: '',
                     address: '',
-                    postalCode: ''
+                    city: '',
+                    postalCode: '',
+                    country: '',
                 },
                 registrations: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.registrations) || [],
                 abstracts: (existingUser === null || existingUser === void 0 ? void 0 : existingUser.abstracts) || [],
