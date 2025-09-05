@@ -1,19 +1,32 @@
 import aboutImage from '@/assets/about-us.jpg';
+// import { useEffect } from 'react';
+// import { useLocation } from 'react-router-dom';
 
 const AboutUs = () => {
+  // const location = useLocation();
+
+  // useEffect(() => {
+  //   if (location.hash) {
+  //     const element = document.getElementById(location.hash);
+  //     if (element) {
+  //       element.scrollIntoView({ behavior: 'smooth' });
+  //     }
+  //   }
+  // }, [location]);
+
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-background to-accent/20">
+    <section id="about-us" className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-background to-accent/20" style={{ height: "100vh" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Content */}
           <div className="order-2 lg:order-1">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-4 sm:mb-6 text-center lg:text-left">
-              About <span className="text-secondary">Atom Conferences</span>
+              About <span className="text-secondary">The Atom Conferences</span>
             </h2>
             
             <div className="space-y-4 text-base sm:text-base text-muted-foreground text-center lg:text-left">
               <p>
-                At Atom Conferences, we believe that groundbreaking discoveries happen when brilliant minds 
+                At The Atom Conferences, we believe that groundbreaking discoveries happen when brilliant minds 
                 from different disciplines collide. Since our founding, we've been the catalyst that brings 
                 together professionals, academics, and students in an ecosystem designed for knowledge exchange 
                 and innovation.
@@ -27,7 +40,7 @@ const AboutUs = () => {
               </p>
               
               <p>
-                With a community of over 10,000 professionals worldwide, Atom Conferences has become 
+                With a community of over 10,000 professionals worldwide, The Atom Conferences has become 
                 the premier destination for those who dare to think differently, challenge conventions, 
                 and build the world of tomorrow.
               </p>

@@ -548,7 +548,7 @@ const Meetings = () => {
                           }}
                         >
                           <span className="relative z-10 flex items-center justify-center gap-2">
-                            Register Now
+                            View Details & Register
                             <motion.div
                               animate={{ x: [0, 5, 0] }}
                               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}

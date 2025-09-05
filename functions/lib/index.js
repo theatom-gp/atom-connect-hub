@@ -945,17 +945,16 @@ exports.uploadDocument = functions.https.onRequest((request, response) => {
 exports.submitAbstract = functions.https.onRequest((request, response) => {
     return corsHandler(request, response, async () => {
         try {
-            const { email, conferenceId, title, authors, keywords, 
-            // abstractText,
-            documentUrl } = request.body;
+            const { email, conferenceId, title, authors, documentUrl } = request.body;
             // Input validation
-            if (!email || !conferenceId) {
+            if (!email || !conferenceId || !title) {
                 console.error('❌ Validation failed:', {
                     email: email,
-                    conferenceId: conferenceId
+                    conferenceId: conferenceId,
+                    title: title
                 });
                 response.status(400).json({
-                    error: 'Email is required. Try again or contact support'
+                    error: 'Email, conference ID, and title are required. Try again or contact support'
                 });
                 return;
             }
@@ -978,8 +977,6 @@ exports.submitAbstract = functions.https.onRequest((request, response) => {
                 conferenceId,
                 title,
                 authors: authors || [],
-                // abstractText,
-                keywords: keywords || [],
                 documentUrl: documentUrl || null,
                 status: 'submitted',
                 submittedAt: currentTime,

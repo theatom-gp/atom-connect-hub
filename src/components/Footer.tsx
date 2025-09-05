@@ -1,5 +1,7 @@
 import { Separator } from '@/components/ui/separator';
 import { MapPin, Phone, Mail, Calendar, Users, Award, ArrowRight } from 'lucide-react';
+// import { Link } from 'react-router-dom';
+
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -7,8 +9,8 @@ const Footer = () => {
   const quickLinks = [
     { name: 'Home', href: '/' },
     { name: 'Upcoming Conferences', href: '/meetings' },
-    { name: 'About Us', href: '/#about' },
-    { name: 'Contact Us', href: '/contact' },
+    { name: 'About Us', href:"/#about-us"},
+    { name: 'Contact Us', href: "/contact" },
   ];
 
   const legalLinks = [
@@ -48,7 +50,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="sm:col-span-2 lg:col-span-1 text-center sm:text-left">
             <div className="mb-6">
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">Atom Conferences</h3>
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">The Atom Conferences</h3>
               <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
                 Connecting minds, shaping futures. We create world-class conferences that bring together 
                 industry leaders, innovators, and change-makers to drive meaningful progress across all sectors.
@@ -151,7 +153,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 text-center sm:text-left">
           <div className="text-slate-400 text-xs sm:text-sm">
-            © {currentYear} Atom Conferences. All rights reserved. Empowering global knowledge exchange since 2020.
+            © {currentYear} The Atom Conferences. All rights reserved. Empowering global knowledge exchange since 2020.
           </div>
           
           <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 text-xs sm:text-sm text-slate-400">

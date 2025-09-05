@@ -769,7 +769,7 @@ const TechInnovationExpo = () => {
       </section>
 
       {/* Chairperson Welcome */}
-      <section className="py-20 bg-secondary/5">
+      <section className="py-20 bg-gradient-to-br from-slate-700 via-slate-900 to-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -781,25 +781,25 @@ const TechInnovationExpo = () => {
             </div>
             
             <div>
-              <div className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-semibold mb-6">
+              <div className="inline-block px-4 py-2 bg-secondary/20 text-secondary rounded-full text-sm font-semibold mb-6">
                 Welcome Message
               </div>
               
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
                 A Message from Our <span className="text-primary">Conference Chair</span>
               </h2>
               
-              <blockquote className="text-muted-foreground text-lg leading-relaxed mb-6 italic">
+              <blockquote className="text-white/75 text-lg leading-relaxed mb-6 italic">
                 "Tech innovation is the backbone of modern society. The Global Congress on Tech Innovation and Applications 2025 represents a unique opportunity to witness the convergence of brilliant minds and revolutionary techniques in tech innovation."
               </blockquote>
               
-              <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+              <p className="text-white/75 text-lg leading-relaxed mb-8">
                 As we stand at the forefront of tech innovation innovation, this conference serves as a catalyst for meaningful collaboration and groundbreaking discoveries. Join us in San Francisco as we explore the technologies and methodologies that will shape the future of tech innovation and create lasting impact across the tech innovation system worldwide.
               </p>
               
               <div className="mb-8">
-                <p className="font-semibold text-foreground">Dr. Carlos Mendes</p>
-                <p className="text-muted-foreground">Conference Chair & Director of Tech Innovation, University of California, San Francisco</p>
+                <p className="font-semibold text-secondary">Dr. Carlos Mendes</p>
+                <p className="text-white">Conference Chair & Director of Tech Innovation, University of California, San Francisco</p>
               </div>
             </div>
           </div>
@@ -809,9 +809,9 @@ const TechInnovationExpo = () => {
       {/* Abstract Submission Section */}
       <section className="py-16 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-secondary/10 rounded-lg p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+          <div className="bg-slate-900/10 rounded-lg p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
             <div className="text-center mb-8">
-              <div className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-semibold mb-4">
+              <div className="inline-block px-4 py-2 bg-secondary/20 text-secondary rounded-full text-sm font-semibold mb-4">
                 Call for Papers
               </div>
               <h2 className="text-3xl font-bold text-foreground mb-4">Submit Your Abstract</h2>
@@ -900,7 +900,7 @@ const TechInnovationExpo = () => {
       </section>
 
       {/* Speakers Section */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-slate-700 via-slate-900 to-slate-900 relative overflow-hidden">
         {/* Enhanced Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <svg className="w-full h-full" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">

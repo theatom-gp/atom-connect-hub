@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
 import { submitAbstract, uploadDocument, AbstractData, PersonalInfo, getUserByEmail, createUser } from "@/lib/firebaseService";
 import { getConferencesForAbstractSubmission, Conference } from "@/lib/conferences";
+import { getImagePath } from "@/lib/imageUtils";
 
 const AbstractSubmission = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -153,14 +154,6 @@ const AbstractSubmission = () => {
       return;
     }
 
-    if (!formData.summary.trim()) {
-      toast({
-        title: "Abstract Text Required",
-        description: "Please enter the abstract text/summary.",
-        variant: "destructive",
-      });
-      return;
-    }
 
     if (!formData.conference) {
       toast({
@@ -302,10 +295,10 @@ const AbstractSubmission = () => {
       <main className="container mx-auto px-4 py-12">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4" >
             Submit Your Abstract
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto" >
             Join the world's leading experts at Tech Innovation Expo 2025. Share your research, 
             connect with pioneers, and shape the future of technology.
           </p>

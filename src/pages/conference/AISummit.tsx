@@ -819,7 +819,7 @@ const AISummit = () => {
       </section>
 
       {/* Chairperson Welcome */}
-      <section className="py-20 bg-secondary/5">
+      <section className="py-20 bg-gradient-to-br from-slate-700 via-slate-900 to-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -831,25 +831,25 @@ const AISummit = () => {
             </div>
             
             <div>
-              <div className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-semibold mb-6">
+              <div className="inline-block px-4 py-2 bg-secondary/20 text-secondary rounded-full text-sm font-semibold mb-6">
                 Welcome Message
               </div>
               
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
-                A Message from Our <span className="text-primary">Conference Chair</span>
+              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+                A Message from Our <span className="text-secondary">Conference Chair</span>
               </h2>
               
-              <blockquote className="text-muted-foreground text-lg leading-relaxed mb-6 italic">
+              <blockquote className="text-white/75 text-lg leading-relaxed mb-6 italic">
                 "AI is the bridge between innovation and progress. The AI Innovation Summit 2025 represents a unique opportunity to witness the convergence of brilliant minds and revolutionary techniques in AI research and development."
               </blockquote>
 
-              <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+              <p className="text-white/75 text-lg leading-relaxed mb-8">
               As we stand at the forefront of AI innovation, this conference serves as a catalyst for meaningful collaboration and groundbreaking discoveries. Join us in San Francisco as we explore the technologies and methodologies that will shape the future of AI and create lasting impact across the world.
               </p>
               
               <div className="mb-8">
-                <p className="font-semibold text-foreground">Dr. Carlos Mendes</p>
-                <p className="text-muted-foreground">Conference Chair & Director of AI, University of California, San Francisco</p>
+                <p className="font-semibold text-secondary">Dr. Carlos Mendes</p>
+                <p className="text-white">Conference Chair & Director of AI, University of California, San Francisco</p>
               </div>
 
             </div>
@@ -860,9 +860,9 @@ const AISummit = () => {
       {/* Abstract Submission Section */}
       <section className="py-16 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-secondary/10 rounded-lg p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+          <div className="bg-slate-900/10 rounded-lg p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
             <div className="text-center mb-8">
-              <div className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-semibold mb-4">
+              <div className="inline-block px-4 py-2 bg-secondary/20 text-secondary rounded-full text-sm font-semibold mb-4">
                 Call for Papers
               </div>
               <h2 className="text-3xl font-bold text-foreground mb-4">Submit Your Abstract</h2>
@@ -951,25 +951,25 @@ const AISummit = () => {
       </section>
 
       {/* Speakers Section */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-slate-700 via-slate-900 to-slate-900 relative overflow-hidden">
         {/* Enhanced Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <svg className="w-full h-full" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+        {/* <div className="absolute inset-0 opacity-10"> */}
+          {/* <svg className="w-full h-full" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg"> */}
             {/* Curly lines pattern */}
-            <path d="M50 100 Q150 50 250 100 T450 100" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
+            {/* <path d="M50 100 Q150 50 250 100 T450 100" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
             <path d="M600 150 Q700 100 800 150 T1000 150" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
             <path d="M100 300 Q200 250 300 300 T500 300" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
             <path d="M700 350 Q800 300 900 350 T1100 350" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
             <path d="M200 500 Q300 450 400 500 T600 500" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
             <path d="M800 550 Q900 500 1000 550 T1200 550" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
             <path d="M150 650 Q250 600 350 650 T550 650" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
-            <path d="M750 700 Q850 650 950 700 T1150 700" stroke="currentColor" strokeWidth="2" opacity="0.4"/>
-          </svg>
-        </div>
+            <path d="M750 700 Q850 650 950 700 T1150 700" stroke="currentColor" strokeWidth="2" opacity="0.4"/> */}
+          {/* </svg> */}
+        {/* </div> */}
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-primary/20 text-secondary rounded-full text-sm font-semibold mb-6">
+            <div className="inline-block px-4 py-2 bg-secondary/20 text-secondary rounded-full text-sm font-semibold mb-6">
               International Experts
             </div>
             

@@ -784,7 +784,7 @@ const ForensicScience = () => {
       </section>
 
       {/* Chairperson Welcome */}
-      <section className="py-20 bg-secondary/5">
+      <section className="py-20 bg-gradient-to-br from-slate-700 via-slate-900 to-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -796,25 +796,25 @@ const ForensicScience = () => {
             </div>
             
             <div>
-              <div className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-semibold mb-6">
+              <div className="inline-block px-4 py-2 bg-secondary/20 text-secondary rounded-full text-sm font-semibold mb-6">
                 Welcome Message
               </div>
               
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
-                A Message from Our <span className="text-primary">Conference Chair</span>
+              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+                A Message from Our <span className="text-secondary">Conference Chair</span>
               </h2>
               
-              <blockquote className="text-muted-foreground text-lg leading-relaxed mb-6 italic">
+              <blockquote className="text-white/75 text-lg leading-relaxed mb-6 italic">
                 "Forensic science is the bridge between evidence and justice. The Global Congress on Forensic Science and Research 2025 represents a unique opportunity to witness the convergence of brilliant minds and revolutionary techniques in forensic investigation."
               </blockquote>
               
-              <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+              <p className="text-white/75 text-lg leading-relaxed mb-8">
                 As we stand at the forefront of forensic innovation, this conference serves as a catalyst for meaningful collaboration and groundbreaking discoveries. Join us in Lisbon as we explore the technologies and methodologies that will shape the future of forensic science and create lasting impact across the justice system worldwide.
               </p>
               
               <div className="mb-8">
-                <p className="font-semibold text-foreground">Dr. Carlos Mendes</p>
-                <p className="text-muted-foreground">Conference Chair & Director of Forensic Sciences, Portuguese National Institute of Legal Medicine</p>
+                <p className="font-semibold text-secondary">Dr. Carlos Mendes</p>
+                <p className="text-white">Conference Chair & Director of Forensic Sciences, Portuguese National Institute of Legal Medicine</p>
               </div>
             </div>
           </div>
@@ -915,7 +915,7 @@ const ForensicScience = () => {
       </section>
 
       {/* Speakers Section */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-slate-700 via-slate-900 to-slate-900 relative overflow-hidden">
         {/* Enhanced Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <svg className="w-full h-full" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
