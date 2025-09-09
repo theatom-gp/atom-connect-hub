@@ -1415,3 +1415,112 @@ export const healthCheck = functions.https.onRequest(async (req, res) => {
     environment: 'production'
   });
 });
+
+// Dynamic sitemap generation
+export const generateSitemap = functions.https.onRequest((request, response) => {
+  return corsHandler(request, response, async () => {
+    try {
+      const currentDate = new Date().toISOString().split('T')[0];
+      
+      // Get dynamic data from Firestore
+      const conferencesSnapshot = await admin.firestore().collection('conferences').get();
+      const conferences = conferencesSnapshot.docs.map(doc => ({
+        id: doc.id,
+        title: doc.data().title || 'Conference',
+        lastModified: doc.data().updatedAt?.toDate?.()?.toISOString().split('T')[0] || currentDate,
+        priority: 0.9
+      }));
+
+      // Generate sitemap XML
+      const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Static Pages -->
+  <url>
+    <loc>https://www.theatomconferences.com/</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.theatomconferences.com/meetings</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.theatomconferences.com/submit-abstract</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.theatomconferences.com/registration</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.theatomconferences.com/contact</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.theatomconferences.com/faq</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Dynamic Conference Pages -->
+${conferences.map(conference => `  <url>
+    <loc>https://www.theatomconferences.com/conference/${conference.id}</loc>
+    <lastmod>${conference.lastModified}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>${conference.priority}</priority>
+  </url>`).join('\n')}
+  
+  <!-- Legal Pages -->
+  <url>
+    <loc>https://www.theatomconferences.com/privacy-policy</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.theatomconferences.com/terms-and-conditions</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.theatomconferences.com/cancellation-policy</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.theatomconferences.com/presentation-guidelines</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.theatomconferences.com/visa-invitation</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>`;
+
+      // Set proper headers for XML
+      response.set('Content-Type', 'application/xml');
+      response.set('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
+      response.status(200).send(sitemapXml);
+      
+    } catch (error) {
+      console.error('Sitemap generation failed:', error);
+      response.status(500).json({ error: 'Failed to generate sitemap' });
+    }
+  });
+});

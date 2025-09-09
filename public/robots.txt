@@ -1,13 +1,24 @@
+# Robots.txt for Atom Conferences
+# https://www.theatomconferences.com
+
 User-agent: *
 Allow: /
 
 # Sitemap
 Sitemap: https://www.theatomconferences.com/sitemap.xml
+Sitemap: https://us-central1-theatomconferences-ec7ab.cloudfunctions.net/generateSitemap
 
 # Disallow admin and private areas
 Disallow: /firebase-test
 Disallow: /admin/
 Disallow: /private/
+Disallow: /api/
+Disallow: /functions/
+Disallow: /_next/
+Disallow: /node_modules/
+Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.css$
 
 # Allow important pages
 Allow: /
@@ -18,6 +29,43 @@ Allow: /registration
 Allow: /about
 Allow: /contact
 Allow: /faq
+Allow: /privacy-policy
+Allow: /terms-and-conditions
+Allow: /cancellation-policy
+Allow: /presentation-guidelines
+Allow: /visa-invitation
 
-# Crawl delay (optional)
+# Specific bot instructions
+User-agent: Googlebot
+Allow: /
 Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 2
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
