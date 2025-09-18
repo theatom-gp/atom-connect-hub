@@ -8,31 +8,31 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-    
+
     /* Professional Conference Colors */
     --primary: 219 89% 35%;  /* Deep Conference Blue */
     --primary-foreground: 0 0% 98%;
     --primary-glow: 219 89% 45%;
-    
+
     --secondary: 20 91% 48%;  /* Conference Orange */
     --secondary-foreground: 0 0% 98%;
-    
+
     --accent: 219 25% 96%;
     --accent-foreground: 219 89% 25%;
-    
+
     /* Conference Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(219 89% 35%), hsl(219 89% 45%));
     --gradient-section: linear-gradient(180deg, hsl(0 0% 98%), hsl(0 0% 100%));
     --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(219 25% 98%));
-    
+
     /* Professional Shadows */
     --shadow-conference: 0 10px 40px -10px hsl(219 89% 35% / 0.15);
     --shadow-card: 0 4px 25px -5px hsl(219 89% 35% / 0.08);
     --shadow-hero: 0 20px 60px -10px hsl(219 89% 35% / 0.25);
-    
+
     /* Professional Typography */
     --font-conference: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    
+
     /* Animations */
     --transition-conference: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-smooth: all 0.2s ease-out;
@@ -70,6 +70,16 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --color-1: oklch(66.2% 0.225 25.9);
+
+    --color-2: oklch(60.4% 0.26 302);
+
+    --color-3: oklch(69.6% 0.165 251);
+
+    --color-4: oklch(80.2% 0.134 225);
+
+    --color-5: oklch(90.7% 0.231 133);
   }
 
   .dark {
@@ -108,6 +118,14 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --color-1: oklch(66.2% 0.225 25.9);
+    --color-2: oklch(60.4% 0.26 302);
+    --color-3: oklch(69.6% 0.165 251);
+    --color-4: oklch(80.2% 0.134 225);
+    --color-5: oklch(90.7% 0.231 133);
+  }
+  .theme {
+    --animate-rainbow: rainbow var(--speed, 2s) infinite linear;
   }
 }
 
@@ -118,5 +136,16 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@theme inline {
+  @keyframes rainbow {
+  0% {
+    background-position: 0%;
+    }
+  100% {
+    background-position: 200%;
+    }
   }
 }

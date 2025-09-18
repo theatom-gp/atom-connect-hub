@@ -1,6 +1,14 @@
 // Shared conference data for the application
 // This file serves as a single source of truth for all conference information
 
+// Speaker interface
+export interface Speaker {
+  name: string;
+  title: string;
+  organization: string;
+  image: string;
+}
+
 // Basic interface for conference data used in Meetings page
 export interface Conference {
   id: string;
@@ -14,6 +22,11 @@ export interface Conference {
   abstractDeadline?: string;
   registrationDeadline?: string;
   notificationDeadline?: string;
+  price?: number;
+  speakers?: Speaker[];
+  keywords?: string;
+  duration?: string;
+  attendees?: string;
 }
 
 // export const conferences: Conference[] = [

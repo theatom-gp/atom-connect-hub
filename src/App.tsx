@@ -12,17 +12,8 @@ import Meetings from "./pages/Meetings";
 import NotFound from "./pages/NotFound";
 import CookieConsent from "./components/CookieConsent";
 
-// Lazy load heavy conference pages (1,600+ lines each)
-const TechInnovationExpo = lazy(() => import("./pages/conference/TechInnovationExpo"));
-const AISummit = lazy(() => import("./pages/conference/AISummit"));
-const GlobalHealthcareRevolution = lazy(() => import("./pages/conference/GlobalHealthcareRevolution"));
-const GlobalFinanceSummit = lazy(() => import("./pages/conference/GlobalFinanceSummit"));
-const ForensicScience = lazy(() => import("./pages/conference/ForensicScience"));
-const PowerandEnergy = lazy(() => import("./pages/conference/PowerandEnergy"));
-const QuantumComputing = lazy(() => import("./pages/conference/QuantumComputing"));
-const Biomaterials = lazy(() => import("./pages/conference/Biomaterials"));
-const SurgeryandAnesthesia = lazy(() => import("./pages/conference/SurgeryandAnesthesia"));
-const Neurology = lazy(() => import("./pages/conference/Neurology"));
+// Dynamic conference routing - no need to import individual conference pages
+const ConferenceRouter = lazy(() => import("./pages/conference/ConferenceRouter"));
 
 // Lazy load form pages (heavy with validation and UI components)
 const AbstractSubmission = lazy(() => import("./pages/AbstractSubmission"));
@@ -39,6 +30,7 @@ const VisaInvitation = lazy(() => import("./pages/VisaInvitation"));
 
 // Lazy load development/testing components
 const FirebaseTest = lazy(() => import("./components/FirebaseTest"));
+const ConferenceAdmin = lazy(() => import("./pages/admin/ConferenceAdminFinal"));
 
 const queryClient = new QueryClient();
 
@@ -70,16 +62,9 @@ const App = () => (
               <Route path="/presentation-guidelines" element={<PresentationGuidelines />} />
               <Route path="/visa-invitation" element={<VisaInvitation />} />
               <Route path="/firebase-test" element={<FirebaseTest />} />
-              <Route path="/conference/techinnovationexpo" element={<TechInnovationExpo />} />
-              <Route path="/conference/aisummit" element={<AISummit />} />
-              <Route path="/conference/globalhealthcarerevolution" element={<GlobalHealthcareRevolution />} />
-              <Route path="/conference/globalfinancesummit" element={<GlobalFinanceSummit />} />
-              <Route path="/conference/forensicscience" element={<ForensicScience />} />
-              <Route path="/conference/powerandenergy" element={<PowerandEnergy />} />
-              <Route path="/conference/quantumcomputing" element={<QuantumComputing />} />
-              <Route path="/conference/biomaterials" element={<Biomaterials />} />
-              <Route path="/conference/surgeryandanesthesia" element={<SurgeryandAnesthesia />} />
-              <Route path="/conference/neurology" element={<Neurology />} />
+              <Route path="/admin/conferences" element={<ConferenceAdmin />} />
+              {/* Dynamic conference routing - handles all conference pages automatically */}
+              <Route path="/conference/:conferenceId" element={<ConferenceRouter />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

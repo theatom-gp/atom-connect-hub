@@ -28,6 +28,7 @@ import speaker3 from '@/assets/null.jpg';
 import speaker4 from '@/assets/null.jpg';
 import { getImagePath } from '@/lib/imageUtils';
 import SEO from '@/components/SEO';
+import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button';
 
 const Biomaterials = () => {
   const navigate = useNavigate();
@@ -1121,13 +1122,13 @@ const Biomaterials = () => {
                     ))}
                   </ul>
                   
-                  <Button 
+                  <InteractiveHoverButton 
                     className="w-full py-3 text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200" 
-                    variant="default"
+                    // variant="default"
                     onClick={() => navigate('/registration?conference=biomaterials')}
                   >
                     Register Now
-                  </Button>
+                  </InteractiveHoverButton>
                 </div>
               </div>
             ))}

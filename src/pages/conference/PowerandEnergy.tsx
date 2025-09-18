@@ -11,6 +11,7 @@ import { Check as CheckIcon, Mail, Bell, Calendar, Globe, ChevronDown, ChevronUp
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button';
 // import heroBackground from '@/assets/tech-innovation/bg.jpg';
 import heroBackground from '@/assets/powerandenergy/bg.jpeg';
 import venueInterior from '@/assets/powerandenergy/venue-interior-1.jpg';
@@ -1073,13 +1074,13 @@ const PowerandEnergy = () => {
                     ))}
                   </ul>
                   
-                  <Button 
+                  <InteractiveHoverButton 
                     className="w-full py-3 text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200" 
-                    variant="default"
+                    // variant="default"
                     onClick={() => navigate('/registration?conference=powerandenergy')}
                   >
                     Register Now
-                  </Button>
+                  </InteractiveHoverButton>
                 </div>
               </div>
             ))}

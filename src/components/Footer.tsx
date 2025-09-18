@@ -32,7 +32,7 @@ const Footer = () => {
     // { icon: MapPin, text: '123 Conference Avenue, Financial District, Austin, TX 78701' },
     { icon: MapPin, text: '123 Conference Avenue, Financial District, Vijayawada, AP 520010' },
     { icon: Phone, text: '+91 (90000) (94024), +91 (81792) (66745)' },
-    { icon: Mail, text: 'info@atomconferences.com' },
+    { icon: Mail, text: 'support@atomconferences.com' },
   ];
 
   const achievements = [
